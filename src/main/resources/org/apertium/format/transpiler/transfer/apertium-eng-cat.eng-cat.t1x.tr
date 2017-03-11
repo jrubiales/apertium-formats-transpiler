@@ -1,0 +1,11 @@
+/* 
+
+Definición de categoría léxica.
+
+<def-cat n="nom">
+    <cat-item tags="n.*"/>
+</def-cat>
+
+*/
+
+catlex nom = 'n.*';
