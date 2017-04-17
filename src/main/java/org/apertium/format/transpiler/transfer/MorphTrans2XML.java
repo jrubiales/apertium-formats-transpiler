@@ -16,11 +16,13 @@ public class MorphTrans2XML {
     }
     
     public static void main(String[] args) {
-        
+        System.out.println("Inicio del programa.");
         if (args.length == 0) {
             help();
         } else {
             String filePath = args[0];
+            System.out.println("File: " + filePath);
+            System.out.println("Parsing...");
             try {
                 ANTLRFileStream in = new ANTLRFileStream(filePath);
                 TransferLexer lexer = new TransferLexer(in);

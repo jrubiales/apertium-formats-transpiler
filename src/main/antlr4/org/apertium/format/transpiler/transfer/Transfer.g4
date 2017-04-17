@@ -1,16 +1,22 @@
 grammar Transfer;
 
-stat : T { 
+/**
+ * Especificación sintáctica.
+ */
+
+/*
+
+stat : T {
 
             if($T.text.equals("catlex")){
                 System.out.print("<def-cat");
             };
-        
+
         } ID {
 
             System.out.println(" n=\"" + $ID.text + "\">");
 
-        } ASSIGNOP STRING { 
+        } ASSIGNOP STRING {
 
             System.out.println("<cat-item tags=\"" + $STRING.text + "\"/>");
 
@@ -21,38 +27,215 @@ stat : T {
         }
 ;
 
-T : CATLEX;
+*/
 
-/* Tokens */
+stat
+    : bDcl EOF;
 
-INT : [0-9]+ ;
+// Block delarations.
+bDcl
+    : tDecl (bDcl)?
+    | varDecl (bDcl)?
+    | mDecl (bDcl)?
+    ;
 
-ID : [a-z][a-z0-9]* ;
+// Type declare
+tDecl
+    : t ID ASSIGN multString SEMI
+    ;
 
-CATLEX : 'catlex' ;
+// Multi-string definition.
+multString
+    : literal COMMA multString
+    | literal
+    ;
 
-SEMICOLON : ';' ;
+// Var declare.
+varDecl
+    : VAR varExpr SEMI
+    ;
 
-WS : [ \r\t\n]+ -> skip;
+// Var expression.
+varExpr
+    : assiExpr COMMA varExpr
+    | assiExpr
+    ;
 
-ASSIGNOP : '=' ;
+// Macro declare.
+mDecl
+    : MACRO ID LPAR mParams RPAR IS mBody END
+    ;
 
-STRING : '\'' ( ESC_SEQ | ~('\\'|'\'') )* '\'' ;
+// Macro params.
+mParams
+    : ID COMMA mParams
+    | ID
+    ;
 
-ESC_SEQ : '\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
-        | UNICODE_ESC
-        | OCTAL_ESC 
-;
+// Macro body.
+mBody
+    :
+    | CASE caseBlock END
+    ;
 
-OCTAL_ESC : '\\' ('0'..'3') ('0'..'7') ('0'..'7')
-          | '\\' ('0'..'7') ('0'..'7')
-          | '\\' ('0'..'7')
-;
+// Case block.
+caseBlock
+    : caseInstr
+    ;
 
-UNICODE_ESC : '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
+// Case instruction.
+caseInstr
+    : whenInst (caseInstr)?
+    ;
 
-HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ;
+whenInst
+    : WHEN expr THEN instr (ELSE instr)? END
+    ;
 
-COMMENT : '/*' .*? '*/' -> skip ;
+instr
+    : caseInstr
+    | ID ASSIGN clipFunc SEMI (instr)?
+    ;
 
-LINE_COMMENT : '//' ~[\r\n]* -> skip ;
+// Expression.
+expr    
+    : clipFunc EQUAL literal
+    ;
+
+// Clip instruction.
+clipFunc
+    : CLIP LPAR ID COMMA literal COMMA literal RPAR 
+    ;
+
+// Assignment expression
+assiExpr
+    : ID
+    | ID ASSIGN literal
+    ;
+
+t
+    : CATLEX
+    | ATTR
+    | LIST
+    ;
+
+literal
+    :   CharacterLiteral
+    |   StringLiteral
+    ;
+
+
+/**
+ * Especificación léxica.
+ */
+
+// Keywords.
+
+CATLEX          : 'catlex' ;
+ATTR            : 'attribute' ;
+LIST            : 'list';
+VAR             : 'var' ;
+MACRO           : 'macro';
+IS              : 'is';
+CASE            : 'case';
+END             : 'end';
+WHEN            : 'when';
+THEN            : 'then';
+ELSE            : 'else';
+CLIP            : 'clip';
+
+// Identifiers.
+
+ID              : [a-zA-Z_][a-zA-Z_0-9]*;
+INT             : [0-9]+ ;
+
+// Operators.
+
+ASSIGN          : '=';
+NOT             : '!';
+COLON           : ':';
+EQUAL           : '==';
+NOTEQUAL        : '!=';
+AND             : '&&';
+OR              : '||';
+
+// Separators.
+
+LPAR            : '(';
+RPAR            : ')';
+SEMI            : ';';
+COMMA           : ',';
+
+// Character Literals.
+
+CharacterLiteral
+    :   '\'' SingleCharacter '\''
+    |   '\'' EscapeSequence '\''
+    ;
+
+fragment
+SingleCharacter
+    :   ~['\\]
+    ;
+
+// String Literals.
+StringLiteral
+    :   '"' StringCharacters? '"'
+    ;
+fragment
+StringCharacters
+    :   StringCharacter+
+    ;
+fragment
+StringCharacter
+    :   ~["\\]
+    |   EscapeSequence
+    ;
+
+// Escape Sequences for Character and String Literals.
+fragment
+EscapeSequence
+    :   '\\' [btnfr"'\\]
+    |   OctalEscape
+    |   UnicodeEscape
+    ;
+
+fragment
+OctalEscape
+    :   '\\' OctalDigit
+    |   '\\' OctalDigit OctalDigit
+    |   '\\' ZeroToThree OctalDigit OctalDigit
+    ;
+
+fragment
+UnicodeEscape
+    :   '\\' 'u' HexDigit HexDigit HexDigit HexDigit
+    ;
+
+fragment
+ZeroToThree
+    :   [0-3]
+    ;
+
+fragment
+OctalDigit
+    :   [0-7]
+    ;
+
+fragment
+HexDigit
+    :   [0-9a-fA-F]
+    ;
+
+// Whitespace and comments.
+
+WS  :  [ \t\r\n\u000C]+ -> skip
+    ;
+
+COMMENT
+    :   '/*' .*? '*/' -> skip
+    ;
+
+LINE_COMMENT
+    :   '//' ~[\r\n]* -> skip
+    ;
