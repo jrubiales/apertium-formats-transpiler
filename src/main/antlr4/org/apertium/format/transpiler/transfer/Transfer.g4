@@ -1,7 +1,7 @@
 grammar Transfer;
 
 /**
- * Especificación sintáctica.
+ * Syntactic specification.
  */
 
 /*
@@ -32,160 +32,252 @@ stat : T {
 stat
     : bDcl EOF;
 
-// Block delarations.
+// Block delaration.
 bDcl
-    : tDecl (bDcl)?
-    | varDecl (bDcl)?
-    | mDecl (bDcl)?
+    : tDecl bDcl?
+    | varDecl bDcl?
+    | mDecl bDcl?
+    | rDecl bDcl?
     ;
 
-// Type declare
+// Type declaration.
 tDecl
     : t ID ASSIGN multString SEMI
     ;
 
-// Multi-string definition.
+// Multi-string.
 multString
-    : literal COMMA multString
-    | literal
+    : literal (COMMA multString)?
     ;
 
-// Var declare.
+// Var declaration.
 varDecl
     : VAR varExpr SEMI
     ;
 
 // Var expression.
 varExpr
-    : assiExpr COMMA varExpr
-    | assiExpr
+    : assiExpr (COMMA varExpr)?
     ;
 
-// Macro declare.
+// Macro declaration.
 mDecl
-    : MACRO ID LPAR mParams RPAR IS mBody END
+    : MACRO ID LPAR mParams RPAR mBody END
     ;
 
 // Macro params.
 mParams
-    : ID COMMA mParams
-    | ID
+    : NPAR ASSIGN INT (C ASSIGN literal)?
     ;
 
 // Macro body.
 mBody
-    :
-    | CASE caseBlock END
+    : instr
     ;
 
-// Case block.
-caseBlock
-    : caseInstr
+// Rule declaration.
+rDecl
+    : RULE LPAR rParams RPAR rBody END
     ;
 
-// Case instruction.
-caseInstr
-    : whenInst (caseInstr)?
+// Rule params.
+rParams
+    : RCOMMENT ASSIGN literal (COMMA rParams)?
+    | C ASSIGN literal (COMMA rParams)?
     ;
 
-whenInst
-    : WHEN expr THEN instr (ELSE instr)? END
+// Rule body.
+rBody
+    : PATTERN ASSIGN multString SEMI rBody?
+    | instr rBody?
     ;
 
+// Instruction.
 instr
-    : caseInstr
-    | ID ASSIGN clipFunc SEMI (instr)?
+    : CASE whenInstr+ END                                       /* choose */
+    | container ASSIGN value SEMI instr?                        /* let */
+    | ID LPAR POS ASSIGN INT RPAR SEMI instr?                   /* call-macro */
+    | MODIFY_CASE container stringValue instr?                  /* modify-case */
+    | container APPEND value instr?                             /* append */
+    | REJECT_CURRENT_RULE LPAR 'shifting' ASSIGN ('yes'|'no')   /* reject-current-rule */
+    | OUT (mlu|lu|b|chunk|ID)+ END                              /* out */
+    ;
+
+container 
+    : (ID|clip) 
+    ;
+
+value
+    : (b|clip|literal|ID|getCaseFrom|caseOf|concat|lu|mlu|chunk)
+    ;
+
+stringValue
+    : (clip|literal|ID|getCaseFrom|caseOf)
+    ;
+
+b: 'b' (LPAR POS ASSIGN INT RPAR)? SEMI
+ ;
+
+concat
+    : CONCAT (value SEMI)+ END
+    ;
+
+lu
+    : LU (value SEMI)+ END
+    ;
+
+mlu
+    : MLU lu+ END
+    ;
+
+chunk
+    : CHUNK ID (LPAR chunkParams* RPAR)? tags (mlu|lu|b|ID)+ END
+    ;
+
+chunkParams
+    : (NAME|NAME_FROM|CASE|C) ASSIGN literal
+    ;
+
+tags
+    : TAGS (value SEMI)+ END
+    ;
+
+getCaseFrom
+    : GET_CASE_FROM LPAR POS ASSIGN INT RPAR (clip|literal|ID)
+    ;
+
+caseOf
+    : CASE_OF LPAR POS ASSIGN INT COMMA SIDE ASSIGN side COMMA PART ASSIGN literal RPAR (clip|literal|ID)
+    ;
+
+// When instruction.
+whenInstr
+    : WHEN expr THEN instr (ELSE instr)? END
     ;
 
 // Expression.
 expr    
-    : clipFunc EQUAL literal
+    : clip NOT? (EQUAL|EQUAL_CASELESS) literal (AND|OR expr)?
+    | clip NOT? (IN|IN_CASELESS|BEGINS_WITH|BEGINS_WITH_CASELESS|ENDS_WITH|ENDS_WITH_CASELESS|CONTAINS_SUBSTR|CONTAINS_SUBSTR_CASELESS) ID (AND|OR expr)?
     ;
 
-// Clip instruction.
-clipFunc
-    : CLIP LPAR ID COMMA literal COMMA literal RPAR 
+// Clip function.
+clip
+    : CLIP LPAR clipParams RPAR 
     ;
 
-// Assignment expression
+// Clip function params.
+clipParams
+    : POS ASSIGN INT COMMA SIDE ASSIGN side COMMA PART ASSIGN literal (COMMA (QUEUE|LINK_TO|C) ASSIGN literal)?
+    ;
+
+// Side param (clip function).
+side
+    : '"sl"'
+    | '"tl"'
+    ;
+
+// Assignment expression.
 assiExpr
     : ID
     | ID ASSIGN literal
     ;
 
+// Type.
 t
     : CATLEX
     | ATTR
     | LIST
     ;
 
+// Literal.
 literal
-    :   CharacterLiteral
-    |   StringLiteral
+    : StringLiteral
     ;
 
-
 /**
- * Especificación léxica.
+ * Lexical specification.
  */
 
 // Keywords.
 
-CATLEX          : 'catlex' ;
-ATTR            : 'attribute' ;
-LIST            : 'list';
-VAR             : 'var' ;
-MACRO           : 'macro';
-IS              : 'is';
-CASE            : 'case';
-END             : 'end';
-WHEN            : 'when';
-THEN            : 'then';
-ELSE            : 'else';
-CLIP            : 'clip';
-
-// Identifiers.
-
-ID              : [a-zA-Z_][a-zA-Z_0-9]*;
-INT             : [0-9]+ ;
+CATLEX                      : 'Catlex' ;
+ATTR                        : 'Attribute' ;
+LIST                        : 'List' ;
+VAR                         : 'Var' ;
+MACRO                       : 'Macro' ;
+N                           : 'n' ;
+NPAR                        : 'npar' ;
+C                           : 'c' ;
+CASE                        : 'case' ;
+END                         : 'end' ;
+WHEN                        : 'when' ;
+THEN                        : 'then' ;
+ELSE                        : 'else' ;
+CLIP                        : 'clip' ;
+POS                         : 'pos' ;
+SIDE                        : 'side' ;
+PART                        : 'part' ;
+QUEUE                       : 'queue' ;
+LINK_TO                     : 'linkTo' ;
+RULE                        : 'Rule' ;
+RCOMMENT                    : 'comment' ;
+PATTERN                     : 'pattern' ;
+IN_CASELESS                 : 'inCaseless' ;
+BEGINS_WITH                 : 'beginsWith' ;
+BEGINS_WITH_CASELESS        : 'beginsWithCaseless' ;
+ENDS_WITH                   : 'endsWith' ;
+ENDS_WITH_CASELESS          : 'endsWithCaseless' ;
+CONTAINS_SUBSTR             : 'containsSubstring' ;
+CONTAINS_SUBSTR_CASELESS    : 'containsSubstringCaseless' ;
+MODIFY_CASE                 : 'modifyCase' ;
+APPEND                      : 'append' ;
+REJECT_CURRENT_RULE         : 'rejectCurrentRule' ;
+OUT                         : 'out' ;
+GET_CASE_FROM               : 'get case from' ;
+CASE_OF                     : 'case of' ;
+CONCAT                      : 'concat' ;
+LU                          : 'lu' ;
+MLU                         : 'mlu' ;
+CHUNK                       : 'Chunk';
+TAGS                        : 'tags';
+NAME                        : 'name';
+NAME_FROM                   : 'nameFrom';
 
 // Operators.
 
-ASSIGN          : '=';
-NOT             : '!';
-COLON           : ':';
-EQUAL           : '==';
-NOTEQUAL        : '!=';
-AND             : '&&';
-OR              : '||';
+ASSIGN                      : '=' ;
+NOT                         : 'not' ;
+EQUAL                       : 'equal' ;
+EQUAL_CASELESS              : 'equalCaseless' ;
+AND                         : 'and' ;
+OR                          : 'or' ;
+IN                          : 'in' ;
+
 
 // Separators.
 
-LPAR            : '(';
-RPAR            : ')';
-SEMI            : ';';
-COMMA           : ',';
+LPAR                        : '(' ;
+RPAR                        : ')' ;
+SEMI                        : ';' ;
+COMMA                       : ',' ;
 
-// Character Literals.
+// Identifiers.
 
-CharacterLiteral
-    :   '\'' SingleCharacter '\''
-    |   '\'' EscapeSequence '\''
-    ;
-
-fragment
-SingleCharacter
-    :   ~['\\]
-    ;
+ID                          : [a-zA-Z_][a-zA-Z_0-9]* ;
+INT                         : [0-9]+ ;
 
 // String Literals.
+
 StringLiteral
     :   '"' StringCharacters? '"'
     ;
+
 fragment
 StringCharacters
     :   StringCharacter+
     ;
+
 fragment
 StringCharacter
     :   ~["\\]

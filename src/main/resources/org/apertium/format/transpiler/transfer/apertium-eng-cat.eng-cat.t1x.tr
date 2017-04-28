@@ -7,7 +7,7 @@
 
 */
 
-catlex nom = "n.*";
+Catlex nom = "n.*";
 
 /*
 
@@ -29,7 +29,7 @@ catlex nom = "n.*";
 
 */
 
-catlex months = "january,n.*", "february,n.*", "march,n.*", "march,np.cog.*",
+Catlex months = "january,n.*", "february,n.*", "march,n.*", "march,np.cog.*",
                 "april,n.*", "may,n.*", "june,n.*",
                 "july,n.*", "august,n.*", "september,n.*", 
                 "october,n.*", "november,n.*", "december,n.*";
@@ -48,7 +48,7 @@ catlex months = "january,n.*", "february,n.*", "march,n.*", "march,np.cog.*",
 
 */
 
-attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
+Attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
 
 /*
 
@@ -88,7 +88,7 @@ attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
 
 */
 
-var genere = "<m>", nombre = "<sg>", interrogativa, exclamativa, neg, adjectiu1, adjectiu2, auxiliar, caseFirstWord, EOS = "true", lema, lema_SV, verbfinal, chunk, temps_chunk, pers_chunk, nbr_chunk, nbr_qual, gen_chunk, gen_qual, gen_paraula, nbr_paraula, nbr_adj, pronom, pronomenc, paraula1, paraula2, tipus_verb, tipus_verb_imp, negative, tipus_det;
+Var genere = "<m>", nombre = "<sg>", interrogativa, exclamativa, neg, adjectiu1, adjectiu2, auxiliar, caseFirstWord, EOS = "true", lema, lema_SV, verbfinal, chunk, temps_chunk, pers_chunk, nbr_chunk, nbr_qual, gen_chunk, gen_qual, gen_paraula, nbr_paraula, nbr_adj, pronom, pronomenc, paraula1, paraula2, tipus_verb, tipus_verb_imp, negative, tipus_det;
 
 /*
 
@@ -104,7 +104,7 @@ var genere = "<m>", nombre = "<sg>", interrogativa, exclamativa, neg, adjectiu1,
 
 */
 
-list days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
+List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
 
 /*
 
@@ -141,14 +141,14 @@ list days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", 
 
 */
 
-macro elimina_GDND(i) is
+Macro elimina_GDND(npar=1)
 
     case
-        when clip(i, "tl", "gen") == "GD" then
-            m = clip(i, "tl", "gen");
+        when clip(pos=1, side="tl", part="gen") equal "GD" then
+            clip(pos=1, side="tl", part="gen") = m;
         end
-        when clip(i, "tl", "nbr") == "ND" then
-            sg = clip(i, "tl", "nbr");
+        when clip(pos=1, side="tl", part="nbr") equal "ND" then
+            clip(pos=1, side="tl", part="nbr") = sg;
         end
     end
 
@@ -237,23 +237,46 @@ end
 
 */
 
-/*
-
-rule is
-    pattern = "months", "num", "coma", "num"
-    firstWord(1)
+Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)")
+    pattern = "months", "num", "coma", "num";
+    firstWord(pos=1); /* call-macro firstWord */
     case
-        when clip(1,"sl","lem") == "March" then
-            clip(1,"sl","lem") = "març"
+        when clip(pos=1, side="sl", part="lem") equal "March" then
+            clip(pos=1, side="sl", part="lem") = "març";
             case
-                when clip(1,"sl","a_nom") == "np.cog" then
-                    clip(1,"tl","a_nom") = "n"
-                    clip(1,"tl","gen") = "m"
-                    clip(1,"tl","nbr") = "sg"
+                when clip(pos=1, side="sl", part="a_nom") equal "<np><cog>" then
+                    clip(pos=1, side="tl", part="a_nom") = "<n>";
+                    clip(pos=1, side="tl", part="gen") = "<m>";
+                    clip(pos=1, side="tl", part="nbr") = "<sg>";
                 end
             end
         end
     end
-end 
-
-*/
+    out
+        Chunk month_num_cm_num(case="caseFirstWord")
+            tags 
+                clip(pos=2, side="tl", part="a_adv");
+                neg; /* id var */
+            end
+            lu 
+                clip(pos=2, side="tl", part="whole");
+            end
+            b(pos=1);
+            lu 
+                "de<pr>"; /* literal + literal-tag */
+            end
+            b;
+            lu 
+                clip(pos=1, side="tl", part="whole");
+            end
+            b;
+            lu 
+                "de<pr>"; /* literal + literal-tag */
+            end
+            b(pos=3);
+            lu 
+                clip(pos=4, side="tl", part="whole");
+            end
+        end
+    end
+end
