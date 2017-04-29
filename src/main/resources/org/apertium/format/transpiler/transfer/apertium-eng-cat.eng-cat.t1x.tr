@@ -1,281 +1,284 @@
 
-/* 
+Transfer(default="chunk")
 
-<def-cat n="nom">
-    <cat-item tags="n.*"/>
-</def-cat>
+    /* 
 
-*/
+    <def-cat n="nom">
+        <cat-item tags="n.*"/>
+    </def-cat>
 
-Catlex nom = "n.*";
+    */
 
-/*
+    Catlex nom = "n.*";
 
-<def-cat n="months">
-    <cat-item lemma="january" tags="n.*"/>
-    <cat-item lemma="february" tags="n.*"/>
-    <cat-item lemma="march" tags="n.*"/>
-    <cat-item lemma="march" tags="np.cog.*"/>
-    <cat-item lemma="april" tags="n.*"/>
-    <cat-item lemma="may" tags="n.*"/>
-    <cat-item lemma="june" tags="n.*"/>
-    <cat-item lemma="july" tags="n.*"/>
-    <cat-item lemma="august" tags="n.*"/>
-    <cat-item lemma="september" tags="n.*"/>
-    <cat-item lemma="october" tags="n.*"/>
-    <cat-item lemma="november" tags="n.*"/>
-    <cat-item lemma="december" tags="n.*"/>
-</def-cat>
+    /*
 
-*/
+    <def-cat n="months">
+        <cat-item lemma="january" tags="n.*"/>
+        <cat-item lemma="february" tags="n.*"/>
+        <cat-item lemma="march" tags="n.*"/>
+        <cat-item lemma="march" tags="np.cog.*"/>
+        <cat-item lemma="april" tags="n.*"/>
+        <cat-item lemma="may" tags="n.*"/>
+        <cat-item lemma="june" tags="n.*"/>
+        <cat-item lemma="july" tags="n.*"/>
+        <cat-item lemma="august" tags="n.*"/>
+        <cat-item lemma="september" tags="n.*"/>
+        <cat-item lemma="october" tags="n.*"/>
+        <cat-item lemma="november" tags="n.*"/>
+        <cat-item lemma="december" tags="n.*"/>
+    </def-cat>
 
-Catlex months = "january,n.*", "february,n.*", "march,n.*", "march,np.cog.*",
-                "april,n.*", "may,n.*", "june,n.*",
-                "july,n.*", "august,n.*", "september,n.*", 
-                "october,n.*", "november,n.*", "december,n.*";
+    */
 
-/* 
+    Catlex months = "january,n.*", "february,n.*", "march,n.*", "march,np.cog.*",
+                    "april,n.*", "may,n.*", "june,n.*",
+                    "july,n.*", "august,n.*", "september,n.*", 
+                    "october,n.*", "november,n.*", "december,n.*";
 
-<def-attr n="a_nom">
-    <attr-item tags="n"/>
-    <attr-item tags="n.acr"/>
-    <attr-item tags="np.loc"/>
-    <attr-item tags="np.ant"/>
-    <attr-item tags="np.cog"/>
-    <attr-item tags="np.al"/>
-    <attr-item tags="adv"/>
-</def-attr>
+    /* 
 
-*/
+    <def-attr n="a_nom">
+        <attr-item tags="n"/>
+        <attr-item tags="n.acr"/>
+        <attr-item tags="np.loc"/>
+        <attr-item tags="np.ant"/>
+        <attr-item tags="np.cog"/>
+        <attr-item tags="np.al"/>
+        <attr-item tags="adv"/>
+    </def-attr>
 
-Attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
+    */
 
-/*
+    Attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
 
-<section-def-vars>
-    <def-var n="genere" v="&amp;lt;m&amp;gt;"/>
-    <def-var n="nombre" v="&amp;lt;sg&amp;gt;"/>
-    <def-var n="interrogativa"/>
-    <def-var n="exclamativa"/>
-    <def-var n="neg"/>
-    <def-var n="adjectiu1"/>
-    <def-var n="adjectiu2"/>
-    <def-var n="auxiliar"/>
-    <def-var n="caseFirstWord"/>
-    <def-var n="EOS" v="true"/>
-    <def-var n="lema"/>
-    <def-var n="lema_SV"/>
-    <def-var n="verbfinal"/>
-    <def-var n="chunk"/>
-    <def-var n="temps_chunk"/>
-    <def-var n="pers_chunk"/>
-    <def-var n="nbr_chunk"/>
-    <def-var n="nbr_qual"/>
-    <def-var n="gen_chunk"/>
-    <def-var n="gen_qual"/>
-    <def-var n="gen_paraula"/>
-    <def-var n="nbr_paraula"/>
-    <def-var n="nbr_adj"/>
-    <def-var n="pronom"/>
-    <def-var n="pronomenc"/>
-    <def-var n="paraula1"/>
-    <def-var n="paraula2"/>
-    <def-var n="tipus_verb"/>
-    <def-var n="tipus_verb_imp"/>
-    <def-var n="negative"/> <!-- BCN-->
-    <def-var n="tipus_det"/>
-</section-def-vars>
+    /*
 
-*/
+    <section-def-vars>
+        <def-var n="genere" v="&amp;lt;m&amp;gt;"/>
+        <def-var n="nombre" v="&amp;lt;sg&amp;gt;"/>
+        <def-var n="interrogativa"/>
+        <def-var n="exclamativa"/>
+        <def-var n="neg"/>
+        <def-var n="adjectiu1"/>
+        <def-var n="adjectiu2"/>
+        <def-var n="auxiliar"/>
+        <def-var n="caseFirstWord"/>
+        <def-var n="EOS" v="true"/>
+        <def-var n="lema"/>
+        <def-var n="lema_SV"/>
+        <def-var n="verbfinal"/>
+        <def-var n="chunk"/>
+        <def-var n="temps_chunk"/>
+        <def-var n="pers_chunk"/>
+        <def-var n="nbr_chunk"/>
+        <def-var n="nbr_qual"/>
+        <def-var n="gen_chunk"/>
+        <def-var n="gen_qual"/>
+        <def-var n="gen_paraula"/>
+        <def-var n="nbr_paraula"/>
+        <def-var n="nbr_adj"/>
+        <def-var n="pronom"/>
+        <def-var n="pronomenc"/>
+        <def-var n="paraula1"/>
+        <def-var n="paraula2"/>
+        <def-var n="tipus_verb"/>
+        <def-var n="tipus_verb_imp"/>
+        <def-var n="negative"/> <!-- BCN-->
+        <def-var n="tipus_det"/>
+    </section-def-vars>
 
-Var genere = "<m>", nombre = "<sg>", interrogativa, exclamativa, neg, adjectiu1, adjectiu2, auxiliar, caseFirstWord, EOS = "true", lema, lema_SV, verbfinal, chunk, temps_chunk, pers_chunk, nbr_chunk, nbr_qual, gen_chunk, gen_qual, gen_paraula, nbr_paraula, nbr_adj, pronom, pronomenc, paraula1, paraula2, tipus_verb, tipus_verb_imp, negative, tipus_det;
+    */
 
-/*
+    Var genere = "<m>", nombre = "<sg>", interrogativa, exclamativa, neg, adjectiu1, adjectiu2, auxiliar, caseFirstWord, EOS = "true", lema, lema_SV, verbfinal, chunk, temps_chunk, pers_chunk, nbr_chunk, nbr_qual, gen_chunk, gen_qual, gen_paraula, nbr_paraula, nbr_adj, pronom, pronomenc, paraula1, paraula2, tipus_verb, tipus_verb_imp, negative, tipus_det;
 
-<def-list n="days">
-    <list-item v="Monday"/>
-    <list-item v="Tuesday"/>
-    <list-item v="Wednesday"/>
-    <list-item v="Thursday"/>
-    <list-item v="Friday"/>
-    <list-item v="Saturday"/>
-    <list-item v="Sunday"/>
-</def-list>
+    /*
 
-*/
+    <def-list n="days">
+        <list-item v="Monday"/>
+        <list-item v="Tuesday"/>
+        <list-item v="Wednesday"/>
+        <list-item v="Thursday"/>
+        <list-item v="Friday"/>
+        <list-item v="Saturday"/>
+        <list-item v="Sunday"/>
+    </def-list>
 
-List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
+    */
 
-/*
+    List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
 
-<def-macro n="elimina_GDND" npar="1">
-    <choose>
-      <when>
-        <test>
-          <equal>
-            <clip pos="1" side="tl" part="gen"/>
-            <lit-tag v="GD"/>
-          </equal>
-        </test>
-        <let>
-            <clip pos="1" side="tl" part="gen"/>
-            <lit-tag v="m"/>
-        </let>
-      </when>
-    </choose>
-    <choose>
-      <when>
-        <test>
-          <equal>
-            <clip pos="1" side="tl" part="nbr"/>
-            <lit-tag v="ND"/>
-          </equal>
-        </test>
-        <let>
-            <clip pos="1" side="tl" part="nbr"/>
-            <lit-tag v="sg"/>
-        </let>
-      </when>
-    </choose>
-</def-macro>
+    /*
 
-*/
+    <def-macro n="elimina_GDND" npar="1">
+        <choose>
+          <when>
+            <test>
+              <equal>
+                <clip pos="1" side="tl" part="gen"/>
+                <lit-tag v="GD"/>
+              </equal>
+            </test>
+            <let>
+                <clip pos="1" side="tl" part="gen"/>
+                <lit-tag v="m"/>
+            </let>
+          </when>
+        </choose>
+        <choose>
+          <when>
+            <test>
+              <equal>
+                <clip pos="1" side="tl" part="nbr"/>
+                <lit-tag v="ND"/>
+              </equal>
+            </test>
+            <let>
+                <clip pos="1" side="tl" part="nbr"/>
+                <lit-tag v="sg"/>
+            </let>
+          </when>
+        </choose>
+    </def-macro>
 
-Macro elimina_GDND(npar=1)
+    */
+    
+    Macro elimina_GDND(npar=1)
 
-    case
-        when clip(pos=1, side="tl", part="gen") equal "GD" then
-            clip(pos=1, side="tl", part="gen") = m;
+        case
+            when clip(pos=1, side="tl", part="gen") equal "<GD>" then
+                clip(pos=1, side="tl", part="gen") = "<m>";
+            end
+            when clip(pos=1, side="tl", part="nbr") equal "<ND>" then
+                clip(pos=1, side="tl", part="nbr") = "<sg>";
+            end
         end
-        when clip(pos=1, side="tl", part="nbr") equal "ND" then
-            clip(pos=1, side="tl", part="nbr") = sg;
-        end
+
     end
 
-end
+    /*
 
-/*
-
-<rule comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)">
-    <pattern>
-      <pattern-item n="months"/>
-      <pattern-item n="num"/>
-      <pattern-item n="coma"/>
-      <pattern-item n="num"/>
-    </pattern>
-    <action>
-      <call-macro n="firstWord">
-        <with-param pos="1"/>
-      </call-macro>
-      <choose>
-        <when>
-          <test>
-            <equal>
-              <clip pos="1" side="sl" part="lem"/>
-              <lit v="March"/>
-            </equal>
-          </test>
-          <let>
-            <clip pos="1" side="tl" part="lem"/>
-            <lit v="març"/>
-          </let>
+    <rule comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)">
+        <pattern>
+          <pattern-item n="months"/>
+          <pattern-item n="num"/>
+          <pattern-item n="coma"/>
+          <pattern-item n="num"/>
+        </pattern>
+        <action>
+          <call-macro n="firstWord">
+            <with-param pos="1"/>
+          </call-macro>
           <choose>
             <when>
               <test>
                 <equal>
-                  <clip pos="1" side="sl" part="a_nom"/>
-                  <lit-tag v="np.cog"/>
+                  <clip pos="1" side="sl" part="lem"/>
+                  <lit v="March"/>
                 </equal>
               </test>
               <let>
-                <clip pos="1" side="tl" part="a_nom"/>
-                <lit-tag v="n"/>
+                <clip pos="1" side="tl" part="lem"/>
+                <lit v="març"/>
               </let>
-              <let>
-                <clip pos="1" side="tl" part="gen"/>
-                <lit-tag v="m"/>
-             </let>
-              <let>
-                <clip pos="1" side="tl" part="nbr"/>
-                <lit-tag v="sg"/>
-             </let>
+              <choose>
+                <when>
+                  <test>
+                    <equal>
+                      <clip pos="1" side="sl" part="a_nom"/>
+                      <lit-tag v="np.cog"/>
+                    </equal>
+                  </test>
+                  <let>
+                    <clip pos="1" side="tl" part="a_nom"/>
+                    <lit-tag v="n"/>
+                  </let>
+                  <let>
+                    <clip pos="1" side="tl" part="gen"/>
+                    <lit-tag v="m"/>
+                 </let>
+                  <let>
+                    <clip pos="1" side="tl" part="nbr"/>
+                    <lit-tag v="sg"/>
+                 </let>
+                </when>
+              </choose>
             </when>
           </choose>
-        </when>
-      </choose>
-      <out>
-        <chunk name="month_num_cm_num" case="caseFirstWord">
-          <tags>
-            <tag><clip pos="2" side="tl" part="a_adv"/></tag>
-            <tag><var n="neg"/></tag>
-          </tags>
-          <lu>
-            <clip pos="2" side="tl" part="whole"/>
-          </lu>
-          <b pos="1"/>
-          <lu>
-            <lit v="de"/>
-            <lit-tag v="pr"/>
-          </lu>
-          <b/>
-          <lu>
-            <clip pos="1" side="tl" part="whole"/>
-          </lu>
-          <b/>
-          <lu>
-            <lit v="de"/>
-            <lit-tag v="pr"/>
-          </lu>
-          <b pos="3"/>
-          <lu>
-            <clip pos="4" side="tl" part="whole"/>
-          </lu>
-        </chunk>
-      </out>
-    </action>
-</rule>
+          <out>
+            <chunk name="month_num_cm_num" case="caseFirstWord">
+              <tags>
+                <tag><clip pos="2" side="tl" part="a_adv"/></tag>
+                <tag><var n="neg"/></tag>
+              </tags>
+              <lu>
+                <clip pos="2" side="tl" part="whole"/>
+              </lu>
+              <b pos="1"/>
+              <lu>
+                <lit v="de"/>
+                <lit-tag v="pr"/>
+              </lu>
+              <b/>
+              <lu>
+                <clip pos="1" side="tl" part="whole"/>
+              </lu>
+              <b/>
+              <lu>
+                <lit v="de"/>
+                <lit-tag v="pr"/>
+              </lu>
+              <b pos="3"/>
+              <lu>
+                <clip pos="4" side="tl" part="whole"/>
+              </lu>
+            </chunk>
+          </out>
+        </action>
+    </rule>
 
-*/
+    */
 
-Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)")
-    pattern = "months", "num", "coma", "num";
-    firstWord(pos=1); /* call-macro firstWord */
-    case
-        when clip(pos=1, side="sl", part="lem") equal "March" then
-            clip(pos=1, side="sl", part="lem") = "març";
-            case
-                when clip(pos=1, side="sl", part="a_nom") equal "<np><cog>" then
-                    clip(pos=1, side="tl", part="a_nom") = "<n>";
-                    clip(pos=1, side="tl", part="gen") = "<m>";
-                    clip(pos=1, side="tl", part="nbr") = "<sg>";
+    Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)")
+        Pattern = "months", "num", "coma", "num";
+        firstWord(pos=1);       /* call-macro firstWord */
+        case
+            when clip(pos=1, side="sl", part="lem") equal "March" then
+                clip(pos=1, side="sl", part="lem") = "març";
+                case
+                    when clip(pos=1, side="sl", part="a_nom") equal "<np><cog>" then
+                        clip(pos=1, side="tl", part="a_nom") = "<n>";
+                        clip(pos=1, side="tl", part="gen") = "<m>";
+                        clip(pos=1, side="tl", part="nbr") = "<sg>";
+                    end
                 end
             end
         end
-    end
-    out
-        Chunk month_num_cm_num(case="caseFirstWord")
-            tags 
-                clip(pos=2, side="tl", part="a_adv");
-                neg; /* id var */
-            end
-            lu 
-                clip(pos=2, side="tl", part="whole");
-            end
-            b(pos=1);
-            lu 
-                "de<pr>"; /* literal + literal-tag */
-            end
-            b;
-            lu 
-                clip(pos=1, side="tl", part="whole");
-            end
-            b;
-            lu 
-                "de<pr>"; /* literal + literal-tag */
-            end
-            b(pos=3);
-            lu 
-                clip(pos=4, side="tl", part="whole");
+        out
+            Chunk month_num_cm_num(case="caseFirstWord")
+                tags 
+                    clip(pos=2, side="tl", part="a_adv");
+                    neg;        /* id var */
+                end
+                lu 
+                    clip(pos=2, side="tl", part="whole");
+                end
+                b(pos=1);
+                lu 
+                    "de<pr>";   /* literal + literal-tag */
+                end
+                b;
+                lu 
+                    clip(pos=1, side="tl", part="whole");
+                end
+                b;
+                lu 
+                    "de<pr>";   /* literal + literal-tag */
+                end
+                b(pos=3);
+                lu 
+                    clip(pos=4, side="tl", part="whole");
+                end
             end
         end
     end

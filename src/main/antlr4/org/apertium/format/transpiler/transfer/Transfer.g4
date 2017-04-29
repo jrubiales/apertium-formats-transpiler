@@ -1,73 +1,116 @@
 grammar Transfer;
 
+/*
+@members {
+    String trans = "";
+}
+*/
+
 /**
  * Syntactic specification.
  */
 
-/*
-
-stat : T {
-
-            if($T.text.equals("catlex")){
-                System.out.print("<def-cat");
-            };
-
-        } ID {
-
-            System.out.println(" n=\"" + $ID.text + "\">");
-
-        } ASSIGNOP STRING {
-
-            System.out.println("<cat-item tags=\"" + $STRING.text + "\"/>");
-
-        } SEMICOLON {
-
-            System.out.println("</def-cat>");
-
-        }
-;
-
-*/
-
 stat
-    : bDcl EOF;
-
-// Block delaration.
-bDcl
-    : tDecl bDcl?
-    | varDecl bDcl?
-    | mDecl bDcl?
-    | rDecl bDcl?
+    : 
+    { 
+        System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
+    } transfer EOF
     ;
 
-// Type declaration.
+// Root element containing the whole structural transfer rule file.
+transfer
+    :
+    TRANSFER {
+        System.out.print("<transfer");
+    } LPAR 'default' {
+        System.out.print(" default");
+    } ASSIGN {
+        System.out.print($ASSIGN.text);
+    } group = ('"lu"' | '"chunk"') { 
+        System.out.print($group.text); 
+    } RPAR {
+        System.out.print(">");
+    } transferBody END {
+        System.out.print("</transfer>");
+    }
+    ;
+
+// Transfer body.
+transferBody
+    : tDecl transferBody?
+    | varDecl transferBody?
+    | mDecl transferBody?
+    | rDecl
+    ;
+
+// Type declaration. Catlex, Attribute, List
 tDecl
-    : t ID ASSIGN multString SEMI
+    : t ID {
+        System.out.print("n=\"" + $ID.text + "\">");
+    } ASSIGN multString[$t.text] SEMI
     ;
 
 // Multi-string.
-multString
-    : literal (COMMA multString)?
+multString [String str]
+    : literal {
+
+        switch(str){
+            case "Catlex" :
+                String[] tokens = $literal.text.split(",");
+                System.out.print("<cat-item ");
+                if(tokens.length == 1){
+                    System.out.print("tags=" + tokens[0]);
+                } else if(tokens.length > 1){
+                    System.out.print("lemma=" + tokens[0] + "\" tags=\"" + tokens[1]);
+                }
+                System.out.print("/>");
+                break;
+            case "Attribute" : System.out.print("<attr-item tags=" + $literal.text + "/>"); break;
+            case "List" : System.out.print("<list-item v=" + $literal.text + "/>"); break;
+            case "Pattern" : System.out.print("<pattern-item n=" + $literal.text + "/>"); break;
+        }
+        
+    } (COMMA multString[str])?
     ;
 
 // Var declaration.
 varDecl
-    : VAR varExpr SEMI
+    : VAR varExpr+ SEMI
     ;
 
 // Var expression.
 varExpr
-    : assiExpr (COMMA varExpr)?
+    : { 
+        System.out.print("<def-var ");
+    }(ID { 
+        System.out.print("n=\"" + $ID.text + "\"/>");
+    } | ID ASSIGN { 
+        System.out.print("n=\"" + $ID.text + "\" ");
+    } literal {
+        System.out.print("v=" + $literal.text + "/>");
+    }) COMMA?
     ;
 
 // Macro declaration.
 mDecl
-    : MACRO ID LPAR mParams RPAR mBody END
+    : MACRO {
+        System.out.print("<def-macro ");
+    } ID {
+        System.out.print("n=\"" + $ID.text + "\" ");  
+    } LPAR mParams RPAR mBody END {
+        System.out.println("</def-macro>");
+    }
     ;
 
 // Macro params.
 mParams
-    : NPAR ASSIGN INT (C ASSIGN literal)?
+    : NPAR ASSIGN INT {
+        System.out.print($NPAR.text + "=\"" + $INT.text + "\"");
+    }(C ASSIGN literal{
+        System.out.print(" " + $C.text + "=" + $literal.text);
+    })? { 
+        System.out.print(">"); 
+    }
     ;
 
 // Macro body.
@@ -88,14 +131,22 @@ rParams
 
 // Rule body.
 rBody
-    : PATTERN ASSIGN multString SEMI rBody?
+    : PATTERN ASSIGN multString[$PATTERN.text] SEMI rBody?
     | instr rBody?
     ;
 
 // Instruction.
 instr
-    : CASE whenInstr+ END                                       /* choose */
-    | container ASSIGN value SEMI instr?                        /* let */
+    : CASE { 
+        System.out.print("<choose>");
+    } whenInstr+ END {
+        System.out.print("</choose>");
+    }                                                           /* choose */
+    | {
+        System.out.print("<let>");
+    } container ASSIGN value SEMI {
+        System.out.print($container.trans + $value.trans + "</let>");
+    } instr?                                                    /* let */
     | ID LPAR POS ASSIGN INT RPAR SEMI instr?                   /* call-macro */
     | MODIFY_CASE container stringValue instr?                  /* modify-case */
     | container APPEND value instr?                             /* append */
@@ -103,12 +154,16 @@ instr
     | OUT (mlu|lu|b|chunk|ID)+ END                              /* out */
     ;
 
-container 
-    : (ID|clip) 
+container returns [String trans]
+    : (ID| clip {
+        $trans = $clip.trans;
+    }) 
     ;
 
-value
-    : (b|clip|literal|ID|getCaseFrom|caseOf|concat|lu|mlu|chunk)
+value returns [String trans]
+    : (b|clip|literal { 
+        $trans = "<lit v=" + $literal.text + "/>";
+    }|ID|getCaseFrom|caseOf|concat|lu|mlu|chunk)
     ;
 
 stringValue
@@ -152,23 +207,67 @@ caseOf
 
 // When instruction.
 whenInstr
-    : WHEN expr THEN instr (ELSE instr)? END
+    : WHEN {
+        System.out.print("<when><test>");
+    } expr { 
+        System.out.print($expr.trans + "</test>");
+    } THEN instr {
+        System.out.print("</when>");
+    } (ELSE {
+        System.out.print("<otherwise>");
+    } instr {
+        System.out.print("</otherwise>");
+    })? END {
+        
+    }
     ;
 
 // Expression.
-expr    
-    : clip NOT? (EQUAL|EQUAL_CASELESS) literal (AND|OR expr)?
-    | clip NOT? (IN|IN_CASELESS|BEGINS_WITH|BEGINS_WITH_CASELESS|ENDS_WITH|ENDS_WITH_CASELESS|CONTAINS_SUBSTR|CONTAINS_SUBSTR_CASELESS) ID (AND|OR expr)?
+expr returns [String trans]
+    : v1 = value NOT? c1 =(EQUAL|EQUAL_CASELESS) v2 = value {
+        $trans = "";
+        boolean hasNot = $NOT!=null && !$NOT.text.equals("");
+        String caselessAttr = ($c1.text.equals("equalCaseless")) ? " caseless=\"yes\"" : "";
+        if(hasNot){
+            $trans += "<not>";
+        }
+        $trans += "<equal" + caselessAttr + ">" +$v1.text + $v2.text + "</equal>";
+        if(hasNot){
+            $trans += "</not>";
+        }
+    } /* Recursion base case */
+    | v1 = value NOT? c1 = (EQUAL|EQUAL_CASELESS) v2 = value (c2 = (AND|OR) expr {
+        $trans = "";
+        boolean hasNot = $NOT!=null && !$NOT.text.equals("");
+        String caselessAttr = ($c1.text.equals("equalCaseless")) ? " caseless=\"yes\"" : "";
+        if(hasNot){
+            $trans += "<not>";
+        }
+        $trans += "<" + $c2.text + "><equal" + caselessAttr + ">" +$v1.text + $v2.text + "</equal>" + $expr.trans + "</" + $c2.text + ">";
+        if(hasNot){
+            $trans += "</not>";
+        }
+    })?                                                                                                                                             /* value value */
+    | value NOT? (IN|IN_CASELESS|BEGINS_WITH|BEGINS_WITH_CASELESS|ENDS_WITH|ENDS_WITH_CASELESS) ID (AND|OR expr)?                                   /* value list */
+    | value NOT? (BEGINS_WITH|BEGINS_WITH_CASELESS|ENDS_WITH|ENDS_WITH_CASELESS|CONTAINS_SUBSTR|CONTAINS_SUBSTR_CASELESS) value (AND|OR expr)?      /* value value */
     ;
 
 // Clip function.
-clip
-    : CLIP LPAR clipParams RPAR 
+clip returns [String trans]
+    : CLIP { 
+        $trans = "<clip ";
+    } LPAR clipParams RPAR {
+        $trans += $clipParams.trans + "/>";
+    }
     ;
 
 // Clip function params.
-clipParams
-    : POS ASSIGN INT COMMA SIDE ASSIGN side COMMA PART ASSIGN literal (COMMA (QUEUE|LINK_TO|C) ASSIGN literal)?
+clipParams returns [String trans]
+    : POS ASSIGN INT COMMA SIDE ASSIGN side COMMA PART ASSIGN literal {
+        $trans = "pos=\"" + $INT.text + "\" side=" + $side.text + " part=" + $literal.text;
+    } (COMMA clipParam = (QUEUE|LINK_TO|C) ASSIGN literal{
+        $trans += $clipParam.text + "=" + $literal.text;
+    })?
     ;
 
 // Side param (clip function).
@@ -177,17 +276,17 @@ side
     | '"tl"'
     ;
 
-// Assignment expression.
-assiExpr
-    : ID
-    | ID ASSIGN literal
-    ;
-
 // Type.
 t
-    : CATLEX
-    | ATTR
-    | LIST
+    : CATLEX {
+        System.out.print("<def-cat ");
+    }
+    | ATTR? {
+        System.out.print("<def-attr ");
+    }
+    | LIST? {
+        System.out.print("<def-list ");
+    }
     ;
 
 // Literal.
@@ -201,6 +300,7 @@ literal
 
 // Keywords.
 
+TRANSFER                    : 'Transfer' ;
 CATLEX                      : 'Catlex' ;
 ATTR                        : 'Attribute' ;
 LIST                        : 'List' ;
@@ -219,10 +319,10 @@ POS                         : 'pos' ;
 SIDE                        : 'side' ;
 PART                        : 'part' ;
 QUEUE                       : 'queue' ;
-LINK_TO                     : 'linkTo' ;
+LINK_TO                     : 'link-to' ;
 RULE                        : 'Rule' ;
 RCOMMENT                    : 'comment' ;
-PATTERN                     : 'pattern' ;
+PATTERN                     : 'Pattern' ;
 IN_CASELESS                 : 'inCaseless' ;
 BEGINS_WITH                 : 'beginsWith' ;
 BEGINS_WITH_CASELESS        : 'beginsWithCaseless' ;
@@ -264,7 +364,8 @@ COMMA                       : ',' ;
 
 // Identifiers.
 
-ID                          : [a-zA-Z_][a-zA-Z_0-9]* ;
+ID                          
+                            : [a-zA-Z_][a-zA-Z_0-9]* ;
 INT                         : [0-9]+ ;
 
 // String Literals.
