@@ -90,7 +90,7 @@ Transfer(default="chunk")
 
     */
 
-    Var genere = "<m>", nombre = "<sg>", interrogativa, exclamativa, neg, adjectiu1, adjectiu2, auxiliar, caseFirstWord, EOS = "true", lema, lema_SV, verbfinal, chunk, temps_chunk, pers_chunk, nbr_chunk, nbr_qual, gen_chunk, gen_qual, gen_paraula, nbr_paraula, nbr_adj, pronom, pronomenc, paraula1, paraula2, tipus_verb, tipus_verb_imp, negative, tipus_det;
+    Var genere = "&amp;lt;m&amp;gt;", nombre = "&amp;lt;sg&amp;gt;", interrogativa, exclamativa, neg, adjectiu1, adjectiu2, auxiliar, caseFirstWord, EOS = "true", lema, lema_SV, verbfinal, chunk, temps_chunk, pers_chunk, nbr_chunk, nbr_qual, gen_chunk, gen_qual, gen_paraula, nbr_paraula, nbr_adj, pronom, pronomenc, paraula1, paraula2, tipus_verb, tipus_verb_imp, negative, tipus_det;
 
     /*
 
@@ -146,11 +146,11 @@ Transfer(default="chunk")
     Macro elimina_GDND(npar=1)
 
         case
-            when clip(pos=1, side="tl", part="gen") equal "<GD>" then
-                clip(pos=1, side="tl", part="gen") = "<m>";
+            when clip(pos=1, side="tl", part="gen") equal litTag("GD") then
+                clip(pos=1, side="tl", part="gen") = litTag("m");
             end
-            when clip(pos=1, side="tl", part="nbr") equal "<ND>" then
-                clip(pos=1, side="tl", part="nbr") = "<sg>";
+            when clip(pos=1, side="tl", part="nbr") equal litTag("ND") then
+                clip(pos=1, side="tl", part="nbr") = litTag("sg");
             end
         end
 
@@ -241,15 +241,15 @@ Transfer(default="chunk")
 
     Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)")
         Pattern = "months", "num", "coma", "num";
-        firstWord(pos=1);       /* call-macro firstWord */
+        firstWord(1);   /* call-macro firstWord */
         case
             when clip(pos=1, side="sl", part="lem") equal "March" then
                 clip(pos=1, side="sl", part="lem") = "març";
                 case
-                    when clip(pos=1, side="sl", part="a_nom") equal "<np><cog>" then
-                        clip(pos=1, side="tl", part="a_nom") = "<n>";
-                        clip(pos=1, side="tl", part="gen") = "<m>";
-                        clip(pos=1, side="tl", part="nbr") = "<sg>";
+                    when clip(pos=1, side="sl", part="a_nom") equal litTag("np.cog") then
+                        clip(pos=1, side="tl", part="a_nom") = litTag("n");
+                        clip(pos=1, side="tl", part="gen") = litTag("m");
+                        clip(pos=1, side="tl", part="nbr") = litTag("sg");
                     end
                 end
             end
@@ -257,7 +257,7 @@ Transfer(default="chunk")
         out
             Chunk month_num_cm_num(case="caseFirstWord")
                 tags 
-                    clip(pos=2, side="tl", part="a_adv");
+                    clip(pos=2, side="tl", part="a_adv");    /* BUG */
                     neg;        /* id var */
                 end
                 lu 
@@ -265,7 +265,8 @@ Transfer(default="chunk")
                 end
                 b(pos=1);
                 lu 
-                    "de<pr>";   /* literal + literal-tag */
+                    "de";           /* literal */
+                    litTag("pr");   /* literal-tag */
                 end
                 b;
                 lu 
@@ -273,7 +274,8 @@ Transfer(default="chunk")
                 end
                 b;
                 lu 
-                    "de<pr>";   /* literal + literal-tag */
+                    "de";           /* literal */
+                    litTag("pr");   /* literal-tag */
                 end
                 b(pos=3);
                 lu 
