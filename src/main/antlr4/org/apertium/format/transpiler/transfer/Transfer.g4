@@ -50,7 +50,7 @@ transferBody
 
         */
         System.out.print($tDecl.trans);
-    } transferBody?
+    } transferBody ?
     | { System.out.print("<section-def-vars>"); } varDecl { System.out.print("</section-def-vars>"); } transferBody?
     | mDecl transferBody?
     | rDecl

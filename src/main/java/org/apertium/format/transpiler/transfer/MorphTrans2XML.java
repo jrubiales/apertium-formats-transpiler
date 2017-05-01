@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.*;
+import org.apertium.format.transpiler.transfer.TransferLexer;
+import org.apertium.format.transpiler.transfer.TransferParser;
 
 /**
  *
@@ -16,7 +18,7 @@ public class MorphTrans2XML {
     }
     
     public static void main(String[] args) {
-        System.out.println("Inicio del programa.");
+                
         if (args.length == 0) {
             help();
         } else {
@@ -32,6 +34,7 @@ public class MorphTrans2XML {
             } catch (IOException ex) {
                 Logger.getLogger(MorphTrans2XML.class.getName()).log(Level.SEVERE, null, ex);
             }
+            System.out.println("Finished.");
         }
     }
 
