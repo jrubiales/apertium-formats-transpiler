@@ -19,7 +19,7 @@ public class XML2MorphTrans {
     private static void help(){
         System.out.println("no arguments were given.");
     }
-    
+        
     public static void main(String[] args) {
         if (args.length == 0) {
             help();
@@ -33,6 +33,5 @@ public class XML2MorphTrans {
                 Logger.getLogger(XML2MorphTrans.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-    
+    }    
 }

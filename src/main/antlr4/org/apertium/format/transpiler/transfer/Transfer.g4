@@ -186,9 +186,9 @@ ruleAction returns [String trans = ""]
 
 // Instruction.
 instr returns [String trans = ""]
-    : CASE (whenInstr {
+    : CASE { $trans += "<choose>"; } (whenInstr {
         $trans += $whenInstr.trans;
-    })+ END
+    })+ otherwise? END { $trans += "</choose>"; }
     | {
         $trans += "<let>";
     } container ASSIGN value SEMI {
@@ -383,19 +383,26 @@ caseOf returns [String trans = ""]
 
 // When instruction.
 whenInstr returns [String trans = ""]
-    : { $trans += "<choose>"; } WHEN {
+    : WHEN {
         $trans += "<when><test>";
     } expr { 
         $trans += $expr.trans + "</test>";
     } THEN instr {
-        $trans += $instr.trans + "</when>";
-    } (ELSE {
+        $trans += $instr.trans;
+    } 
+    /*(ELSE {
         $trans += "<otherwise>";
     } instr {
         $trans += $instr.trans + "</otherwise>";
-    })? END {
-        { $trans += "</choose>"; }
+    })? */
+    END {
+        { $trans += "</when>"; }
     }
+    ;
+
+// Otherwise instruction.
+otherwise returns [String trans = ""] 
+    : OTHERWISE { $trans += "<otherwise>"; } instr { $trans += $instr.trans + "</otherwise>"; }
     ;
 
 // Expression.
@@ -536,7 +543,8 @@ CASE                        : 'case' ;
 END                         : 'end' ;
 WHEN                        : 'when' ;
 THEN                        : 'then' ;
-ELSE                        : 'else' ;
+// ELSE                        : 'else' ;
+OTHERWISE                   : 'otherwise' ;
 CLIP                        : 'clip' ;
 POS                         : 'pos' ;
 SIDE                        : 'side' ;
