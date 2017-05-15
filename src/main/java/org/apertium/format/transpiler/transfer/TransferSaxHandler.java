@@ -16,6 +16,7 @@ public class TransferSaxHandler extends DefaultHandler {
     private String equalsTrans, notTrans, boolOpTrans;
     private final List<String> l1;
 
+//    private int c = 0;
     public TransferSaxHandler() {
         sb = new StringBuilder();
         pTrans = new StringBuilder();
@@ -33,6 +34,10 @@ public class TransferSaxHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String name,
             Attributes attributes) throws SAXException {
 
+//        for(int i=0; i<c;++i){
+//            sb.append(" ");
+//        }        
+//        ++c;
         if (localName.equals("transfer")) {
             sb.append("Transfer");
             String def = attributes.getValue("default");
@@ -45,12 +50,11 @@ public class TransferSaxHandler extends DefaultHandler {
             sb.append("Catlex ").append(n).append(" = ");
         } else if (localName.equals("cat-item")) {
             String lemma = attributes.getValue("lemma");
-            String tags = attributes.getValue("tags");
             if (lemma != null && !lemma.equals("")) {
-                pTrans.append("\"").append(lemma).append(",").append(tags).append("\", ");
-            } else {
-                pTrans.append("\"").append(tags).append("\", ");
+                pTrans.append("\"").append(lemma).append("\", ");
             }
+            String tags = attributes.getValue("tags");
+            pTrans.append("\"").append(tags).append("\", ");
         } else if (localName.equals("def-attr")) {
             String n = attributes.getValue("n");
             sb.append("Attribute ").append(n).append(" = ");
@@ -82,7 +86,6 @@ public class TransferSaxHandler extends DefaultHandler {
         } else if (localName.equals("choose")) {
             sb.append("case\n");
         } else if (localName.equals("clip")) {
-
             StringBuilder auxTrans = new StringBuilder();
             String pos = attributes.getValue("pos");
             String side = attributes.getValue("side");
@@ -129,15 +132,31 @@ public class TransferSaxHandler extends DefaultHandler {
         } else if (localName.equals("and") || localName.equals("or")) {
             boolOpTrans = " " + localName;
         } else if (localName.equals("rule")) {
-            sb.append("Rule() ").append("\n");
+            pTrans.append("Rule(");
+            String c = attributes.getValue("c");
+            if (c != null && !c.equals("")) {
+                pTrans.append("c=\"").append(c).append("\", ");
+            }
+            String comment = attributes.getValue("comment");
+            if (comment != null && !comment.equals("")) {
+                pTrans.append("comment=\"").append(comment).append("\"");
+            }
+            String str = pTrans.toString().replaceAll(", $", "");
+            sb.append(str).append(")\n");
+            pTrans.setLength(0);
         } else if (localName.equals("pattern")) {
-            sb.append("Pattern = \n");
+            sb.append("Pattern = ");
+        } else if (localName.equals("pattern-item")) {
+            String n = attributes.getValue("n");
+            pTrans.append(n).append(", ");
         } else if (localName.equals("action")) {
             sb.append("action\n");
         } else if (localName.equals("call-macro")) {
-            sb.append("callMacro();\n");
+            String n = attributes.getValue("n");
+            sb.append(n).append("(");
         } else if (localName.equals("with-param")) {
-
+            String pos = attributes.getValue("pos");
+            pTrans.append(pos).append(", ");
         } else if (localName.equals("out")) {
             sb.append("out\n");
         } else if (localName.equals("chunk")) {
@@ -164,6 +183,7 @@ public class TransferSaxHandler extends DefaultHandler {
     public void endElement(String uri, String localName, String name)
             throws SAXException {
 
+//        --c;
         if (localName.equals("equal")) {
             if (l1.size() > 1) {
                 pTrans.append(l1.get(0)).append(" ").append(equalsTrans).append(" ").append(l1.get(1)).append(boolOpTrans).append(" ");
@@ -174,13 +194,13 @@ public class TransferSaxHandler extends DefaultHandler {
             boolOpTrans = "";
             l1.clear();
         } else if (localName.equals("test")) {
-            sb.append(notTrans).append(pTrans).append("then\n");
+            sb.append(pTrans).append("then\n"); // .append(notTrans)
             pTrans.setLength(0);
             notTrans = "";
         } else if (localName.equals("when")) {
-            sb.append("end /* end when */\n");
+            sb.append("end /* when */\n");
         } else if (localName.equals("otherwise")) {
-            sb.append("end /* end otherwise */\n");
+            sb.append("end /* otherwise */\n");
         } else if (localName.equals("def-cat")) {
             String str = pTrans.toString().replaceAll(", $", ";");
             sb.append(str).append("\n");
@@ -194,7 +214,8 @@ public class TransferSaxHandler extends DefaultHandler {
             sb.append(str).append("\n");
             pTrans.setLength(0);
         } else if (localName.equals("def-list")) {
-            sb.append(pTrans).append("\n");
+            String str = pTrans.toString().replaceAll(", $", ";");
+            sb.append(str).append("\n");
             pTrans.setLength(0);
         } else if (localName.equals("let")) {
             if (l1.size() > 1) {
@@ -203,30 +224,40 @@ public class TransferSaxHandler extends DefaultHandler {
             l1.clear();
             sb.append(pTrans).append(";\n");
             pTrans.setLength(0);
+        } else if (localName.equals("transfer")) {
+            sb.append("end /* transfer */\n");
         } else if (localName.equals("def-macro")) {
-            sb.append("end /* end macro */\n");
+            sb.append("end /* macro */\n");
         } else if (localName.equals("choose")) {
-            sb.append("end /* end choose */\n");
+            sb.append("end /* choose */\n");
         } else if (localName.equals("rule")) {
-            sb.append("end /* end rule */\n");
+            sb.append("end /* rule */\n");
         } else if (localName.equals("action")) {
-            sb.append("end /* end action */\n");
+            sb.append("end /* action */\n");
         } else if (localName.equals("out")) {
-            sb.append("end /* end out */\n");
+            sb.append("end /* out */\n");
         } else if (localName.equals("chunk")) {
-            sb.append("end /* end chunk */\n");
+            sb.append("end /* chunk */\n");
         } else if (localName.equals("tags")) {
             l1.forEach((string) -> {
                 pTrans.append(string).append("\n");
             });
             l1.clear();
-            sb.append(pTrans).append("end /* end tags */\n");
+            sb.append(pTrans).append("end /* tags */\n");
         } else if (localName.equals("lu")) {
             l1.forEach((string) -> {
                 pTrans.append(string).append("\n");
             });
             l1.clear();
-            sb.append(pTrans).append("end /* end lu */\n");
+            sb.append(pTrans).append("end /* lu */\n");
+        } else if (localName.equals("call-macro")) {
+            String str = pTrans.toString().replaceAll(", $", ")");
+            sb.append(str).append(";\n");
+            pTrans.setLength(0);
+        } else if (localName.equals("pattern-item")) {
+            String str = pTrans.toString().replaceAll(", $", ";");
+            sb.append(str).append("\n");
+            pTrans.setLength(0);
         }
     }
 

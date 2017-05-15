@@ -149,6 +149,8 @@ Transfer(default="chunk")
             when clip(pos=1, side="tl", part="gen") equal litTag("GD") then
                 clip(pos=1, side="tl", part="gen") = litTag("m");
             end
+        end
+        case
             when clip(pos=1, side="tl", part="nbr") equal litTag("ND") then
                 clip(pos=1, side="tl", part="nbr") = litTag("sg");
             end
