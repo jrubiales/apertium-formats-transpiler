@@ -13,7 +13,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class TransferSaxHandler extends DefaultHandler {
 
     private final StringBuilder sb, pTrans;
-    private String equalsTrans, notTrans, boolOpTrans;
+    private String op, notTrans, boolOpTrans;
     private final List<String> l1;
 
 //    private int c = 0;
@@ -23,6 +23,7 @@ public class TransferSaxHandler extends DefaultHandler {
         l1 = new ArrayList<>();
         notTrans = "";
         boolOpTrans = "";
+        op = "";
     }
 
     @Override
@@ -165,14 +166,74 @@ public class TransferSaxHandler extends DefaultHandler {
             sb.append("tags\n");
         } else if (localName.equals("lu")) {
             sb.append("lu\n");
+        } else if (localName.equals("mlu")) {
+            sb.append("mlu\n");
         } else if (localName.equals("equal")) {
             String caseless = attributes.getValue("caseless");
-            if (caseless != null) {
-                equalsTrans = "equalCaseless";
+            if (caseless != null && caseless.equals("yes")) {
+                op = "equalCaseless";
             } else {
-                equalsTrans = "equal";
+                op = "equal";
             }
+        } else if (localName.equals("begins-with") || localName.equals("begins-with-list")) {
+            String caseless = attributes.getValue("caseless");
+            if (caseless != null && caseless.equals("yes")) {
+                op = "beginsWithCaseless";
+            } else {
+                op = "beginsWith";
+            }
+        } else if (localName.equals("ends-with") || localName.equals("ends-with-list")) {
+            String caseless = attributes.getValue("caseless");
+            if (caseless != null && caseless.equals("yes")) {
+                op = "endsWithCaseless";
+            } else {
+                op = "endsWith";
+            }
+        } else if (localName.equals("contains-substring")) {
+            String caseless = attributes.getValue("caseless");
+            if (caseless != null && caseless.equals("yes")) {
+                op = "containsSubstringCaseless";
+            } else {
+                op = "containsSubstring";
+            }
+        } else if (localName.equals("contains-substring")) {
+            String caseless = attributes.getValue("caseless");
+            if (caseless != null && caseless.equals("yes")) {
+                op = "containsSubstringCaseless";
+            } else {
+                op = "containsSubstring";
+            }
+        } else if (localName.equals("in")) {
+            String caseless = attributes.getValue("caseless");
+            if (caseless != null && caseless.equals("yes")) {
+                op = "inCaseless";
+            } else {
+                op = "in";
+            }
+        } else if (localName.equals("b")) {
+            String pos = attributes.getValue("pos");
+            sb.append("b(");
+            if (pos != null && !pos.equals("")) {
+                sb.append(pos);
+            }
+            sb.append(");");
+        } else if (localName.equals("let")) {
+            op = "let";
+        } else if (localName.equals("modify-case")) {
+            op = "modifyCase";
+        } else if (localName.equals("append")) {
+            op = "append";
+        } else if (localName.equals("reject-current-rule")) {
+            String shifting = attributes.getValue("shifting");
+            sb.append("rejectCurrentRule(");
+            if(shifting != null && !shifting.equals("")){
+                sb.append("shifting=\"").append(shifting).append("\"");
+            }
+            sb.append(")");
+        } else if (localName.equals("concat")) {
+            sb.append("concat");
         }
+
     }
 
     @Override
@@ -184,13 +245,16 @@ public class TransferSaxHandler extends DefaultHandler {
             throws SAXException {
 
 //        --c;
-        if (localName.equals("equal")) {
+        if (localName.equals("equal")
+                || localName.equals("begins-with") || localName.equals("begins-with-list")
+                || localName.equals("ends-with") || localName.equals("ends-with-list")
+                || localName.equals("contains-substring") || localName.equals("in")) {
             if (l1.size() > 1) {
-                pTrans.append(l1.get(0)).append(" ").append(equalsTrans).append(" ").append(l1.get(1)).append(boolOpTrans).append(" ");
+                pTrans.append(l1.get(0)).append(" ").append(op).append(" ").append(l1.get(1)).append(boolOpTrans).append(" ");
             }
             sb.append(pTrans);
             pTrans.setLength(0);
-            equalsTrans = "";
+            op = "";
             boolOpTrans = "";
             l1.clear();
         } else if (localName.equals("test")) {
@@ -216,13 +280,6 @@ public class TransferSaxHandler extends DefaultHandler {
         } else if (localName.equals("def-list")) {
             String str = pTrans.toString().replaceAll(", $", ";");
             sb.append(str).append("\n");
-            pTrans.setLength(0);
-        } else if (localName.equals("let")) {
-            if (l1.size() > 1) {
-                pTrans.append(l1.get(0)).append(" = ").append(l1.get(1));
-            }
-            l1.clear();
-            sb.append(pTrans).append(";\n");
             pTrans.setLength(0);
         } else if (localName.equals("transfer")) {
             sb.append("end /* transfer */\n");
@@ -250,6 +307,8 @@ public class TransferSaxHandler extends DefaultHandler {
             });
             l1.clear();
             sb.append(pTrans).append("end /* lu */\n");
+        } else if (localName.equals("mlu")) {
+            sb.append(pTrans).append("end /* mlu */\n");
         } else if (localName.equals("call-macro")) {
             String str = pTrans.toString().replaceAll(", $", ")");
             sb.append(str).append(";\n");
@@ -258,6 +317,20 @@ public class TransferSaxHandler extends DefaultHandler {
             String str = pTrans.toString().replaceAll(", $", ";");
             sb.append(str).append("\n");
             pTrans.setLength(0);
+        } else if (localName.equals("let") || localName.equals("modify-case") || localName.equals("append")) {
+            if (l1.size() > 1) {
+                // todo. Aquí cuando sea un var sólo tiene que aparecer el id.
+                pTrans.append(l1.get(0)).append(" ").append(op).append(" ").append(l1.get(1));
+            }
+            l1.clear();
+            sb.append(pTrans).append(";\n");
+            pTrans.setLength(0);
+        } else if (localName.equals("concat")) {
+            l1.forEach((string) -> {
+                pTrans.append(string).append("\n");
+            });
+            l1.clear();
+            sb.append(pTrans).append("end /* concat */\n");
         }
     }
 

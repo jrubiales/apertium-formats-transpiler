@@ -201,17 +201,15 @@ instr returns [String trans = ""]
     } RPAR SEMI {        
         $trans += "</call-macro>";
     } (instr { $trans += $instr.trans; })?
-    | MODIFY_CASE {
-        $trans += "<modify-case>";
-    } container stringValue {        
-        $trans += $container.trans + $stringValue.trans + "</modify-case>";
+    | container MODIFY_CASE stringValue {        
+        $trans += "<modify-case>" + $container.trans + $stringValue.trans + "</modify-case>";
     } (instr { $trans += $instr.trans; })?
-    | APPEND LPAR 'n' ASSIGN ID RPAR {
+    | VAR APPEND ID {
         $trans += "<append n=\"" + $ID.text + "\">";
     } (value { $trans += $value.trans; })+ END {
         $trans += "</append>";
     } (instr { $trans += $instr.trans; })?
-    | REJECT_CURRENT_RULE LPAR 'shifting' ASSIGN ('yes'|'no')
+    | REJECT_CURRENT_RULE LPAR 'shifting' ASSIGN ('yes'|'no') RPAR SEMI
     | OUT {
         $trans += "<out>";
     } (mlu {
@@ -254,10 +252,6 @@ value returns [String trans = ""]
         $trans += $litTag.trans;
     } | ID {
         $trans += "<var n=\"" + $ID.text + "\"/>";
-    } | getCaseFrom {
-        $trans += $getCaseFrom.trans;
-    } | caseOf {
-        $trans += $caseOf.trans;
     } | concat {
         $trans += $concat.trans;
     } | lu {
@@ -276,17 +270,13 @@ stringValue returns [String trans = ""]
         $trans += "<lit v=" + $literal.text + "/>"; 
     } | ID {
         $trans += "<var n=" + $ID.text + "/>";
-    } | getCaseFrom {
-        $trans += $getCaseFrom.trans;
-    } | caseOf {
-        $trans += $caseOf.trans;
     } )
     ;
 
 b returns [String trans = ""]
-    : 'b'{
+    : 'b' {
         $trans += "<b";
-    } (LPAR POS ASSIGN INT RPAR {
+    } (LPAR INT RPAR {
         $trans += " pos=\"" + $INT.text + "\"";
     })? SEMI {
         $trans += "/>";
@@ -352,32 +342,6 @@ tags returns [String trans = ""]
         $trans += "<tag>" + $value.trans + "</tag>";
     } SEMI)+ END {
         $trans += "</tags>";
-    }
-    ;
-
-getCaseFrom returns [String trans = ""]
-    : GET_CASE_FROM {
-        $trans += "<get-case-from ";
-    } LPAR POS ASSIGN INT RPAR {
-        $trans += "pos=\"" + $INT.text + "\">";
-    } (clip {
-        $trans += $clip.trans;
-    } | literal {
-        $trans += "<lit v=" + $literal.text + "/>";
-    } | ID {
-        $trans += "<var n=" + $ID.text + "/>";
-    }) SEMI {
-        $trans += "</get-case-from>";
-    }
-    ;
-
-caseOf returns [String trans = ""]
-    : CASE_OF {
-        $trans += "<case-of ";
-    } LPAR POS ASSIGN INT COMMA SIDE ASSIGN side COMMA PART ASSIGN literal RPAR {
-        $trans += "pos=\"" + $INT.text + "\" side=\"" + $side.text + "\" part=" + $literal.text;
-    } SEMI {
-        $trans += "/>";
     }
     ;
 
@@ -534,58 +498,63 @@ TRANSFER                    : 'Transfer' ;
 CATLEX                      : 'Catlex' ;
 ATTR                        : 'Attribute' ;
 LIST                        : 'List' ;
-VAR                         : 'Var' ;
 MACRO                       : 'Macro' ;
+RULE                        : 'Rule' ;
+
+// Attributres
+
 N                           : 'n' ;
 NPAR                        : 'npar' ;
 C                           : 'c' ;
-CASE                        : 'case' ;
 END                         : 'end' ;
-WHEN                        : 'when' ;
-THEN                        : 'then' ;
-// ELSE                        : 'else' ;
-OTHERWISE                   : 'otherwise' ;
-CLIP                        : 'clip' ;
 POS                         : 'pos' ;
 SIDE                        : 'side' ;
 PART                        : 'part' ;
 QUEUE                       : 'queue' ;
 LINK_TO                     : 'link-to' ;
-RULE                        : 'Rule' ;
 RCOMMENT                    : 'comment' ;
 PATTERN                     : 'Pattern' ;
-IN_CASELESS                 : 'inCaseless' ;
+CONCAT                      : 'concat' ;
+LU                          : 'lu' ;
+MLU                         : 'mlu' ;
+TAGS                        : 'tags' ;
+NAME                        : 'name' ;
+NAME_FROM                   : 'namefrom' ;
+
+// Condition.
+
+AND                         : 'and' ;
+OR                          : 'or' ;
+NOT                         : 'not' ;
+EQUAL                       : 'equal' ;
+EQUAL_CASELESS              : 'equalCaseless' ;
 BEGINS_WITH                 : 'beginsWith' ;
 BEGINS_WITH_CASELESS        : 'beginsWithCaseless' ;
 ENDS_WITH                   : 'endsWith' ;
 ENDS_WITH_CASELESS          : 'endsWithCaseless' ;
 CONTAINS_SUBSTR             : 'containsSubstring' ;
 CONTAINS_SUBSTR_CASELESS    : 'containsSubstringCaseless' ;
-MODIFY_CASE                 : 'modifyCase' ;
-APPEND                      : 'append' ;
-REJECT_CURRENT_RULE         : 'rejectCurrentRule' ;
-OUT                         : 'out' ;
-GET_CASE_FROM               : 'get case from' ;
-CASE_OF                     : 'case of' ;
+IN                          : 'in' ;
+IN_CASELESS                 : 'inCaseless' ;
+
+// Container, value, stringvalue
+
+VAR                         : 'Var' ;
+CLIP                        : 'clip' ;
+LTAG                        : 'litTag' ;
 CONCAT                      : 'concat' ;
 LU                          : 'lu' ;
 MLU                         : 'mlu' ;
 CHUNK                       : 'Chunk' ;
-TAGS                        : 'tags' ;
-NAME                        : 'name' ;
-NAME_FROM                   : 'namefrom' ;
-LTAG                        : 'litTag' ;
 
-// Operators.
+// sentence
 
 ASSIGN                      : '=' ;
-NOT                         : 'not' ;
-EQUAL                       : 'equal' ;
-EQUAL_CASELESS              : 'equalCaseless' ;
-AND                         : 'and' ;
-OR                          : 'or' ;
-IN                          : 'in' ;
-
+OUT                         : 'out' ;
+CASE                        : 'case' ;
+MODIFY_CASE                 : 'modifyCase' ;
+APPEND                      : 'append' ;
+REJECT_CURRENT_RULE         : 'rejectCurrentRule' ;
 
 // Separators.
 
@@ -594,10 +563,15 @@ RPAR                        : ')' ;
 SEMI                        : ';' ;
 COMMA                       : ',' ;
 
+// Others
+
+WHEN                        : 'when' ;
+THEN                        : 'then' ;
+OTHERWISE                   : 'otherwise' ;
+
 // Identifiers.
 
-ID                          
-                            : [a-zA-Z_][a-zA-Z_0-9]* ;
+ID                          : [a-zA-Z_][a-zA-Z_0-9]* ;
 INT                         : [0-9]+ ;
 
 // String Literals.
