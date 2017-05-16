@@ -13,16 +13,17 @@ import org.xml.sax.helpers.DefaultHandler;
 public class TransferSaxHandler extends DefaultHandler {
 
     private final StringBuilder sb, pTrans;
-    private String op, notTrans, boolOpTrans;
-    private final List<String> l1;
+    private String op, notTrans, varId;
+    private final List<String> l1, l1Aux;
 
 //    private int c = 0;
     public TransferSaxHandler() {
         sb = new StringBuilder();
         pTrans = new StringBuilder();
         l1 = new ArrayList<>();
+        l1Aux = new ArrayList<>();
         notTrans = "";
-        boolOpTrans = "";
+        varId = "";
         op = "";
     }
 
@@ -119,19 +120,16 @@ public class TransferSaxHandler extends DefaultHandler {
             String v = attributes.getValue("v");
             auxTrans.append("litTag(\"").append(v).append("\")");
             l1.add(auxTrans.toString());
-        } else if (localName.equals("var")) {
-            StringBuilder auxTrans = new StringBuilder();
+        } else if (localName.equals("var") || localName.equals("list")) {
             String n = attributes.getValue("n");
-            auxTrans.append(n);
-            l1.add(auxTrans.toString());
+            varId = n;
+            l1.add(varId);
         } else if (localName.equals("when")) {
             sb.append("when ");
         } else if (localName.equals("otherwise")) {
             sb.append("otherwise\n");
         } else if (localName.equals("not")) {
             notTrans = localName + " ";
-        } else if (localName.equals("and") || localName.equals("or")) {
-            boolOpTrans = " " + localName;
         } else if (localName.equals("rule")) {
             pTrans.append("Rule(");
             String c = attributes.getValue("c");
@@ -216,9 +214,9 @@ public class TransferSaxHandler extends DefaultHandler {
             if (pos != null && !pos.equals("")) {
                 sb.append(pos);
             }
-            sb.append(");");
+            sb.append(");\n");
         } else if (localName.equals("let")) {
-            op = "let";
+            op = "=";
         } else if (localName.equals("modify-case")) {
             op = "modifyCase";
         } else if (localName.equals("append")) {
@@ -231,7 +229,9 @@ public class TransferSaxHandler extends DefaultHandler {
             }
             sb.append(")");
         } else if (localName.equals("concat")) {
-            sb.append("concat");
+            l1Aux.clear();
+            l1Aux.addAll(l1);
+            l1.clear();
         }
 
     }
@@ -250,17 +250,29 @@ public class TransferSaxHandler extends DefaultHandler {
                 || localName.equals("ends-with") || localName.equals("ends-with-list")
                 || localName.equals("contains-substring") || localName.equals("in")) {
             if (l1.size() > 1) {
-                pTrans.append(l1.get(0)).append(" ").append(op).append(" ").append(l1.get(1)).append(boolOpTrans).append(" ");
+                pTrans.append(l1.get(0)).append(" ").append(op).append(" ").append(l1.get(1));
             }
-            sb.append(pTrans);
-            pTrans.setLength(0);
             op = "";
-            boolOpTrans = "";
             l1.clear();
-        } else if (localName.equals("test")) {
-            sb.append(pTrans).append("then\n"); // .append(notTrans)
+            // Meto en la lista auxilidar de forma temporal la traducción parcial
+            l1Aux.add(pTrans.toString());
             pTrans.setLength(0);
-            notTrans = "";
+        } else if (localName.equals("and") || localName.equals("or")) {
+            l1Aux.forEach((string) -> {
+                pTrans.append(string).append(" ").append(localName).append(" ");
+            });
+            // Quitar el and/or final
+            // String str = pTrans.toString().replaceAll(boolOpTrans + " $", " ");
+            //pTrans.setLength(0);
+            //pTrans.append(str);
+            l1Aux.clear();
+            l1Aux.add(pTrans.toString());
+        } else if (localName.equals("not")) {
+//            pTrans.append(notTrans);
+//            notTrans = "";
+        } else if (localName.equals("test")) {
+            sb.append(pTrans).append("then\n");
+            pTrans.setLength(0);
         } else if (localName.equals("when")) {
             sb.append("end /* when */\n");
         } else if (localName.equals("otherwise")) {
@@ -297,7 +309,7 @@ public class TransferSaxHandler extends DefaultHandler {
             sb.append("end /* chunk */\n");
         } else if (localName.equals("tags")) {
             l1.forEach((string) -> {
-                pTrans.append(string).append("\n");
+                pTrans.append(string).append(";\n");
             });
             l1.clear();
             sb.append(pTrans).append("end /* tags */\n");
@@ -313,24 +325,29 @@ public class TransferSaxHandler extends DefaultHandler {
             String str = pTrans.toString().replaceAll(", $", ")");
             sb.append(str).append(";\n");
             pTrans.setLength(0);
-        } else if (localName.equals("pattern-item")) {
+        } else if (localName.equals("pattern")) {
             String str = pTrans.toString().replaceAll(", $", ";");
             sb.append(str).append("\n");
             pTrans.setLength(0);
         } else if (localName.equals("let") || localName.equals("modify-case") || localName.equals("append")) {
             if (l1.size() > 1) {
-                // todo. Aquí cuando sea un var sólo tiene que aparecer el id.
                 pTrans.append(l1.get(0)).append(" ").append(op).append(" ").append(l1.get(1));
             }
+            op = "";
             l1.clear();
             sb.append(pTrans).append(";\n");
             pTrans.setLength(0);
         } else if (localName.equals("concat")) {
             l1.forEach((string) -> {
-                pTrans.append(string).append("\n");
+                pTrans.append(string).append(" concat ");
             });
+            // Volvemos a dejar la lista como estaba antes de entrar a concat para que el let funcione correctamente.
             l1.clear();
-            sb.append(pTrans).append("end /* concat */\n");
+            l1.addAll(l1Aux);
+            // Le añadimos la nueva traducción parcial.
+            String str = pTrans.toString().replaceAll(" concat $", "");
+            l1.add(str);
+            pTrans.setLength(0);
         }
     }
 

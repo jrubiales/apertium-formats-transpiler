@@ -1,198 +1,186 @@
 Transfer(default="chunk")
-Catlex to = "to", "pr";
-Catlex interj = "ij";
-Catlex on = "on", "pr", "on", "adv";
-Catlex enough = "enough", "adv";
-Catlex detquant = "det.qnt.*";
-Catlex all = "all", "predet.sp";
-Catlex nomplural = "n.pl";
-Catlex nom = "n.*", "np.*";
-Catlex months = "january", "n.*", "february", "n.*", "march", "n.*", "march", "np.cog.*", "april", "n.*", "may", "n.*", "june", "n.*", "july", "n.*", "august", "n.*", "september", "n.*", "october", "n.*", "november", "n.*", "december", "n.*";
-Catlex nomcomu = "n.*";
-Catlex nompropi = "np.*";
-Catlex nploc = "np.loc.*";
-Catlex adj = "adj", "adj.*", "adj.comp", "adj.sup", "adj.pos", "adj.sint", "adj.sint.*", "vblex.pp", "vbmod.pp";
-Catlex adj2 = "adj", "adj.*", "adj.sint", "adj.sint.*", "adj.comp", "adj.sup";
-Catlex adj2pos = "adj.pos", "adj", "adj.sint", "adj.sint.*", "adj.comp", "adj.sup";
-Catlex adjsup = "adj.sup", "adj.sint.sup";
-Catlex num = "num.*", "num";
-Catlex det = "det.dem.*", "det.ind.*", "det.def.*", "det.pos.*", "det.qnt.*", "det.itg.*", "det.ord.*", "predet.*";
-Catlex det2 = "det.qnt.*", "det.ord.*";
-Catlex prep = "pr";
-Catlex prep_cnjadv = "pr", "before", "cnjadv", "after", "cnjadv";
-Catlex probj = "prn.obj.*";
-Catlex prnsubj = "prn.subj.*";
-Catlex prnref = "prn.ref.*";
-Catlex tn_itg_pos = "prn.tn.*", "prn.itg.*", "prn.pos.*";
-Catlex verbcj = "vblex.pres", "vblex.past", "vblex.past.*", "vblex.pri.*", "vblex.sep.pres", "vblex.sep.past", "vblex.sep.past.*", "vblex.sep.pri.*", "vbser.pres", "vbser.past", "vbser.past.*", "vbser.pri.*", "vbhaver.pres", "vbhaver.past", "vbhaver.pri.*", "can", "vaux.*";
-Catlex verbcjnoser = "vblex.pres", "vblex.past", "vblex.pri.*", "vblex.sep.pres", "vblex.sep.past", "vblex.sep.pri.*";
-Catlex controlverb = "be# likely", "vblex.*", "be# unlikely", "vblex.*", "desire", "vblex.inf", "need", "vblex.inf", "wish", "vblex.inf", "hope", "vblex.inf", "choose", "vblex.inf", "expect", "vblex.inf", "pretend", "vblex.inf", "prefer", "vblex.inf", "promise", "vblex.inf", "recommend", "vblex.inf", "decide", "vblex.inf", "manage", "vblex.inf", "refuse", "vblex.inf", "agree", "vblex.inf", "avoid", "vblex.inf", "enjoy", "vblex.inf", "hate", "vblex.inf", "intend", "vblex.inf", "plan", "vblex.inf", "continue", "vblex.inf", "resolve", "vblex.inf", "try", "vblex.inf", "like", "vblex.inf", "vow", "vblex.inf", "desire", "vblex.pres", "need", "vblex.pres", "wish", "vblex.pres", "hope", "vblex.pres", "choose", "vblex.pres", "expect", "vblex.pres", "pretend", "vblex.pres", "prefer", "vblex.pres", "promise", "vblex.pres", "recommend", "vblex.pres", "decide", "vblex.pres", "manage", "vblex.pres", "refuse", "vblex.pres", "agree", "vblex.pres", "avoid", "vblex.pres", "enjoy", "vblex.pres", "hate", "vblex.pres", "intend", "vblex.pres", "plan", "vblex.pres", "continue", "vblex.pres", "resolve", "vblex.pres", "try", "vblex.pres", "like", "vblex.pres", "vow", "vblex.pres", "desire", "vblex.past", "need", "vblex.past", "wish", "vblex.past", "hope", "vblex.past", "choose", "vblex.past", "expect", "vblex.past", "pretend", "vblex.past", "prefer", "vblex.past", "promise", "vblex.past", "recommend", "vblex.past", "decide", "vblex.past", "manage", "vblex.past", "refuse", "vblex.past", "agree", "vblex.past", "avoid", "vblex.past", "enjoy", "vblex.past", "hate", "vblex.past", "intend", "vblex.past", "plan", "vblex.past", "continue", "vblex.past", "resolve", "vblex.past", "try", "vblex.past", "like", "vblex.past", "vow", "vblex.past", "desire", "vblex.pri.*", "need", "vblex.pri.*", "wish", "vblex.pri.*", "hope", "vblex.pri.*", "choose", "vblex.pri.*", "expect", "vblex.pri.*", "pretend", "vblex.pri.*", "prefer", "vblex.pri.*", "promise", "vblex.pri.*", "recommend", "vblex.pri.*", "decide", "vblex.pri.*", "manage", "vblex.pri.*", "refuse", "vblex.pri.*", "agree", "vblex.pri.*", "avoid", "vblex.pri.*", "enjoy", "vblex.pri.*", "hate", "vblex.pri.*", "intend", "vblex.pri.*", "plan", "vblex.pri.*", "continue", "vblex.pri.*", "resolve", "vblex.pri.*", "try", "vblex.pri.*", "like", "vblex.pri.*", "vow", "vblex.pri.*", "desire", "vblex.ger", "need", "vblex.ger", "wish", "vblex.ger", "hope", "vblex.ger", "choose", "vblex.ger", "expect", "vblex.ger", "pretend", "vblex.ger", "prefer", "vblex.ger", "promise", "vblex.ger", "recommend", "vblex.ger", "decide", "vblex.ger", "manage", "vblex.ger", "refuse", "vblex.ger", "agree", "vblex.ger", "avoid", "vblex.ger", "enjoy", "vblex.ger", "hate", "vblex.ger", "intend", "vblex.ger", "plan", "vblex.ger", "continue", "vblex.ger", "resolve", "vblex.ger", "try", "vblex.ger", "like", "vblex.ger", "vow", "vblex.ger";
-Catlex controlverbger = "desire", "vblex.ger", "need", "vblex.ger", "wish", "vblex.ger", "hope", "vblex.ger", "choose", "vblex.ger", "expect", "vblex.ger", "pretend", "vblex.ger", "prefer", "vblex.ger", "promise", "vblex.ger", "recommend", "vblex.ger", "decide", "vblex.ger", "manage", "vblex.ger", "refuse", "vblex.ger", "agree", "vblex.ger", "avoid", "vblex.ger", "enjoy", "vblex.ger", "hate", "vblex.ger", "intend", "vblex.ger", "plan", "vblex.ger", "continue", "vblex.ger", "resolve", "vblex.ger", "try", "vblex.ger", "like", "vblex.ger", "vow", "vblex.ger";
-Catlex controlverbpp = "desire", "vblex.pp", "need", "vblex.pp", "wish", "vblex.pp", "hope", "vblex.pp", "choose", "vblex.pp", "expect", "vblex.pp", "pretend", "vblex.pp", "prefer", "vblex.pp", "promise", "vblex.pp", "recommend", "vblex.pp", "decide", "vblex.pp", "manage", "vblex.pp", "refuse", "vblex.pp", "agree", "vblex.pp", "avoid", "vblex.pp", "enjoy", "vblex.pp", "hate", "vblex.pp", "intend", "vblex.pp", "plan", "vblex.pp", "continue", "vblex.pp", "resolve", "vblex.pp", "try", "vblex.pp", "like", "vblex.pp", "vow", "vblex.pp";
-Catlex copulatiu = "vbser.pres", "vbser.past", "vbser.past.*", "vbser.pri.*", "look", "vblex.pres", "look", "vblex.past", "look", "vblex.pri.*", "seem", "vblex.pres", "seem", "vblex.past", "seem", "vblex.pri.*", "become", "vblex.pres", "become", "vblex.past", "become", "vblex.pri.*", "feel", "vblex.pres", "feel", "vblex.past", "feel", "vblex.pri.*", "get", "vblex.pres", "get", "vblex.past", "get", "vblex.pri.*";
-Catlex inf = "vblex.inf", "vblex.sep.inf", "vbser.inf", "vbmod.inf", "vaux.inf";
-Catlex infpres = "vblex.inf", "vblex.pres", "vblex.sep.inf", "vblex.sep.pres", "vbser.inf", "vbser.pres";
-Catlex modinf = "vbmod.inf", "vbmod.pres";
-Catlex mod = "vbmod.*";
-Catlex ger = "vblex.ger", "reporting.ger", "vblex.sep.ger", "vbser.ger";
-Catlex haveger = "vbhaver.ger";
-Catlex auxtemps = "will", "vaux.*", "would", "vaux.*", "shall", "vaux.*";
-Catlex auxmod = "can", "vaux.*", "must", "vaux.*", "should", "vaux.*", "may", "vaux.*", "might", "vaux.*";
-Catlex auxnocan = "will", "vaux.*", "would", "vaux.*", "shall", "vaux.*", "may", "vaux.*", "might", "vaux.*", "do", "vbdo.*", "do", "vblex.*";
-Catlex do = "do", "vbdo.*", "do", "vblex.pri.*", "do", "vblex.pres", "do", "vblex.past", "do", "vblex.inf";
-Catlex going = "go", "vblex.ger";
-Catlex apos = "apos";
-Catlex coma = "cm";
-Catlex have_aux = "vbhaver.*";
-Catlex have_aux_inf = "vbhaver.inf", "vbhaver.pres";
-Catlex ppadj = "vblex.pp", "vblex.sep.pp", "vbser.pp";
-Catlex pp = "vblex.pp", "vblex.sep.pp", "vbser.pp", "vbmod.pp";
-Catlex pprs = "vblex.pprs", "vblex.sep.pprs", "vbhaver.pprs", "vbser.pprs", "vbmod.pprs";
-Catlex vbsubs = "vblex.subs", "vblex.sep.subs", "vbhaver.subs", "vbser.subs", "vbmod.subs";
-Catlex adv_preadv = "preadv", "adv";
-Catlex adv = "adv";
-Catlex ever = "ever", "adv";
-Catlex adv_not = "not", "adv", "never", "adv";
-Catlex non = "non", "adv";
-Catlex no = "no", "adv", "no", "det.*";
-Catlex withno = "with no", "pr";
-Catlex ago = "ago", "adv";
-Catlex hence = "hence", "adv";
-Catlex preadv = "preadv";
-Catlex advitg = "adv.itg";
-Catlex cnj = "cnjcoo", "cnjsub", "cnjadv";
-Catlex cnjcoo = "and", "cnjcoo", "or", "cnjcoo";
-Catlex such_a = "such a", "det.ind.sg";
-Catlex yearmonth = "year", "n.sg", "year", "n.pl", "month", "n.sg", "month", "n.pl";
-Catlex old = "old", "adj.sint";
-Catlex periode = "minute", "n.*", "hour", "n.*", "day", "n.*", "week", "n.*", "fortnight", "n.*", "month", "n.*", "year", "n.*", "decade", "n.*", "century", "n.*";
-Catlex there = "there", "adv";
-Catlex genitiu = "gen";
-Catlex be = "be", "vbser.*";
-Catlex be_sorry = "be# sorry", "vblex.*";
-Catlex be_past_pres = "be", "vbser.past", "be", "vbser.past.*", "be", "vbser.pres", "be", "vbser.pri.*";
-Catlex relnom = "rel.nn.*";
-Catlex reladj = "rel.an.*";
-Catlex relaa = "rel.aa.*";
-Catlex which = "which", "prn.itg.*", "which", "rel.an.*";
-Catlex sent = "sent";
-Catlex guio = "guio";
-Catlex descon = "**", "";
-Attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
-Attribute a_np = "np";
-Attribute a_np_acr = "np", "acr";
-Attribute a_adj = "adj", "adj.pos", "vblex.pp", "vbmod.pp", "vblex.pron.pp", "adjant";
-Attribute grau_adj = "comp", "sup";
-Attribute a_det = "det.dem", "det.ind", "det.def", "det.pos", "det.qnt", "det.itg", "det.ord", "adj.pos", "num", "predet";
-Attribute a_prnpro = "prn.pro";
-Attribute a_prnenc = "prn.enc";
-Attribute a_num = "num", "num.percent", "num.ord", "num.mon";
-Attribute a_verb = "vblex", "vblex.pron", "vbhaver", "vbser", "vbmod";
-Attribute a_have_aux = "vbhaver";
-Attribute a_pp = "vblex.pp", "vblex.pron.pp", "vbser.pp", "vbmod.pp";
-Attribute a_aux = "vaux";
-Attribute a_prn = "prn";
-Attribute a_adv = "adv", "preadv", "adv.itg", "cnjadv";
-Attribute a_rel = "rel.nn", "rel.an", "rel.aa", "rel.adv";
-Attribute tipus_rel = "nn", "an", "aa", "adv";
-Attribute tipus_prn = "tn", "obj", "enc", "itg", "pos";
-Attribute pers = "p1", "p2", "p3", "PD";
-Attribute gen = "m", "f", "mf", "GD", "nt";
-Attribute gen_sense_mf = "m", "f", "GD", "nt";
-Attribute gen_mf = "mf";
-Attribute nbr = "sg", "pl", "sp", "ND";
-Attribute nbr_sense_sp = "sg", "pl", "ND";
-Attribute nbr_sp = "sp";
-Attribute temps = "cni", "fti", "ifi", "imp", "pii", "pis", "inf", "prs", "pres", "past", "pri", "pp", "ger", "pprs", "subs";
-Var genere = "&lt;m&gt;";
-Var nombre = "&lt;sg&gt;";
-Var interrogativa;
-Var exclamativa;
-Var neg;
-Var adjectiu1;
-Var adjectiu2;
-Var auxiliar;
-Var caseFirstWord;
-Var EOS = "true";
-Var lema;
-Var lema_SV;
-Var verbfinal;
-Var chunk;
-Var temps_chunk;
-Var pers_chunk;
-Var nbr_chunk;
-Var nbr_qual;
-Var gen_chunk;
-Var gen_qual;
-Var gen_paraula;
-Var nbr_paraula;
-Var nbr_adj;
-Var pronom;
-Var pronomenc;
-Var paraula1;
-Var paraula2;
-Var tipus_verb;
-Var tipus_verb_imp;
-Var negative;
-Var tipus_det;
-List reportingverb = "say", "admit", "agree", "decide", "deny", "explain", "insist", "promise", "recommend", "suggest", "point", "think", "believe", "hope", "fear", "suppose";
-List controlnouns = "desire", "order", "need", "right", "duty", "failure", "power", "wish", "capacity", "ability", "hope", "chance", "honour", "compulsion", "responsibility", "opportunity", "idea", "record", "way", "attempt", "obligation", "impulse", "surprise", "will", "mean";
-List tractaments = "Mr.", "Mrs.", "Ms.", "Dr.";
-List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
-List adv_neg = "not", "never";
-List verbs_modals = "can", "must", "should", "may", "might";
-List numeros25 = "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen";
-Macro elimina_GDND(npar=1)
-case
-when clip(pos=1, side=tl, part=gen) equal litTag("GD") then
-clip(pos=1, side=tl, part=gen) = litTag("m");
-end /* end when */
-otherwise
-clip(pos=1, side=tl, part=gen) = litTag("m");
-end /* end otherwise */
-end /* end choose */
-case
-when clip(pos=1, side=tl, part=nbr) equal litTag("ND") then
-clip(pos=1, side=tl, part=nbr) = litTag("sg");
-end /* end when */
-end /* end choose */
-end /* end macro */
-Rule(comment="REGLA: PRONOM")
-Pattern = prnsubj;
-action
-firstWord(1);
-case
-when clip(pos=1, side=sl, part=lem) equalCaseless "prpers" then
-lema = "prnsubj2";
-end /* end when */
-otherwise
-lema = "prnsubj";
-end /* end otherwise */
-end /* end choose */
-out
-Chunk
-tags
-litTag("SN")
-clip(pos=1, side=tl, part=tipus_prn)
-clip(pos=1, side=tl, part=pers)
-clip(pos=1, side=tl, part=gen)
-clip(pos=1, side=tl, part=nbr)
-end /* end tags */
-lu
-litTag("SN")
-clip(pos=1, side=tl, part=tipus_prn)
-clip(pos=1, side=tl, part=pers)
-clip(pos=1, side=tl, part=gen)
-clip(pos=1, side=tl, part=nbr)
-clip(pos=1, side=tl, part=lem)
-clip(pos=1, side=tl, part=a_prn)
-clip(pos=1, side=tl, part=tipus_prn, link-to=2)
-clip(pos=1, side=tl, part=pers)
-clip(pos=1, side=tl, part=gen)
-clip(pos=1, side=tl, part=nbr)
-end /* end lu */
-end /* end chunk */
-end /* end out */
-end /* end action */
-end /* end rule */
-end /* end transfer */
+  Macro conj_verb1(npar=1)
+    case
+      when clip(pos=1, side=sl, part=lem) inCaseless verbs_modals then
+        case
+          when clip(pos=1, side=sl, part=lem) equalCaseless "can" and clip(pos=1, side=sl, part=temps) equal litTag("pres") then
+            temps_chunk = litTag("pri");
+          end /* when */
+          when clip(pos=1, side=sl, part=lem) equalCaseless "can" and clip(pos=1, side=sl, part=temps) equal litTag("past") then
+            temps_chunk = litTag("cni");
+          end /* when */
+          when clip(pos=1, side=sl, part=lem) equalCaseless "must" or clip(pos=1, side=sl, part=lem) equalCaseless "may" then
+            temps_chunk = litTag("pri");
+          end /* when */
+          when clip(pos=1, side=sl, part=lem) equalCaseless "should" or clip(pos=1, side=sl, part=lem) equalCaseless "might" then
+            temps_chunk = litTag("cni");
+          end /* when */
+        end /* choose */
+        lema_SV = "mod";
+        pers_chunk = litTag("PD");
+        nbr_chunk = litTag("ND");
+        verbfinal = clip(pos=1, side=tl, part=lemh) concat clip(pos=1, side=tl, part=a_verb) concat litTag("3") concat litTag("4") concat litTag("5") concat clip(pos=1, side=tl, part=lemq);
+      end /* when */
+      otherwise
+        case
+          when clip(pos=1, side=sl, part=temps) equal litTag("past") and clip(pos=1, side=sl, part=pers) equal "" and clip(pos=1, side=sl, part=nbr) equal "" then
+            lema_SV = "verbcj_perif";
+            temps_chunk = litTag("ifip");
+            pers_chunk = litTag("PD");
+            nbr_chunk = litTag("ND");
+            verbfinal = "anar" concat litTag("vaux") concat litTag("4") concat litTag("5") concat "$ ^" concat clip(pos=1, side=tl, part=lemh) concat clip(pos=1, side=tl, part=a_verb) concat litTag("inf") concat clip(pos=1, side=tl, part=lemq);
+          end /* when */
+          when clip(pos=1, side=sl, part=temps) equal litTag("past") and clip(pos=1, side=sl, part=nbr) equal litTag("sg") then
+            lema_SV = "verbcj_perif";
+            temps_chunk = litTag("ifip");
+            pers_chunk = litTag("PD");
+            nbr_chunk = clip(pos=1, side=tl, part=nbr);
+            verbfinal = "anar" concat litTag("vaux") concat litTag("4") concat litTag("5") concat "$ ^" concat clip(pos=1, side=tl, part=lemh) concat clip(pos=1, side=tl, part=a_verb) concat litTag("inf") concat clip(pos=1, side=tl, part=lemq);
+          end /* when */
+          when clip(pos=1, side=sl, part=temps) equal litTag("pres") then
+            clip(pos=1, side=tl, part=temps) = litTag("pri");
+            lema_SV = "verbcj";
+            temps_chunk = clip(pos=1, side=tl, part=temps);
+            pers_chunk = litTag("PD");
+            nbr_chunk = litTag("ND");
+            verbfinal = clip(pos=1, side=tl, part=lemh) concat clip(pos=1, side=tl, part=a_verb) concat litTag("3") concat litTag("4") concat litTag("5") concat clip(pos=1, side=tl, part=lemq);
+          end /* when */
+          when clip(pos=1, side=sl, part=temps) equal litTag("pri") then
+            lema_SV = "verbcj";
+            temps_chunk = clip(pos=1, side=tl, part=temps);
+            pers_chunk = clip(pos=1, side=tl, part=pers);
+            nbr_chunk = clip(pos=1, side=tl, part=nbr);
+            verbfinal = clip(pos=1, side=tl, part=lemh) concat clip(pos=1, side=tl, part=a_verb) concat litTag("3") concat litTag("4") concat litTag("5") concat clip(pos=1, side=tl, part=lemq);
+          end /* when */
+          when clip(pos=1, side=sl, part=temps) equal litTag("ger") then
+            lema_SV = "ger";
+            temps_chunk = clip(pos=1, side=tl, part=temps);
+            pers_chunk = litTag("PD");
+            nbr_chunk = litTag("ND");
+            verbfinal = clip(pos=1, side=tl, part=lemh) concat clip(pos=1, side=tl, part=a_verb) concat litTag("3") concat clip(pos=1, side=tl, part=lemq);
+          end /* when */
+          when clip(pos=1, side=sl, part=temps) equal litTag("inf") then
+            lema_SV = "inf";
+            temps_chunk = clip(pos=1, side=tl, part=temps);
+            pers_chunk = litTag("PD");
+            nbr_chunk = litTag("ND");
+            verbfinal = clip(pos=1, side=tl, part=lemh) concat clip(pos=1, side=tl, part=a_verb) concat litTag("3") concat clip(pos=1, side=tl, part=lemq);
+          end /* when */
+        end /* choose */
+      end /* otherwise */
+    end /* choose */
+  end /* macro */
+
+  Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)")
+    Pattern = months, num, coma, num;
+    action
+      firstWord(1);
+      case
+        when clip(pos=1, side=sl, part=lem) equal "March" then
+          clip(pos=1, side=tl, part=lem) = "març";
+          case
+            when clip(pos=1, side=sl, part=a_nom) equal litTag("np.cog") then
+              clip(pos=1, side=tl, part=a_nom) = litTag("n");
+              clip(pos=1, side=tl, part=gen) = litTag("m");
+              clip(pos=1, side=tl, part=nbr) = litTag("sg");
+            end /* when */
+          end /* choose */
+        end /* when */
+      end /* choose */
+      out
+        Chunk
+          tags
+            clip(pos=2, side=tl, part=a_adv);
+            neg;
+          end /* tags */
+          lu
+            clip(pos=2, side=tl, part=a_adv);
+            neg;
+            clip(pos=2, side=tl, part=whole)
+          end /* lu */
+          b(1);
+          lu
+            clip(pos=2, side=tl, part=a_adv);
+            neg;
+            clip(pos=2, side=tl, part=whole)
+            "de"
+            litTag("pr")
+          end /* lu */
+          b();
+          lu
+            clip(pos=2, side=tl, part=a_adv);
+            neg;
+            clip(pos=2, side=tl, part=whole)
+            "de"
+            litTag("pr")
+            clip(pos=1, side=tl, part=whole)
+            end /* lu */
+            b();
+          lu
+            clip(pos=2, side=tl, part=a_adv);
+            neg;
+            clip(pos=2, side=tl, part=whole)
+            "de"
+            litTag("pr")
+            clip(pos=1, side=tl, part=whole)
+            "de"
+            litTag("pr")
+          end /* lu */
+            b(3);
+            lu
+            clip(pos=2, side=tl, part=a_adv);
+            neg;
+            clip(pos=2, side=tl, part=whole)
+            "de"
+            litTag("pr")
+            clip(pos=1, side=tl, part=whole)
+            "de"
+            litTag("pr")
+            clip(pos=4, side=tl, part=whole)
+          end /* lu */
+          mlu
+            lu
+              clip(pos=2, side=tl, part=a_adv);
+              neg;
+              clip(pos=2, side=tl, part=whole)
+              "de"
+              litTag("pr")
+              clip(pos=1, side=tl, part=whole)
+              "de"
+              litTag("pr")
+              clip(pos=4, side=tl, part=whole)
+              clip(pos=1, side=tl, part=whole)
+            end /* lu */
+            b();
+            lu
+              clip(pos=2, side=tl, part=a_adv);
+              neg;
+              clip(pos=2, side=tl, part=whole)
+              "de"
+              litTag("pr")
+              clip(pos=1, side=tl, part=whole)
+              "de"
+              litTag("pr")
+              clip(pos=4, side=tl, part=whole)
+              clip(pos=1, side=tl, part=whole)
+              "de"
+              litTag("pr")
+            end /* lu */
+            clip(pos=2, side=tl, part=a_adv);
+            neg;
+            clip(pos=2, side=tl, part=whole)
+            "de"
+            litTag("pr")
+            clip(pos=1, side=tl, part=whole)
+            "de"
+            litTag("pr")
+            clip(pos=4, side=tl, part=whole)
+            clip(pos=1, side=tl, part=whole)
+            "de"
+            litTag("pr")
+          end /* mlu */
+        end /* chunk */
+      end /* out */
+    end /* action */
+  end /* rule */
+end /* transfer */

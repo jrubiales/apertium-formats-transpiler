@@ -284,11 +284,13 @@ b returns [String trans = ""]
     ;
 
 concat returns [String trans = ""]
-    : CONCAT {
+    : {
         $trans += "<concat>";
     } (value { 
         $trans += $value.trans;
-    })+ END
+    } CONCAT?)+ { 
+        $trans += "</concat>";
+    }
     ;
 
 lu returns [String trans = ""]
@@ -336,7 +338,7 @@ chunkParams returns [String trans = ""]
     ;
 
 tags returns [String trans = ""]
-    : TAGS {
+    : TAGS ASSIGN{
         $trans += "<tags>";
     } (value {
         $trans += "<tag>" + $value.trans + "</tag>";
@@ -500,8 +502,14 @@ ATTR                        : 'Attribute' ;
 LIST                        : 'List' ;
 MACRO                       : 'Macro' ;
 RULE                        : 'Rule' ;
+PATTERN                     : 'Pattern' ;
+TAGS                        : 'tags' ;
+CONCAT                      : 'concat' ;
+WHEN                        : 'when' ;
+THEN                        : 'then' ;
+OTHERWISE                   : 'otherwise' ;
 
-// Attributres
+// Tags Attributes
 
 N                           : 'n' ;
 NPAR                        : 'npar' ;
@@ -513,11 +521,6 @@ PART                        : 'part' ;
 QUEUE                       : 'queue' ;
 LINK_TO                     : 'link-to' ;
 RCOMMENT                    : 'comment' ;
-PATTERN                     : 'Pattern' ;
-CONCAT                      : 'concat' ;
-LU                          : 'lu' ;
-MLU                         : 'mlu' ;
-TAGS                        : 'tags' ;
 NAME                        : 'name' ;
 NAME_FROM                   : 'namefrom' ;
 
@@ -562,12 +565,6 @@ LPAR                        : '(' ;
 RPAR                        : ')' ;
 SEMI                        : ';' ;
 COMMA                       : ',' ;
-
-// Others
-
-WHEN                        : 'when' ;
-THEN                        : 'then' ;
-OTHERWISE                   : 'otherwise' ;
 
 // Identifiers.
 
