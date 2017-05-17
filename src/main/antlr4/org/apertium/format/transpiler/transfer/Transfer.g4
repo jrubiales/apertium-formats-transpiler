@@ -504,7 +504,6 @@ MACRO                       : 'Macro' ;
 RULE                        : 'Rule' ;
 PATTERN                     : 'Pattern' ;
 TAGS                        : 'tags' ;
-CONCAT                      : 'concat' ;
 WHEN                        : 'when' ;
 THEN                        : 'then' ;
 OTHERWISE                   : 'otherwise' ;

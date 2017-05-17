@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.*;
-import org.apertium.format.transpiler.transfer.TransferLexer;
-import org.apertium.format.transpiler.transfer.TransferParser;
+//import org.apertium.format.transpiler.transfer.TransferLexer;
+//import org.apertium.format.transpiler.transfer.TransferParser;
 
 /**
  *

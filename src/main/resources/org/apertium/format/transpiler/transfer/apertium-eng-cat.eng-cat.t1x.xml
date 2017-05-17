@@ -11,22 +11,32 @@
                 <when>
                     <test>
                         <and>
-                            <not>
-                                <or>
+                            <or>
+                                <equal caseless="yes">
+                                    <clip pos="1" side="sl" part="lem"/>
+                                    <lit v="can"/>
+                                </equal>
+                                <equal>
+                                    <clip pos="1" side="sl" part="temps"/>
+                                    <lit-tag v="pres"/>
+                                </equal>
+                            </or>
+                            <or>
+                                <and>
                                     <equal caseless="yes">
                                         <clip pos="1" side="sl" part="lem"/>
                                         <lit v="can"/>
                                     </equal>
-                                    <equal>
-                                        <clip pos="1" side="sl" part="temps"/>
-                                        <lit-tag v="pres"/>
+                                    <equal caseless="yes">
+                                        <clip pos="1" side="sl" part="lem"/>
+                                        <lit v="can"/>
                                     </equal>
-                                </or>
-                            </not>
-                            <equal caseless="yes">
-                                <clip pos="1" side="sl" part="lem"/>
-                                <lit v="can"/>
-                            </equal>                            
+                                </and>
+                                <equal>
+                                    <clip pos="1" side="sl" part="temps"/>
+                                    <lit-tag v="pres"/>
+                                </equal>
+                            </or> 
                         </and>
                     </test>
                     <let>

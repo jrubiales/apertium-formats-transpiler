@@ -22,9 +22,9 @@ public class TransferSaxHandler extends DefaultHandler {
         pTrans = new StringBuilder();
         l1 = new ArrayList<>();
         l1Aux = new ArrayList<>();
-        notTrans = "";
         varId = "";
         op = "";
+        notTrans = "";
     }
 
     @Override
@@ -47,6 +47,8 @@ public class TransferSaxHandler extends DefaultHandler {
                 sb.append("(default=\"").append(def).append("\")");
             }
             sb.append("\n");
+        } else if (localName.equals("not")) {
+            notTrans = "not ";
         } else if (localName.equals("def-cat")) {
             String n = attributes.getValue("n");
             sb.append("Catlex ").append(n).append(" = ");
@@ -128,8 +130,6 @@ public class TransferSaxHandler extends DefaultHandler {
             sb.append("when ");
         } else if (localName.equals("otherwise")) {
             sb.append("otherwise\n");
-        } else if (localName.equals("not")) {
-            notTrans = localName + " ";
         } else if (localName.equals("rule")) {
             pTrans.append("Rule(");
             String c = attributes.getValue("c");
@@ -194,13 +194,6 @@ public class TransferSaxHandler extends DefaultHandler {
             } else {
                 op = "containsSubstring";
             }
-        } else if (localName.equals("contains-substring")) {
-            String caseless = attributes.getValue("caseless");
-            if (caseless != null && caseless.equals("yes")) {
-                op = "containsSubstringCaseless";
-            } else {
-                op = "containsSubstring";
-            }
         } else if (localName.equals("in")) {
             String caseless = attributes.getValue("caseless");
             if (caseless != null && caseless.equals("yes")) {
@@ -224,7 +217,7 @@ public class TransferSaxHandler extends DefaultHandler {
         } else if (localName.equals("reject-current-rule")) {
             String shifting = attributes.getValue("shifting");
             sb.append("rejectCurrentRule(");
-            if(shifting != null && !shifting.equals("")){
+            if (shifting != null && !shifting.equals("")) {
                 sb.append("shifting=\"").append(shifting).append("\"");
             }
             sb.append(")");
@@ -249,29 +242,30 @@ public class TransferSaxHandler extends DefaultHandler {
                 || localName.equals("begins-with") || localName.equals("begins-with-list")
                 || localName.equals("ends-with") || localName.equals("ends-with-list")
                 || localName.equals("contains-substring") || localName.equals("in")) {
+            StringBuilder trans = new StringBuilder(notTrans);
+            notTrans = "";
             if (l1.size() > 1) {
-                pTrans.append(l1.get(0)).append(" ").append(op).append(" ").append(l1.get(1));
+                trans.append(l1.get(0)).append(" ").append(op).append(" ").append(l1.get(1));
             }
             op = "";
             l1.clear();
             // Meto en la lista auxilidar de forma temporal la traducción parcial
-            l1Aux.add(pTrans.toString());
+            l1Aux.add(trans.toString());
             pTrans.setLength(0);
+            pTrans.append(trans.toString());
         } else if (localName.equals("and") || localName.equals("or")) {
+            StringBuilder trans = new StringBuilder();
             l1Aux.forEach((string) -> {
-                pTrans.append(string).append(" ").append(localName).append(" ");
+                trans.append(string).append(" ").append(localName).append(" ");
             });
             // Quitar el and/or final
-            // String str = pTrans.toString().replaceAll(boolOpTrans + " $", " ");
-            //pTrans.setLength(0);
-            //pTrans.append(str);
+            String str = trans.toString().replaceAll(" " + localName + " $", "");
             l1Aux.clear();
-            l1Aux.add(pTrans.toString());
-        } else if (localName.equals("not")) {
-//            pTrans.append(notTrans);
-//            notTrans = "";
+            l1Aux.add(str);
+            pTrans.setLength(0);
+            pTrans.append(str);
         } else if (localName.equals("test")) {
-            sb.append(pTrans).append("then\n");
+            sb.append(pTrans).append(" then\n");
             pTrans.setLength(0);
         } else if (localName.equals("when")) {
             sb.append("end /* when */\n");
