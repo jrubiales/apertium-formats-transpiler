@@ -19,23 +19,23 @@ public class MorphTrans2XML {
     
     public static void main(String[] args) {
                 
-        if (args.length == 0) {
-            help();
-        } else {
-            String filePath = args[0];
-            System.out.println("File: " + filePath);
-            System.out.println("Parsing...");
-            try {
-                ANTLRFileStream in = new ANTLRFileStream(filePath);
-                TransferLexer lexer = new TransferLexer(in);
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                TransferParser parser = new TransferParser(tokens);
-                parser.stat();
-            } catch (IOException ex) {
-                Logger.getLogger(MorphTrans2XML.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println("Finished.");
-        }
+//        if (args.length == 0) {
+//            help();
+//        } else {
+//            String filePath = args[0];
+//            System.out.println("File: " + filePath);
+//            System.out.println("Parsing...");
+//            try {
+//                ANTLRFileStream in = new ANTLRFileStream(filePath);
+//                TransferLexer lexer = new TransferLexer(in);
+//                CommonTokenStream tokens = new CommonTokenStream(lexer);
+//                TransferParser parser = new TransferParser(tokens);
+//                parser.stat();
+//            } catch (IOException ex) {
+//                Logger.getLogger(MorphTrans2XML.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            System.out.println("Finished.");
+//        }
     }
 
 }
