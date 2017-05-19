@@ -1,191 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?> <!-- -*- nxml -*- -->
 <transfer default="chunk">
-    
-    <section-def-cats>
 
-        <def-cat n="to"><!--BCN-->
-            <cat-item lemma="to" tags="pr"/>
-        </def-cat>
-
-        <def-cat n="interj">
-            <cat-item tags="ij"/>
-        </def-cat>
-        <def-cat n="on">
-            <cat-item lemma="on" tags="pr"/>
-            <cat-item lemma="on" tags="adv"/>
-        </def-cat>
-
-        <def-cat n="enough"><!--BCN-->
-            <cat-item lemma="enough" tags="adv"/>
-        </def-cat>
-
-        <def-cat n="detquant"><!--BCN-->
-            <cat-item tags="det.qnt.*"/>
-        </def-cat>
-
-        <def-cat n="all"><!--BCN-->
-            <cat-item lemma="all" tags="predet.sp"/>
-        </def-cat>
-
-        <def-cat n="nomplural"><!--BCN-->
-            <cat-item tags="n.pl"/>
-        </def-cat>
-
-        <def-cat n="nom">
-            <cat-item tags="n.*"/>
-            <cat-item tags="np.*"/>
-        </def-cat>
-
-        <def-cat n="months">
-            <cat-item lemma="january" tags="n.*"/>
-            <cat-item lemma="february" tags="n.*"/>
-            <cat-item lemma="march" tags="n.*"/>
-            <cat-item lemma="march" tags="np.cog.*"/>
-            <cat-item lemma="april" tags="n.*"/>
-            <cat-item lemma="may" tags="n.*"/>
-            <cat-item lemma="june" tags="n.*"/>
-            <cat-item lemma="july" tags="n.*"/>
-            <cat-item lemma="august" tags="n.*"/>
-            <cat-item lemma="september" tags="n.*"/>
-            <cat-item lemma="october" tags="n.*"/>
-            <cat-item lemma="november" tags="n.*"/>
-            <cat-item lemma="december" tags="n.*"/>
-        </def-cat>
-
-    </section-def-cats>
-    
-    <section-def-attrs>
-        <def-attr n="a_nom">
-            <attr-item tags="n"/>
-            <attr-item tags="n.acr"/>
-            <attr-item tags="np.loc"/>
-            <attr-item tags="np.ant"/>
-            <attr-item tags="np.cog"/>
-            <attr-item tags="np.al"/>
-            <attr-item tags="adv"/>
-        </def-attr>
-
-        <def-attr n="a_np">
-            <attr-item tags="np"/>
-        </def-attr>
-
-        <def-attr n="a_np_acr">
-            <attr-item tags="np"/>
-            <attr-item tags="acr"/>
-        </def-attr>
-
-        <def-attr n="a_adj">
-            <attr-item tags="adj"/>
-            <attr-item tags="adj.pos"/>
-            <attr-item tags="vblex.pp"/>
-            <attr-item tags="vbmod.pp"/>
-            <attr-item tags="vblex.pron.pp"/>
-            <attr-item tags="adjant"/>
-        </def-attr>
-
-    </section-def-attrs>
-    
-    <section-def-vars>
-        <def-var n="genere" v="&amp;lt;m&amp;gt;"/>
-        <def-var n="nombre" v="&amp;lt;sg&amp;gt;"/>
-        <def-var n="interrogativa"/>
-        <def-var n="exclamativa"/>
-        <def-var n="neg"/>
-        <def-var n="adjectiu1"/>
-        <def-var n="adjectiu2"/>
-        <def-var n="auxiliar"/>
-        <def-var n="caseFirstWord"/>
-        <def-var n="EOS" v="true"/>
-        <def-var n="lema"/>
-        <def-var n="lema_SV"/>
-        <def-var n="verbfinal"/>
-        <def-var n="chunk"/>
-        <def-var n="temps_chunk"/>
-        <def-var n="pers_chunk"/>
-        <def-var n="nbr_chunk"/>
-        <def-var n="nbr_qual"/>
-        <def-var n="gen_chunk"/>
-        <def-var n="gen_qual"/>
-        <def-var n="gen_paraula"/>
-        <def-var n="nbr_paraula"/>
-        <def-var n="nbr_adj"/>
-        <def-var n="pronom"/>
-        <def-var n="pronomenc"/>
-        <def-var n="paraula1"/>
-        <def-var n="paraula2"/>
-        <def-var n="tipus_verb"/>
-        <def-var n="tipus_verb_imp"/>
-        <def-var n="negative"/> <!-- BCN-->
-        <def-var n="tipus_det"/>
-    </section-def-vars>
-
-    <section-def-lists>
-
-        <def-list n="days">
-            <list-item v="Monday"/>
-            <list-item v="Tuesday"/>
-            <list-item v="Wednesday"/>
-            <list-item v="Thursday"/>
-            <list-item v="Friday"/>
-            <list-item v="Saturday"/>
-            <list-item v="Sunday"/>
-        </def-list>
-
-        <def-list n="numeros25">
-
-            <list-item v="1"/>
-            <list-item v="2"/>
-            <list-item v="3"/>
-            <list-item v="4"/>
-            <list-item v="5"/>
-            <list-item v="6"/>
-            <list-item v="7"/>
-            <list-item v="8"/>
-            <list-item v="9"/>
-            <list-item v="10"/>
-            <list-item v="11"/>
-            <list-item v="12"/>
-            <list-item v="13"/>
-            <list-item v="14"/>
-            <list-item v="15"/>
-            <list-item v="16"/>
-            <list-item v="17"/>
-            <list-item v="18"/>
-            <list-item v="19"/>
-            <list-item v="one"/>
-            <list-item v="two"/>
-            <list-item v="three"/>
-            <list-item v="four"/>
-            <list-item v="five"/>
-            <list-item v="six"/>
-            <list-item v="seven"/>
-            <list-item v="eight"/>
-            <list-item v="nine"/>
-            <list-item v="ten"/>
-            <list-item v="eleven"/>
-            <list-item v="twelve"/>
-            <list-item v="thirteen"/>
-            <list-item v="fourteen"/>
-            <list-item v="fifteen"/>
-            <list-item v="sixteen"/>
-            <list-item v="seventeen"/>
-            <list-item v="eighteen"/>
-            <list-item v="nineteen"/>
-
-        </def-list>
-
-    </section-def-lists>
-    
     <section-def-macros>
         
         <def-macro n="elimina_GDND" npar="1">
             <choose>
                 <when>
                     <test>
-                        <equal>
-                            <clip pos="1" side="tl" part="gen"/>
-                            <lit-tag v="GD"/>
-                        </equal>
+                        <or>
+                            <and>
+                                <equal>
+                                    <clip pos="1" side="tl" part="gen"/>
+                                    <lit v="1"/>
+                                </equal>
+                                <equal>
+                                    <clip pos="1" side="tl" part="gen"/>
+                                    <lit v="2"/>
+                                </equal>
+                            </and>
+                            <or>
+                                <and>
+                                    <equal>
+                                        <clip pos="1" side="tl" part="gen"/>
+                                        <lit v="3"/>
+                                    </equal>
+                                    <equal>
+                                        <clip pos="1" side="tl" part="gen"/>
+                                        <lit v="4"/>
+                                    </equal>
+                                </and>
+                                <equal>
+                                    <clip pos="1" side="tl" part="gen"/>
+                                    <lit v="5"/>
+                                </equal>
+                            </or>
+                            <equal>
+                                <clip pos="1" side="tl" part="gen"/>
+                                <lit v="6"/>
+                            </equal>
+                        </or>
                     </test>
                     <let>
                         <clip pos="1" side="tl" part="gen"/>
@@ -193,196 +46,8 @@
                     </let>
                 </when>
             </choose>
-            <choose>
-                <when>
-                    <test>
-                        <equal>
-                            <clip pos="1" side="tl" part="nbr"/>
-                            <lit-tag v="ND"/>
-                        </equal>
-                    </test>
-                    <let>
-                        <clip pos="1" side="tl" part="nbr"/>
-                        <lit-tag v="sg"/>
-                    </let>
-                </when>
-            </choose>
         </def-macro>
-        
-        <def-macro n="posa_GDND" npar="1"><!--per a posar valors de GD i ND en adjectius i determinants, que venen del bilingüe sense cap valor i per tant és impossible fer-hi cap operació ni canvi -->
-
-            <choose>
-                <when><!--si la paraula no té valor per a gènere (i en aquest cas, tampoc per a nombre) -->
-                    <test>
-                        <equal>
-                            <clip pos="1" side="tl" part="gen"/>
-                            <lit v=""/>
-                        </equal>
-                    </test>
-                    <let>
-                        <var n="paraula1"/>
-                        <clip pos="1" side="tl" part="lemh"/>
-                    </let>
-                    <append n="paraula1">
-                        <clip pos="1" side="tl" part="tags"/>
-                        <lit-tag v="GD"/>
-                        <lit-tag v="ND"/>
-                        <clip pos="1" side="tl" part="lemq"/>
-                    </append>
-                    <let>
-                        <clip pos="1" side="tl" part="whole"/>
-                        <var n="paraula1"/>
-                    </let>
-                </when>
-                <when><!--si la paraula no té valor per a nombre (però sí per a gènere, ja que sinó hauria entrat pel when anterior) -->
-                    <test>
-                        <equal>
-                            <clip pos="1" side="tl" part="nbr"/>
-                            <lit v=""/>
-                        </equal>
-                    </test>
-                    <let>
-                        <var n="paraula1"/>
-                        <clip pos="1" side="tl" part="lemh"/>
-                    </let>
-                    <append n="paraula1">
-                        <clip pos="1" side="tl" part="tags"/>
-                        <lit-tag v="ND"/>
-                        <clip pos="1" side="tl" part="lemq"/>
-                    </append>
-                    <let>
-                        <clip pos="1" side="tl" part="whole"/>
-                        <var n="paraula1"/>
-                    </let>
-                </when>
-            </choose>
-        </def-macro>
-
-        <def-macro n="conj_verb1" npar="1"><!--conjuga un verb -->
-
-            <!--Primera part: si aquest verb és un verb modal -->
-
-            <choose>
-                <when>
-                    <test>
-                        <and>
-                            <or>
-                                <equal caseless="yes">
-                                    <clip pos="2" side="tl" part="lem"/>
-                                    <lit v="milió de"/>
-                                </equal>
-                                <equal caseless="yes">
-                                    <clip pos="2" side="tl" part="lem"/>
-                                    <lit v="un milió de"/>
-                                </equal>
-                            </or>
-                            <equal>
-                                <clip pos="1" side="tl" part="gen"/>
-                                <lit-tag v="GD"/>
-                            </equal>
-                        </and>   
-                    </test>
-                    <let>
-                        <var n="temps_chunk"/>
-                        <lit-tag v="pri"/>
-                    </let>
-                </when>
-            </choose>
-        </def-macro>
-        
-        <section-rules>
-
-            <!--********************************* REGLES DE SN ***************************************************** -->
-
-            <!-- primer les regles lèxiques-->
-            <rule comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)">
-                <pattern>
-                    <pattern-item n="months"/>
-                    <pattern-item n="num"/>
-                    <pattern-item n="coma"/>
-                    <pattern-item n="num"/>
-                </pattern>
-                <action>
-                    <call-macro n="firstWord">
-                        <with-param pos="1"/>
-                    </call-macro>
-                    <choose>
-                        <when>
-                            <test>
-                                <equal>
-                                    <clip pos="1" side="sl" part="lem"/>
-                                    <lit v="March"/>
-                                </equal>
-                            </test>
-                            <let>
-                                <clip pos="1" side="tl" part="lem"/>
-                                <lit v="març"/>
-                            </let>
-                            <choose>
-                                <when>
-                                    <test>
-                                        <equal>
-                                            <clip pos="1" side="sl" part="a_nom"/>
-                                            <lit-tag v="np.cog"/>
-                                        </equal>
-                                    </test>
-                                    <let>
-                                        <clip pos="1" side="tl" part="a_nom"/>
-                                        <lit-tag v="n"/>
-                                    </let>
-                                    <let>
-                                        <clip pos="1" side="tl" part="gen"/>
-                                        <lit-tag v="m"/>
-                                    </let>
-                                    <let>
-                                        <clip pos="1" side="tl" part="nbr"/>
-                                        <concat>
-                                            <lit-tag v="sg"/>
-                                            <lit v="sg"/>
-                                        </concat>
-                                    </let>
-                                </when>
-                            </choose>
-                        </when>
-                    </choose>
-                    <out>
-                        <chunk name="month_num_cm_num" case="caseFirstWord">
-                            <tags>
-                                <tag>
-                                    <clip pos="2" side="tl" part="a_adv"/>
-                                </tag>
-                                <tag>
-                                    <var n="neg"/>
-                                </tag>
-                            </tags>
-                            <lu>
-                                <clip pos="2" side="tl" part="whole"/>
-                            </lu>
-                            <b pos="1"/>
-                            <lu>
-                                <lit v="de"/>
-                                <lit-tag v="pr"/>
-                            </lu>
-                            <b/>
-                            <lu>
-                                <clip pos="1" side="tl" part="whole"/>
-                            </lu>
-                            <b/>
-                            <lu>
-                                <lit v="de"/>
-                                <lit-tag v="pr"/>
-                            </lu>
-                            <b pos="3"/>
-                            <lu>
-                                <clip pos="4" side="tl" part="whole"/>
-                            </lu>
-                        </chunk>
-                    </out>
-                </action>
-            </rule>
-    
-        </section-rules>
-    
+            
     </section-def-macros>
     
 </transfer>

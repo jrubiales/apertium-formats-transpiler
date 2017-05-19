@@ -219,6 +219,48 @@ public class TransferSaxHandler extends DefaultHandler {
 //            sb.append(")");
 //        }
 
+
+        if (localName.equals("clip")) {
+            StringBuilder auxTrans = new StringBuilder();
+            String pos = attributes.getValue("pos");
+            String side = attributes.getValue("side");
+            String part = attributes.getValue("part");
+
+            auxTrans.append("clip(pos=").append(pos)
+                    .append(", side=").append(side)
+                    .append(", part=").append(part);
+            String queue = attributes.getValue("queue");
+            if (queue != null) {
+                auxTrans.append(", queue=").append(queue);
+            }
+            String linkTo = attributes.getValue("link-to");
+            if (linkTo != null) {
+                auxTrans.append(", link-to=").append(linkTo);
+            }
+            String c = attributes.getValue("c");
+            if (c != null) {
+                auxTrans.append(", c=").append(c);
+            }
+            auxTrans.append(")");
+            stack.push(auxTrans.toString());
+        } else if (localName.equals("lit")) {
+            StringBuilder auxTrans = new StringBuilder();
+            String v = attributes.getValue("v");
+            auxTrans.append("\"").append(v).append("\"");
+            stack.push(auxTrans.toString());
+        } else if (localName.equals("and") || localName.equals("or")) {
+            stack.push(localName);
+        } else if (localName.equals("when")) {
+            sb.append("when ");
+        } else if (localName.equals("equal")) {
+            String caseless = attributes.getValue("caseless");
+            if (caseless != null && caseless.equals("yes")) {
+                op = "equalCaseless";
+            } else {
+                op = "equal";
+            }
+        }
+
     }
 
     @Override
@@ -229,6 +271,47 @@ public class TransferSaxHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String name)
             throws SAXException {
+        
+        if (localName.equals("equal")
+                || localName.equals("begins-with") || localName.equals("begins-with-list")
+                || localName.equals("ends-with") || localName.equals("ends-with-list")
+                || localName.equals("contains-substring") || localName.equals("in")) {
+                        
+            // Desapilar 2 elementos.
+            String v1 = stack.pop();
+            String v2 = stack.pop();
+            StringBuilder trans = new StringBuilder();
+            // Generar traducción añadiendo el operador condicional.
+            trans.append(v2).append(" ").append(op).append(" ").append(v1);
+            // Alamacenar la traducción parcial en la pila.
+            stack.push(trans.toString());
+            
+        } else if (localName.equals("and") || localName.equals("or")) {
+            
+            StringBuilder trans = new StringBuilder();
+            
+            // Desapilar n elementos y generar traducción.
+            boolean found = false;
+            while(!stack.empty() && !found){
+                String e = stack.pop();
+                if(!e.equals(localName)){
+                    trans.append(e).append(" ").append(localName).append(" ");
+                } else {
+                    found = true;
+                }
+            }
+            
+            String t = trans.toString().replaceAll(" " + localName + " $", "");
+            
+            // Alamacenar la traducción parcial en la pila.
+            stack.push(t);
+           
+        } else if (localName.equals("test")) {
+            sb.append(stack.pop()).append(" then\n");
+            stack.clear();
+        } else if (localName.equals("when")) {
+            sb.append("end /* when */\n");
+        } 
 
 //        if (localName.equals("equal")
 //                || localName.equals("begins-with") || localName.equals("begins-with-list")
