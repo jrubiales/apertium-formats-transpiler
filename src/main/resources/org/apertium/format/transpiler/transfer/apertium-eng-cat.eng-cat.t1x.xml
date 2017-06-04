@@ -45,7 +45,7 @@
                         <lit-tag v="m"/>
                     </let>
                 </when>
-            </choose>
+            </choose>            
         </def-macro>
             
     </section-def-macros>
