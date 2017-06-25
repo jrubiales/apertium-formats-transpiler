@@ -12,9 +12,6 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class TransferSaxHandler extends DefaultHandler {
 
-    /* Traducción final. */
-    private final StringBuilder trans;
-
     /* Traducciones parciales. */
     private StringBuilder pTrans;
 
@@ -23,7 +20,6 @@ public class TransferSaxHandler extends DefaultHandler {
     private final Stack<String> stack;
 
     public TransferSaxHandler() {
-        trans = new StringBuilder();
         pTrans = new StringBuilder();
         refId = "";
         condition = "";
@@ -41,26 +37,32 @@ public class TransferSaxHandler extends DefaultHandler {
             Attributes attributes) throws SAXException {
 
         if (localName.equals("transfer")) {
-            trans.append("Transfer");
+            System.out.print("Transfer");
             String def = attributes.getValue("default");
             if (def != null) {
-                trans.append("(default=\"").append(def).append("\")");
+                System.out.print("(default=\"");
+                System.out.print(def);
+                System.out.print("\")");
             }
-            trans.append("\n");
+            System.out.println();
         } else if (localName.equals("def-cat")) {
             String n = attributes.getValue("n");
-            trans.append("Catlex ").append(n).append(" = ");
+            System.out.print("Catlex ");
+            System.out.print(n);
+            System.out.print(" = ");
         } else if (localName.equals("cat-item")) {
             String lemma = attributes.getValue("lemma");
             pTrans.append("\"");
             if (lemma != null) {
-                pTrans.append(lemma).append(", ");
+                pTrans.append(lemma).append(",");
             }
             String tags = attributes.getValue("tags");
             pTrans.append(tags).append("\", ");
         } else if (localName.equals("def-attr")) {
             String n = attributes.getValue("n");
-            trans.append("Attribute ").append(n).append(" = ");
+            System.out.print("Attribute ");
+            System.out.print(n);
+            System.out.print(" = ");
         } else if (localName.equals("attr-item")) {
             String tags = attributes.getValue("tags");
             if (tags != null) {
@@ -68,44 +70,57 @@ public class TransferSaxHandler extends DefaultHandler {
             }
         } else if (localName.equals("def-var")) {
             String n = attributes.getValue("n");
-            trans.append("Var ").append(n);
+            System.out.print("Var ");
+            System.out.print(n);
             String v = attributes.getValue("v");
             if (v != null) {
-                trans.append(" = ");
-                trans.append("\"").append(v).append("\"");
+                System.out.print(" = ");
+                System.out.print("\"");
+                System.out.print(v);
+                System.out.print("\"");
             }
         } else if (localName.equals("def-list")) {
             String n = attributes.getValue("n");
-            trans.append("List ").append(n).append(" = ");
+            System.out.print("List ");
+            System.out.print(n);
+            System.out.print(" = ");
         } else if (localName.equals("list-item")) {
             String v = attributes.getValue("v");
             pTrans.append("\"").append(v).append("\", ");
         } else if (localName.equals("def-macro")) {
             String n = attributes.getValue("n");
             String nPar = attributes.getValue("npar");
-            trans.append("Macro ").append(n).append("(npar=").append(nPar).append(")\n");
+            System.out.print("Macro ");
+            System.out.print(n);
+            System.out.print("(npar=");
+            System.out.print(nPar);
+            System.out.print(")\n");
         } else if (localName.equals("rule")) {
-            trans.append("Rule(");
+            System.out.print("Rule(");
             String c = attributes.getValue("c");
             if (c != null) {
-                trans.append("c=\"").append(c).append("\", ");
+                System.out.print("c=\"");
+                System.out.print(c);
+                System.out.print("\", ");
             }
             String comment = attributes.getValue("comment");
             if (comment != null) {
-                trans.append("comment=\"").append(comment).append("\"");
+                System.out.print("comment=\"");
+                System.out.print(comment);
+                System.out.print("\"");
             }
-            trans.append(")\n");
+            System.out.print(")\n");
         } else if (localName.equals("pattern")) {
-            trans.append("Pattern = ");
+            System.out.print("Pattern = ");
         } else if (localName.equals("pattern-item")) {
             String n = attributes.getValue("n");
-            pTrans.append(n).append(", ");
+            pTrans.append("\"").append(n).append("\", ");
         } /* sentence (dtd) */ else if (localName.equals("choose")) {
-            trans.append("case\n");
+            System.out.print("case\n");
         } else if (localName.equals("when")) {
-            trans.append("when ");
+            System.out.print("when ");
         } else if (localName.equals("otherwise")) {
-            trans.append("otherwise ");
+            System.out.print("otherwise ");
         } else if (localName.equals("and") || localName.equals("or")) {
             stack.push(localName);
         } else if (localName.equals("equal")
@@ -122,12 +137,13 @@ public class TransferSaxHandler extends DefaultHandler {
         } else if (localName.equals("append")) {
             sentence = "append";
         } else if (localName.equals("out")) {
-            trans.append("out\n");
+            System.out.print("out\n");
         } else if (localName.equals("modify-case")) {
             sentence = "modifyCase";
         } else if (localName.equals("call-macro")) {
             String n = attributes.getValue("n");
-            trans.append(n).append("(");
+            System.out.print(n);
+            System.out.print("(");
         } else if (localName.equals("with-param")) {
             String pos = attributes.getValue("pos");
             pTrans.append(pos).append(", ");
@@ -138,19 +154,19 @@ public class TransferSaxHandler extends DefaultHandler {
             String part = attributes.getValue("part");
 
             pTrans.append("clip(pos=").append(pos)
-                    .append(", side=").append(side)
-                    .append(", part=").append(part);
+                    .append(", side=\"").append(side).append("\"")
+                    .append(", part=\"").append(part).append("\"");
             String queue = attributes.getValue("queue");
             if (queue != null) {
-                pTrans.append(", queue=").append(queue);
+                pTrans.append(", queue=\"").append(queue).append("\"");
             }
             String linkTo = attributes.getValue("link-to");
             if (linkTo != null) {
-                pTrans.append(", link-to=").append(linkTo);
+                pTrans.append(", link-to=\"").append(linkTo).append("\"");
             }
             String c = attributes.getValue("c");
             if (c != null) {
-                pTrans.append(", c=").append(c);
+                pTrans.append(", c=\"").append(c).append("\"");
             }
             pTrans.append(")");
             stack.push(pTrans.toString());
@@ -180,29 +196,33 @@ public class TransferSaxHandler extends DefaultHandler {
             stack.push(refId);
             
         } else if (localName.equals("concat")) {
-            trans.append("concat\n");
+            System.out.print("concat\n");
         } else if (localName.equals("mlu")) {
-            trans.append("mlu\n");
+            System.out.print("mlu\n");
         } else if (localName.equals("lu")) {
-            trans.append("lu\n");
+            System.out.print("lu\n");
         } else if (localName.equals("chunk")) {
-            trans.append("Chunk\n");
+            System.out.print("Chunk\n");
         } else if (localName.equals("tags")) {
-            trans.append("tags\n");
+            System.out.print("tags\n");
         } else if (localName.equals("b")) {
             String pos = attributes.getValue("pos");
-            trans.append("b(");
-            if (pos != null && !pos.equals("")) {
-                trans.append(pos);
+            System.out.print("b");
+            if (pos != null) {
+                System.out.print("(");
+                System.out.print(pos);
+                System.out.print(")");
             }
-            trans.append(");\n");
+            System.out.print(";\n");
         } else if (localName.equals("reject-current-rule")) {
             String shifting = attributes.getValue("shifting");
-            trans.append("rejectCurrentRule(");
+            System.out.print("rejectCurrentRule(");
             if (shifting != null && !shifting.equals("")) {
-                trans.append("shifting=\"").append(shifting).append("\"");
+                System.out.print("shifting=\"");
+                System.out.print(shifting);
+                System.out.print("\"");
             }
-            trans.append(")");
+            System.out.print(")");
         }
     }
 
@@ -216,38 +236,43 @@ public class TransferSaxHandler extends DefaultHandler {
             throws SAXException {
 
         if (localName.equals("transfer")) {
-            trans.append("end /* transfer */\n");
+            System.out.print("end /* transfer */\n");
         } else if (localName.equals("def-cat")) {
-            trans.append(pTrans.toString().replaceAll(", $", ";")).append("\n");
+            System.out.print(pTrans.toString().replaceAll(", $", ";"));
+            System.out.println();
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
         } else if (localName.equals("def-attr")) {
-            trans.append(pTrans.toString().replaceAll(", $", ";")).append("\n");
+            System.out.print(pTrans.toString().replaceAll(", $", ";"));
+            System.out.println();
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
         } else if (localName.equals("def-var")) {
-            trans.append(";\n");
+            System.out.print(";\n");
         } else if (localName.equals("def-list")) {
-            trans.append(pTrans.toString().replaceAll(", $", ";")).append("\n");
+            System.out.print(pTrans.toString().replaceAll(", $", ";"));
+            System.out.println();
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
         } else if (localName.equals("def-macro")) {
-            trans.append("end /* macro */\n");
+            System.out.print("end /* macro */\n");
         } else if (localName.equals("rule")) {
-            trans.append("end /* rule */\n");
+            System.out.print("end /* rule */\n");
         } else if (localName.equals("pattern")) {
-            trans.append(pTrans.toString().replaceAll(", $", ";")).append("\n");
+            System.out.print(pTrans.toString().replaceAll(", $", ";"));
+            System.out.println();
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
         } /* sentence (dtd) */ else if (localName.equals("choose")) {
-            trans.append("end /* choose */\n");
+            System.out.print("end /* choose */\n");
         } else if (localName.equals("when")) {
-            trans.append("end /* when */\n");
+            System.out.print("end /* when */\n");
         } else if (localName.equals("test")) {
-            trans.append(stack.pop()).append(" then\n");
+            System.out.print(stack.pop());
+            System.out.print(" then\n");
             stack.clear();
         } else if (localName.equals("otherwise")) {
-            trans.append("end /* otherwise */\n");
+            System.out.print("end /* otherwise */\n");
         } else if (localName.equals("and") || localName.equals("or")) {
 
             // Desapilar n elementos y generar traducción.
@@ -269,7 +294,7 @@ public class TransferSaxHandler extends DefaultHandler {
         } else if (localName.equals("not")) {
             String c = stack.pop();
             pTrans.append("not ").append(c);
-            stack.push(trans.toString());
+            stack.push(pTrans.toString());
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
         } else if (localName.equals("equal")
@@ -295,40 +320,46 @@ public class TransferSaxHandler extends DefaultHandler {
             });
             stack.clear();
 
-            trans.append(pTrans.toString().replaceAll(" " + sentence + " $", "")).append(";\n");
+            System.out.print(pTrans.toString().replaceAll(" " + sentence + " $", ""));
+            System.out.print(";\n");
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
 
         } else if (localName.equals("out")) {
-            trans.append("end /* out */\n");
+            System.out.print("end /* out */\n");
         } else if (localName.equals("call-macro")) {
-            trans.append(pTrans.toString().replaceAll(", $", ")")).append(";\n");
+            System.out.print(pTrans.toString().replaceAll(", $", ")"));
+            System.out.print(";\n");
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
         } else if (localName.equals("concat")) {
             while (!stack.empty()) {
                 pTrans.append(stack.pop()).append(";\n");
             }
-            trans.append(pTrans).append("end /* concat */\n");
+            System.out.print(pTrans);
+            System.out.print("end /* concat */\n");
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
         } else if (localName.equals("mlu")) {
-            trans.append(pTrans).append("end /* mlu */\n");
+            System.out.print(pTrans);
+            System.out.print("end /* mlu */\n");
         } else if (localName.equals("lu")) {
             while (!stack.empty()) {
                 pTrans.append(stack.pop()).append(";\n");
             }
-            trans.append(pTrans).append("end /* lu */\n");
+            System.out.print(pTrans);
+            System.out.print("end /* lu */\n");
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
 
         } else if (localName.equals("chunk")) {
-            trans.append("end /* chunk */\n");
+            System.out.print("end /* chunk */\n");
         } else if (localName.equals("tags")) {
             while (!stack.empty()) {
                 pTrans.append(stack.pop()).append(";\n");
             }
-            trans.append(pTrans).append("end /* tags */\n");
+            System.out.print(pTrans);
+            System.out.print("end /* tags */\n");
             // pTrans.setLength(0);
             pTrans = new StringBuilder();
         }
@@ -336,6 +367,6 @@ public class TransferSaxHandler extends DefaultHandler {
 
     @Override
     public void endDocument() {
-        System.out.println(trans.toString());
+
     }
 }

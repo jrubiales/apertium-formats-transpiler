@@ -188,7 +188,7 @@ ruleAction returns [String trans = ""]
 instr returns [String trans = ""]
     : CASE { $trans += "<choose>"; } (whenInstr {
         $trans += $whenInstr.trans;
-    })+ otherwise? END { $trans += "</choose>"; }
+    })+ otherwise? END { $trans += "</choose>"; } (instr { $trans += $instr.trans; })?
     | {
         $trans += "<let>";
     } container ASSIGN value SEMI {
@@ -204,11 +204,19 @@ instr returns [String trans = ""]
     | container MODIFY_CASE stringValue {        
         $trans += "<modify-case>" + $container.trans + $stringValue.trans + "</modify-case>";
     } (instr { $trans += $instr.trans; })?
-    | VAR APPEND ID {
+
+    /* 
+
+    TODO. Fix.
+   
+    | ID APPEND { 
         $trans += "<append n=\"" + $ID.text + "\">";
     } (value { $trans += $value.trans; })+ END {
         $trans += "</append>";
-    } (instr { $trans += $instr.trans; })?
+    } (instr { $trans += $instr.trans; })? 
+
+    */
+
     | REJECT_CURRENT_RULE LPAR 'shifting' ASSIGN ('yes'|'no') RPAR SEMI
     | OUT {
         $trans += "<out>";
@@ -314,10 +322,12 @@ mlu returns [String trans = ""]
 chunk returns [String trans = ""]
     : CHUNK {
         $trans += "<chunk";
-    } ID? {
+    } (ID {
         $trans += " name=\"" + $ID.text + "\"";
-    } (LPAR chunkParams* RPAR)? {
-        $trans += $chunkParams.trans + ">";
+    })? (LPAR chunkParams* RPAR {
+        $trans += $chunkParams.trans;
+    })? {
+        $trans += ">";
     } tags {
         $trans += $tags.trans;
     } ( mlu { $trans += $mlu.trans; } 
@@ -469,12 +479,12 @@ t returns [String trans = ""]
     : CATLEX {
         $trans += "def-cat";
     }
-    | ATTR? {
+    | (ATTR {
         $trans += "def-attr";
-    }
-    | LIST? {
+    })?
+    | (LIST {
         $trans += "def-list";
-    }
+    })?
     ;
 
 // Literal.
