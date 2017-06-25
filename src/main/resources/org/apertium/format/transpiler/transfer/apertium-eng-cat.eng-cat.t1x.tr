@@ -1,289 +1,150 @@
 
 Transfer(default="chunk")
 
-    /* 
+  Catlex to = "to, pr";
+  Catlex interj = "ij";
+  Catlex on = "on, pr", "on, adv";
+  Catlex enough = "enough, adv";
+  Catlex detquant = "det.qnt.*";
+  Catlex all = "all, predet.sp";
+  Catlex nomplural = "n.pl";
+  Catlex nom = "n.*", "np.*";
+  Catlex months = "january, n.*", "february, n.*", "march, n.*", "march, np.cog.*", "april, n.*", "may, n.*", "june, n.*", "july, n.*", "august, n.*", "september, n.*", "october, n.*", "november, n.*", "december, n.*";
+  Catlex nomcomu = "n.*";
+  Catlex nompropi = "np.*";
+  Catlex nploc = "np.loc.*";
+  Catlex adj = "adj", "adj.*", "adj.comp", "adj.sup", "adj.pos", "adj.sint", "adj.sint.*", "vblex.pp", "vbmod.pp";
+  Catlex adj2 = "adj", "adj.*", "adj.sint", "adj.sint.*", "adj.comp", "adj.sup";
+  Catlex adj2pos = "adj.pos", "adj", "adj.sint", "adj.sint.*", "adj.comp", "adj.sup";
+  Catlex adjsup = "adj.sup", "adj.sint.sup";
+  Catlex num = "num.*", "num";
+  Catlex det = "det.dem.*", "det.ind.*", "det.def.*", "det.pos.*", "det.qnt.*", "det.itg.*", "det.ord.*", "predet.*";
+  Catlex det2 = "det.qnt.*", "det.ord.*";
+  Catlex prep = "pr";
+  
+  Attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
+  Attribute a_np = "np";
+  Attribute a_np_acr = "np", "acr";
+  Attribute a_adj = "adj", "adj.pos", "vblex.pp", "vbmod.pp", "vblex.pron.pp", "adjant";
+  Attribute grau_adj = "comp", "sup";
+  Attribute a_det = "det.dem", "det.ind", "det.def", "det.pos", "det.qnt", "det.itg", "det.ord", "adj.pos", "num", "predet";
+  Attribute a_prnpro = "prn.pro";
+  Attribute a_prnenc = "prn.enc";
+  Attribute a_num = "num", "num.percent", "num.ord", "num.mon";
+  Attribute a_verb = "vblex", "vblex.pron", "vbhaver", "vbser", "vbmod";
+  Attribute a_have_aux = "vbhaver";
+  Attribute a_pp = "vblex.pp", "vblex.pron.pp", "vbser.pp", "vbmod.pp";
+  Attribute a_aux = "vaux";
+  Attribute a_prn = "prn";
+  Attribute a_adv = "adv", "preadv", "adv.itg", "cnjadv";
+  Attribute a_rel = "rel.nn", "rel.an", "rel.aa", "rel.adv";
+  Attribute tipus_rel = "nn", "an", "aa", "adv";
+  Attribute tipus_prn = "tn", "obj", "enc", "itg", "pos";
+  Attribute pers = "p1", "p2", "p3", "PD";
+  Attribute gen = "m", "f", "mf", "GD", "nt";
+  Attribute gen_sense_mf = "m", "f", "GD", "nt";
+  Attribute gen_mf = "mf";
+  Attribute nbr = "sg", "pl", "sp", "ND";
+  Attribute nbr_sense_sp = "sg", "pl", "ND";
+  Attribute nbr_sp = "sp";
+  Attribute temps = "cni", "fti", "ifi", "imp", "pii", "pis", "inf", "prs", "pres", "past", "pri", "pp", "ger", "pprs", "subs";
+  
+  Var genere = "&lt;m&gt;";
+  Var nombre = "&lt;sg&gt;";
+  Var interrogativa;
+  Var exclamativa;
+  Var neg;
+  Var adjectiu1;
+  Var adjectiu2;
+  Var auxiliar;
+  Var caseFirstWord;
+  Var EOS = "true";
+  Var lema;
+  Var lema_SV;
+  Var verbfinal;
+  Var chunk;
+  Var temps_chunk;
+  Var pers_chunk;
+  Var nbr_chunk;
+  Var nbr_qual;
+  Var gen_chunk;
+  Var gen_qual;
+  Var gen_paraula;
+  Var nbr_paraula;
+  Var nbr_adj;
+  Var pronom;
+  Var pronomenc;
+  Var paraula1;
+  Var paraula2;
+  Var tipus_verb;
+  Var tipus_verb_imp;
+  Var negative;
+  Var tipus_det;
 
-    <def-cat n="nom">
-        <cat-item tags="n.*"/>
-    </def-cat>
+  List reportingverb = "say", "admit", "agree", "decide", "deny", "explain", "insist", "promise", "recommend", "suggest", "point", "think", "believe", "hope", "fear", "suppose";
+  List controlnouns = "desire", "order", "need", "right", "duty", "failure", "power", "wish", "capacity", "ability", "hope", "chance", "honour", "compulsion", "responsibility", "opportunity", "idea", "record", "way", "attempt", "obligation", "impulse", "surprise", "will", "mean";
+  List tractaments = "Mr.", "Mrs.", "Ms.", "Dr.";
+  List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
+  List adv_neg = "not", "never";
+  List verbs_modals = "can", "must", "should", "may", "might";
+  List numeros25 = "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen";
 
-    */
+  Macro elimina_GDND(npar=1)
+    case
+      when clip(pos=1, side=tl, part=gen) equal litTag("GD") then
+        clip(pos=1, side=tl, part=gen) = litTag("m");
+      end /* when */
+    end /* choose */
+    case
+      when clip(pos=1, side=tl, part=nbr) equal litTag("ND") then
+        clip(pos=1, side=tl, part=nbr) = litTag("sg");
+      end /* when */
+    end /* choose */
+  end /* macro */
 
-    Catlex nom = "n.*";
-
-    /*
-
-    <def-cat n="months">
-        <cat-item lemma="january" tags="n.*"/>
-        <cat-item lemma="february" tags="n.*"/>
-        <cat-item lemma="march" tags="n.*"/>
-        <cat-item lemma="march" tags="np.cog.*"/>
-        <cat-item lemma="april" tags="n.*"/>
-        <cat-item lemma="may" tags="n.*"/>
-        <cat-item lemma="june" tags="n.*"/>
-        <cat-item lemma="july" tags="n.*"/>
-        <cat-item lemma="august" tags="n.*"/>
-        <cat-item lemma="september" tags="n.*"/>
-        <cat-item lemma="october" tags="n.*"/>
-        <cat-item lemma="november" tags="n.*"/>
-        <cat-item lemma="december" tags="n.*"/>
-    </def-cat>
-
-    */
-
-    Catlex months = "january,n.*", "february,n.*", "march,n.*", "march,np.cog.*",
-                    "april,n.*", "may,n.*", "june,n.*",
-                    "july,n.*", "august,n.*", "september,n.*", 
-                    "october,n.*", "november,n.*", "december,n.*";
-
-    /* 
-
-    <def-attr n="a_nom">
-        <attr-item tags="n"/>
-        <attr-item tags="n.acr"/>
-        <attr-item tags="np.loc"/>
-        <attr-item tags="np.ant"/>
-        <attr-item tags="np.cog"/>
-        <attr-item tags="np.al"/>
-        <attr-item tags="adv"/>
-    </def-attr>
-
-    */
-
-    Attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
-
-    /*
-
-    <section-def-vars>
-        <def-var n="genere" v="&amp;lt;m&amp;gt;"/>
-        <def-var n="nombre" v="&amp;lt;sg&amp;gt;"/>
-        <def-var n="interrogativa"/>
-        <def-var n="exclamativa"/>
-        <def-var n="neg"/>
-        <def-var n="adjectiu1"/>
-        <def-var n="adjectiu2"/>
-        <def-var n="auxiliar"/>
-        <def-var n="caseFirstWord"/>
-        <def-var n="EOS" v="true"/>
-        <def-var n="lema"/>
-        <def-var n="lema_SV"/>
-        <def-var n="verbfinal"/>
-        <def-var n="chunk"/>
-        <def-var n="temps_chunk"/>
-        <def-var n="pers_chunk"/>
-        <def-var n="nbr_chunk"/>
-        <def-var n="nbr_qual"/>
-        <def-var n="gen_chunk"/>
-        <def-var n="gen_qual"/>
-        <def-var n="gen_paraula"/>
-        <def-var n="nbr_paraula"/>
-        <def-var n="nbr_adj"/>
-        <def-var n="pronom"/>
-        <def-var n="pronomenc"/>
-        <def-var n="paraula1"/>
-        <def-var n="paraula2"/>
-        <def-var n="tipus_verb"/>
-        <def-var n="tipus_verb_imp"/>
-        <def-var n="negative"/> <!-- BCN-->
-        <def-var n="tipus_det"/>
-    </section-def-vars>
-
-    */
-
-    Var genere = "&amp;lt;m&amp;gt;", nombre = "&amp;lt;sg&amp;gt;", interrogativa, exclamativa, neg, adjectiu1, adjectiu2, auxiliar, caseFirstWord, EOS = "true", lema, lema_SV, verbfinal, chunk, temps_chunk, pers_chunk, nbr_chunk, nbr_qual, gen_chunk, gen_qual, gen_paraula, nbr_paraula, nbr_adj, pronom, pronomenc, paraula1, paraula2, tipus_verb, tipus_verb_imp, negative, tipus_det;
-
-    /*
-
-    <def-list n="days">
-        <list-item v="Monday"/>
-        <list-item v="Tuesday"/>
-        <list-item v="Wednesday"/>
-        <list-item v="Thursday"/>
-        <list-item v="Friday"/>
-        <list-item v="Saturday"/>
-        <list-item v="Sunday"/>
-    </def-list>
-
-    */
-
-    List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
-
-    /*
-
-    <def-macro n="elimina_GDND" npar="1">
-        <choose>
-          <when>
-            <test>
-              <equal>
-                <clip pos="1" side="tl" part="gen"/>
-                <lit-tag v="GD"/>
-              </equal>
-            </test>
-            <let>
-                <clip pos="1" side="tl" part="gen"/>
-                <lit-tag v="m"/>
-            </let>
-          </when>
-        </choose>
-        <choose>
-          <when>
-            <test>
-              <equal>
-                <clip pos="1" side="tl" part="nbr"/>
-                <lit-tag v="ND"/>
-              </equal>
-            </test>
-            <let>
-                <clip pos="1" side="tl" part="nbr"/>
-                <lit-tag v="sg"/>
-            </let>
-          </when>
-        </choose>
-    </def-macro>
-
-    */
-    
-    Macro elimina_GDND(npar=1)
-
+  Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 ? 23 de juliol de 2010)")
+    Pattern = months, num, coma, num;
+    firstWord(1);
+    case
+      when clip(pos=1, side=sl, part=lem) equal "March" then
+        clip(pos=1, side=tl, part=lem) = "març";
         case
-            when clip(pos=1, side="tl", part="gen") equal litTag("GD") then
-                clip(pos=1, side="tl", part="gen") = litTag("m");
-            end
-        end
-        case
-            when clip(pos=1, side="tl", part="nbr") equal litTag("ND") then
-                clip(pos=1, side="tl", part="nbr") = litTag("sg");
-            end
-        end
-
-    end
-
-    /*
-
-    <rule comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)">
-        <pattern>
-          <pattern-item n="months"/>
-          <pattern-item n="num"/>
-          <pattern-item n="coma"/>
-          <pattern-item n="num"/>
-        </pattern>
-        <action>
-          <call-macro n="firstWord">
-            <with-param pos="1"/>
-          </call-macro>
-          <choose>
-            <when>
-              <test>
-                <equal>
-                  <clip pos="1" side="sl" part="lem"/>
-                  <lit v="March"/>
-                </equal>
-              </test>
-              <let>
-                <clip pos="1" side="tl" part="lem"/>
-                <lit v="març"/>
-              </let>
-              <choose>
-                <when>
-                  <test>
-                    <equal>
-                      <clip pos="1" side="sl" part="a_nom"/>
-                      <lit-tag v="np.cog"/>
-                    </equal>
-                  </test>
-                  <let>
-                    <clip pos="1" side="tl" part="a_nom"/>
-                    <lit-tag v="n"/>
-                  </let>
-                  <let>
-                    <clip pos="1" side="tl" part="gen"/>
-                    <lit-tag v="m"/>
-                 </let>
-                  <let>
-                    <clip pos="1" side="tl" part="nbr"/>
-                    <lit-tag v="sg"/>
-                 </let>
-                </when>
-              </choose>
-            </when>
-          </choose>
-          <out>
-            <chunk name="month_num_cm_num" case="caseFirstWord">
-              <tags>
-                <tag><clip pos="2" side="tl" part="a_adv"/></tag>
-                <tag><var n="neg"/></tag>
-              </tags>
-              <lu>
-                <clip pos="2" side="tl" part="whole"/>
-              </lu>
-              <b pos="1"/>
-              <lu>
-                <lit v="de"/>
-                <lit-tag v="pr"/>
-              </lu>
-              <b/>
-              <lu>
-                <clip pos="1" side="tl" part="whole"/>
-              </lu>
-              <b/>
-              <lu>
-                <lit v="de"/>
-                <lit-tag v="pr"/>
-              </lu>
-              <b pos="3"/>
-              <lu>
-                <clip pos="4" side="tl" part="whole"/>
-              </lu>
-            </chunk>
-          </out>
-        </action>
-    </rule>
-
-    */
-
-    Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)")
-        Pattern = "months", "num", "coma", "num";
-        firstWord(1);   /* call-macro firstWord */
-        case
-            when clip(pos=1, side="sl", part="lem") equal "March" then
-                clip(pos=1, side="sl", part="lem") = "març";
-                case
-                    when clip(pos=1, side="sl", part="a_nom") equal litTag("np.cog") then
-                        clip(pos=1, side="tl", part="a_nom") = litTag("n");
-                        clip(pos=1, side="tl", part="gen") = litTag("m");
-                        clip(pos=1, side="tl", part="nbr") = litTag("sg");
-                    end
-                end
-            end
-        end
-        out
-            Chunk month_num_cm_num(case="caseFirstWord")
-                tags 
-                    clip(pos=2, side="tl", part="a_adv");    /* BUG */
-                    neg;        /* id var */
-                end
-                lu 
-                    clip(pos=2, side="tl", part="whole");
-                end
-                b(pos=1);
-                lu 
-                    "de";           /* literal */
-                    litTag("pr");   /* literal-tag */
-                end
-                b;
-                lu 
-                    clip(pos=1, side="tl", part="whole");
-                end
-                b;
-                lu 
-                    "de";           /* literal */
-                    litTag("pr");   /* literal-tag */
-                end
-                b(pos=3);
-                lu 
-                    clip(pos=4, side="tl", part="whole");
-                end
-            end
-        end
-    end
-end
+          when clip(pos=1, side=sl, part=a_nom) equal litTag("np.cog") then
+            clip(pos=1, side=tl, part=a_nom) = litTag("n");
+            clip(pos=1, side=tl, part=gen) = litTag("m");
+            clip(pos=1, side=tl, part=nbr) = litTag("sg");
+          end /* when */
+        end /* choose */
+      end /* when */
+    end /* choose */
+    out
+      Chunk
+        tags
+          neg;
+          clip(pos=2, side=tl, part=a_adv);
+        end /* tags */
+        lu
+          clip(pos=2, side=tl, part=whole);
+        end /* lu */
+        b(1);
+        lu
+          litTag("pr");
+          "de";
+        end /* lu */
+        b();
+        lu
+          clip(pos=1, side=tl, part=whole);
+        end /* lu */
+        b();
+        lu
+          litTag("pr");
+          "de";
+        end /* lu */
+        b(3);
+        lu
+          clip(pos=4, side=tl, part=whole);
+        end /* lu */
+      end /* chunk */
+    end /* out */
+  end /* rule */
+end /* transfer */

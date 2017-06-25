@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?> <!-- -*- nxml -*- -->
+<?xml version="1.0" encoding="UTF-8"?>
 <transfer default="chunk">
-    
     <section-def-cats>
-
+    
         <def-cat n="to"><!--BCN-->
             <cat-item lemma="to" tags="pr"/>
         </def-cat>
-
+    
         <def-cat n="interj">
             <cat-item tags="ij"/>
         </def-cat>
@@ -14,28 +13,28 @@
             <cat-item lemma="on" tags="pr"/>
             <cat-item lemma="on" tags="adv"/>
         </def-cat>
-
+    
         <def-cat n="enough"><!--BCN-->
             <cat-item lemma="enough" tags="adv"/>
         </def-cat>
-
+    
         <def-cat n="detquant"><!--BCN-->
             <cat-item tags="det.qnt.*"/>
         </def-cat>
-
+    
         <def-cat n="all"><!--BCN-->
             <cat-item lemma="all" tags="predet.sp"/>
         </def-cat>
-
+    
         <def-cat n="nomplural"><!--BCN-->
             <cat-item tags="n.pl"/>
         </def-cat>
-
+    
         <def-cat n="nom">
             <cat-item tags="n.*"/>
             <cat-item tags="np.*"/>
         </def-cat>
-
+    
         <def-cat n="months">
             <cat-item lemma="january" tags="n.*"/>
             <cat-item lemma="february" tags="n.*"/>
@@ -51,7 +50,81 @@
             <cat-item lemma="november" tags="n.*"/>
             <cat-item lemma="december" tags="n.*"/>
         </def-cat>
-
+    
+        <def-cat n="nomcomu">
+            <cat-item tags="n.*"/>
+        </def-cat>
+    
+        <def-cat n="nompropi">
+            <cat-item tags="np.*"/>
+        </def-cat>
+        <def-cat n="nploc">
+            <cat-item tags="np.loc.*"/>
+        </def-cat>
+    
+        <def-cat n="adj">
+            <cat-item tags="adj"/>
+            <cat-item tags="adj.*"/>
+            <cat-item tags="adj.comp"/>
+            <cat-item tags="adj.sup"/>
+            <cat-item tags="adj.pos"/>
+            <cat-item tags="adj.sint"/>
+            <cat-item tags="adj.sint.*"/>
+            <cat-item tags="vblex.pp"/> <!-- BCN ok implica tocar les regles per la concordança-->
+            <cat-item tags="vbmod.pp"/> <!-- BCN ok implica tocar les regles per la concordança-->
+        </def-cat>
+    
+        <def-cat n="adj2"><!--revisar regles amb 'adj' i 'adj2' -->
+            <cat-item tags="adj"/>
+            <cat-item tags="adj.*"/>
+            <cat-item tags="adj.sint"/>
+            <cat-item tags="adj.sint.*"/>
+            <cat-item tags="adj.comp"/>
+            <cat-item tags="adj.sup"/>
+        </def-cat>
+    
+        <def-cat n="adj2pos">
+            <cat-item tags="adj.pos"/>
+            <cat-item tags="adj"/>
+            <cat-item tags="adj.sint"/>
+            <cat-item tags="adj.sint.*"/>
+            <cat-item tags="adj.comp"/>
+            <cat-item tags="adj.sup"/>
+        </def-cat>
+    
+        <def-cat n="adjsup">
+            <cat-item tags="adj.sup"/>
+            <cat-item tags="adj.sint.sup"/>
+        </def-cat>
+    
+    
+    
+        <def-cat n="num">
+            <cat-item tags="num.*"/>
+            <cat-item tags="num"/>
+      
+        </def-cat>
+    
+        <def-cat n="det"><!--Determinants i predeterminants, van anteposats en català -->
+            <cat-item tags="det.dem.*"/>
+            <cat-item tags="det.ind.*"/>
+            <cat-item tags="det.def.*"/>
+            <cat-item tags="det.pos.*"/>
+            <cat-item tags="det.qnt.*"/>
+            <cat-item tags="det.itg.*"/>
+            <cat-item tags="det.ord.*"/>
+            <cat-item tags="predet.*"/>
+        </def-cat>
+    
+        <def-cat n="det2"><!--Poden anar precedits d'un altre determinant i anar després d'un genitiu saxó -->
+            <cat-item tags="det.qnt.*"/>
+            <cat-item tags="det.ord.*"/>
+        </def-cat>
+       
+        <def-cat n="prep">
+            <cat-item tags="pr"/>
+        </def-cat>
+    
     </section-def-cats>
     
     <section-def-attrs>
@@ -64,16 +137,16 @@
             <attr-item tags="np.al"/>
             <attr-item tags="adv"/>
         </def-attr>
-
+    
         <def-attr n="a_np">
             <attr-item tags="np"/>
         </def-attr>
-
+    
         <def-attr n="a_np_acr">
             <attr-item tags="np"/>
             <attr-item tags="acr"/>
         </def-attr>
-
+    
         <def-attr n="a_adj">
             <attr-item tags="adj"/>
             <attr-item tags="adj.pos"/>
@@ -82,7 +155,160 @@
             <attr-item tags="vblex.pron.pp"/>
             <attr-item tags="adjant"/>
         </def-attr>
-
+    
+    
+        <def-attr n="grau_adj">
+            <attr-item tags="comp"/>
+            <attr-item tags="sup"/>
+        </def-attr>
+    
+        <def-attr n="a_det">
+            <attr-item tags="det.dem"/>
+            <attr-item tags="det.ind"/>
+            <attr-item tags="det.def"/>
+            <attr-item tags="det.pos"/>
+            <attr-item tags="det.qnt"/>
+            <attr-item tags="det.itg"/>
+            <attr-item tags="det.ord"/>
+            <attr-item tags="adj.pos"/>
+            <attr-item tags="num"/>
+            <attr-item tags="predet"/>
+        </def-attr>
+    
+        <def-attr n="a_prnpro">
+            <attr-item tags="prn.pro"/>
+        </def-attr>
+        <def-attr n="a_prnenc">
+            <attr-item tags="prn.enc"/>
+        </def-attr>
+        <def-attr n="a_num">
+            <attr-item tags="num"/>
+            <attr-item tags="num.percent"/>
+            <attr-item tags="num.ord"/>
+            <attr-item tags="num.mon"/>
+        </def-attr>
+    
+        <def-attr n="a_verb">
+            <attr-item tags="vblex"/>
+            <attr-item tags="vblex.pron"/>
+            <attr-item tags="vbhaver"/>
+            <attr-item tags="vbser"/>
+            <attr-item tags="vbmod"/>
+        </def-attr>
+    
+        <def-attr n="a_have_aux">
+            <attr-item tags="vbhaver"/>
+        </def-attr>
+    
+        <def-attr n="a_pp">
+            <attr-item tags="vblex.pp"/>
+            <attr-item tags="vblex.pron.pp"/>
+            <attr-item tags="vbser.pp"/>
+            <attr-item tags="vbmod.pp"/>
+        </def-attr>
+    
+    
+        <def-attr n="a_aux">
+            <attr-item tags="vaux"/>
+        </def-attr>
+    
+        <def-attr n="a_prn">
+            <attr-item tags="prn"/>
+        </def-attr>
+    
+        <def-attr n="a_adv">
+            <attr-item tags="adv"/>
+            <attr-item tags="preadv"/>
+            <attr-item tags="adv.itg"/>
+            <attr-item tags="cnjadv"/>
+        </def-attr>
+    
+        <def-attr n="a_rel">
+            <attr-item tags="rel.nn"/>
+            <attr-item tags="rel.an"/>
+            <attr-item tags="rel.aa"/>
+            <attr-item tags="rel.adv"/>
+        </def-attr>
+    
+        <def-attr n="tipus_rel">
+            <attr-item tags="nn"/>
+            <attr-item tags="an"/>
+            <attr-item tags="aa"/>
+            <attr-item tags="adv"/>
+        </def-attr>
+    
+        <def-attr n="tipus_prn">
+            <attr-item tags="tn"/>
+            <attr-item tags="obj"/>
+            <attr-item tags="enc"/>
+            <attr-item tags="itg"/>
+            <attr-item tags="pos"/>
+        </def-attr>
+    
+        <def-attr n="pers">
+            <attr-item tags="p1"/>
+            <attr-item tags="p2"/>
+            <attr-item tags="p3"/>
+            <attr-item tags="PD"/>
+        </def-attr>
+    
+        <def-attr n="gen">
+            <attr-item tags="m"/>
+            <attr-item tags="f"/>
+            <attr-item tags="mf"/>
+            <attr-item tags="GD"/>
+            <attr-item tags="nt"/>
+        </def-attr>
+    
+    
+    
+        <def-attr n="gen_sense_mf">
+            <attr-item tags="m"/>
+            <attr-item tags="f"/>
+            <attr-item tags="GD"/>
+            <attr-item tags="nt"/>
+        </def-attr>
+    
+        <def-attr n="gen_mf">
+            <attr-item tags="mf"/>
+        </def-attr>
+    
+        <def-attr n="nbr">
+            <attr-item tags="sg"/>
+            <attr-item tags="pl"/>
+            <attr-item tags="sp"/>
+            <attr-item tags="ND"/>
+        </def-attr>
+        <def-attr n="nbr_sense_sp">
+            <attr-item tags="sg"/>
+            <attr-item tags="pl"/>
+            <attr-item tags="ND"/>
+        </def-attr>
+    
+        <def-attr n="nbr_sp">
+            <attr-item tags="sp"/>
+        </def-attr>
+    
+    
+        <def-attr n="temps">
+            <attr-item tags="cni"/>
+            <attr-item tags="fti"/>
+            <attr-item tags="ifi"/>
+            <attr-item tags="imp"/>
+            <attr-item tags="pii"/>
+            <attr-item tags="pis"/>
+            <attr-item tags="inf"/>
+            <attr-item tags="prs"/>
+            <attr-item tags="pres"/>
+            <attr-item tags="past"/>
+            <attr-item tags="pri"/>
+            <attr-item tags="pp"/>
+            <attr-item tags="ger"/>
+            <attr-item tags="pprs"/>
+            <attr-item tags="subs"/>
+        </def-attr>
+    
+    
     </section-def-attrs>
     
     <section-def-vars>
@@ -118,9 +344,63 @@
         <def-var n="negative"/> <!-- BCN-->
         <def-var n="tipus_det"/>
     </section-def-vars>
-
+    
     <section-def-lists>
-
+    
+        <def-list n="reportingverb"> <!-- BCN verbs que poden no portar el THAT -->
+            <list-item v="say"/>
+            <list-item v="admit"/>
+            <list-item v="agree"/>
+            <list-item v="decide"/>
+            <list-item v="deny"/>
+            <list-item v="explain"/>
+            <list-item v="insist"/>
+            <list-item v="promise"/>
+            <list-item v="recommend"/>
+            <list-item v="suggest"/>
+            <list-item v="point"/>
+            <list-item v="think"/>
+            <list-item v="believe"/>
+            <list-item v="hope"/>
+            <list-item v="fear"/>
+            <list-item v="suppose"/>
+        </def-list>
+    
+        <def-list n="controlnouns"> <!-- BCN -->
+            <list-item v="desire"/>
+            <list-item v="order"/>
+            <list-item v="need"/>
+            <list-item v="right"/>
+            <list-item v="duty"/>
+            <list-item v="failure"/>
+            <list-item v="power"/>
+            <list-item v="wish"/>
+            <list-item v="capacity"/>
+            <list-item v="ability"/>
+            <list-item v="hope"/>
+            <list-item v="chance"/>
+            <list-item v="honour"/>
+            <list-item v="compulsion"/>
+            <list-item v="responsibility"/>
+            <list-item v="opportunity"/>
+            <list-item v="idea"/>
+            <list-item v="record"/>
+            <list-item v="way"/>
+            <list-item v="attempt"/>
+            <list-item v="obligation"/>
+            <list-item v="impulse"/>
+            <list-item v="surprise"/>
+            <list-item v="will"/>
+            <list-item v="mean"/>
+        </def-list>
+    
+        <def-list n="tractaments"> <!--potser s'hauria de canviar categoria i posar com a determinants -->
+            <list-item v="Mr."/>
+            <list-item v="Mrs."/>
+            <list-item v="Ms."/>
+            <list-item v="Dr."/>
+        </def-list>
+    
         <def-list n="days">
             <list-item v="Monday"/>
             <list-item v="Tuesday"/>
@@ -130,9 +410,25 @@
             <list-item v="Saturday"/>
             <list-item v="Sunday"/>
         </def-list>
-
+    
+        <def-list n="adv_neg">
+            <list-item v="not"/>
+            <list-item v="never"/>
+        </def-list>
+    
+    
+        <def-list n="verbs_modals">
+      
+            <list-item v="can"/>
+            <list-item v="must"/>
+            <list-item v="should"/>
+            <list-item v="may"/>
+            <list-item v="might"/>
+      
+        </def-list>
+    
         <def-list n="numeros25">
-
+      
             <list-item v="1"/>
             <list-item v="2"/>
             <list-item v="3"/>
@@ -171,13 +467,13 @@
             <list-item v="seventeen"/>
             <list-item v="eighteen"/>
             <list-item v="nineteen"/>
-
+      
         </def-list>
-
+    
     </section-def-lists>
     
     <section-def-macros>
-        
+    
         <def-macro n="elimina_GDND" npar="1">
             <choose>
                 <when>
@@ -208,189 +504,96 @@
                 </when>
             </choose>
         </def-macro>
-        
-        <def-macro n="posa_GDND" npar="1"><!--per a posar valors de GD i ND en adjectius i determinants, que venen del bilingüe sense cap valor i per tant és impossible fer-hi cap operació ni canvi -->
-
-            <choose>
-                <when><!--si la paraula no té valor per a gènere (i en aquest cas, tampoc per a nombre) -->
-                    <test>
-                        <equal>
-                            <clip pos="1" side="tl" part="gen"/>
-                            <lit v=""/>
-                        </equal>
-                    </test>
-                    <let>
-                        <var n="paraula1"/>
-                        <clip pos="1" side="tl" part="lemh"/>
-                    </let>
-                    <append n="paraula1">
-                        <clip pos="1" side="tl" part="tags"/>
-                        <lit-tag v="GD"/>
-                        <lit-tag v="ND"/>
-                        <clip pos="1" side="tl" part="lemq"/>
-                    </append>
-                    <let>
-                        <clip pos="1" side="tl" part="whole"/>
-                        <var n="paraula1"/>
-                    </let>
-                </when>
-                <when><!--si la paraula no té valor per a nombre (però sí per a gènere, ja que sinó hauria entrat pel when anterior) -->
-                    <test>
-                        <equal>
-                            <clip pos="1" side="tl" part="nbr"/>
-                            <lit v=""/>
-                        </equal>
-                    </test>
-                    <let>
-                        <var n="paraula1"/>
-                        <clip pos="1" side="tl" part="lemh"/>
-                    </let>
-                    <append n="paraula1">
-                        <clip pos="1" side="tl" part="tags"/>
-                        <lit-tag v="ND"/>
-                        <clip pos="1" side="tl" part="lemq"/>
-                    </append>
-                    <let>
-                        <clip pos="1" side="tl" part="whole"/>
-                        <var n="paraula1"/>
-                    </let>
-                </when>
-            </choose>
-        </def-macro>
-
-        <def-macro n="conj_verb1" npar="1"><!--conjuga un verb -->
-
-            <!--Primera part: si aquest verb és un verb modal -->
-
-            <choose>
-                <when>
-                    <test>
-                        <and>
-                            <or>
-                                <equal caseless="yes">
-                                    <clip pos="2" side="tl" part="lem"/>
-                                    <lit v="milió de"/>
-                                </equal>
-                                <equal caseless="yes">
-                                    <clip pos="2" side="tl" part="lem"/>
-                                    <lit v="un milió de"/>
-                                </equal>
-                            </or>
-                            <equal>
-                                <clip pos="1" side="tl" part="gen"/>
-                                <lit-tag v="GD"/>
-                            </equal>
-                        </and>   
-                    </test>
-                    <let>
-                        <var n="temps_chunk"/>
-                        <lit-tag v="pri"/>
-                    </let>
-                </when>
-            </choose>
-        </def-macro>
-        
-        <section-rules>
-
-            <!--********************************* REGLES DE SN ***************************************************** -->
-
-            <!-- primer les regles lèxiques-->
-            <rule comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)">
-                <pattern>
-                    <pattern-item n="months"/>
-                    <pattern-item n="num"/>
-                    <pattern-item n="coma"/>
-                    <pattern-item n="num"/>
-                </pattern>
-                <action>
-                    <call-macro n="firstWord">
-                        <with-param pos="1"/>
-                    </call-macro>
-                    <choose>
-                        <when>
-                            <test>
-                                <equal>
-                                    <clip pos="1" side="sl" part="lem"/>
-                                    <lit v="March"/>
-                                </equal>
-                            </test>
-                            <let>
-                                <clip pos="1" side="tl" part="lem"/>
-                                <lit v="març"/>
-                            </let>
-                            <choose>
-                                <when>
-                                    <test>
-                                        <equal>
-                                            <clip pos="1" side="sl" part="a_nom"/>
-                                            <lit-tag v="np.cog"/>
-                                        </equal>
-                                    </test>
-                                    <let>
-                                        <clip pos="1" side="tl" part="a_nom"/>
-                                        <lit-tag v="n"/>
-                                    </let>
-                                    <let>
-                                        <clip pos="1" side="tl" part="gen"/>
-                                        <lit-tag v="m"/>
-                                    </let>
-                                    <let>
-                                        <clip pos="1" side="tl" part="nbr"/>
-                                        <concat>
-                                            <lit-tag v="sg"/>
-                                            <lit v="sg"/>
-                                        </concat>
-                                    </let>
-                                </when>
-                            </choose>
-                        </when>
-                    </choose>
-                    <out>
-                        <chunk name="month_num_cm_num" case="caseFirstWord">
-                            <tags>
-                                <tag>
-                                    <clip pos="2" side="tl" part="a_adv"/>
-                                </tag>
-                                <tag>
-                                    <var n="neg"/>
-                                </tag>
-                            </tags>
-                            <lu>
-                                <clip pos="2" side="tl" part="whole"/>
-                            </lu>
-                            <b pos="1"/>
-                            <lu>
-                                <lit v="de"/>
-                                <lit-tag v="pr"/>
-                            </lu>
-                            <b/>
-                            <lu>
-                                <clip pos="1" side="tl" part="whole"/>
-                            </lu>
-                            <b/>
-                            <lu>
-                                <lit v="de"/>
-                                <lit-tag v="pr"/>
-                            </lu>
-                            <b pos="3"/>
-                            <lu>
-                                <clip pos="4" side="tl" part="whole"/>
-                            </lu>
-                        </chunk>
-                    </out>
-                </action>
-            </rule>
-    
-        </section-rules>
-    
     </section-def-macros>
     
+    <section-rules>
+    
+        <!--********************************* REGLES DE SN ***************************************************** -->
+    
+        <!-- primer les regles lèxiques-->
+        <rule comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)">
+            <pattern>
+                <pattern-item n="months"/>
+                <pattern-item n="num"/>
+                <pattern-item n="coma"/>
+                <pattern-item n="num"/>
+            </pattern>
+            <action>
+                <call-macro n="firstWord">
+                    <with-param pos="1"/>
+                </call-macro>
+                <choose>
+                    <when>
+                        <test>
+                            <equal>
+                                <clip pos="1" side="sl" part="lem"/>
+                                <lit v="March"/>
+                            </equal>
+                        </test>
+                        <let>
+                            <clip pos="1" side="tl" part="lem"/>
+                            <lit v="març"/>
+                        </let>
+                        <choose>
+                            <when>
+                                <test>
+                                    <equal>
+                                        <clip pos="1" side="sl" part="a_nom"/>
+                                        <lit-tag v="np.cog"/>
+                                    </equal>
+                                </test>
+                                <let>
+                                    <clip pos="1" side="tl" part="a_nom"/>
+                                    <lit-tag v="n"/>
+                                </let>
+                                <let>
+                                    <clip pos="1" side="tl" part="gen"/>
+                                    <lit-tag v="m"/>
+                                </let>
+                                <let>
+                                    <clip pos="1" side="tl" part="nbr"/>
+                                    <lit-tag v="sg"/>
+                                </let>
+                            </when>
+                        </choose>
+                    </when>
+                </choose>
+                <out>
+                    <chunk name="month_num_cm_num" case="caseFirstWord">
+                        <tags>
+                            <tag>
+                                <clip pos="2" side="tl" part="a_adv"/>
+                            </tag>
+                            <tag>
+                                <var n="neg"/>
+                            </tag>
+                        </tags>
+                        <lu>
+                            <clip pos="2" side="tl" part="whole"/>
+                        </lu>
+                        <b pos="1"/>
+                        <lu>
+                            <lit v="de"/>
+                            <lit-tag v="pr"/>
+                        </lu>
+                        <b/>
+                        <lu>
+                            <clip pos="1" side="tl" part="whole"/>
+                        </lu>
+                        <b/>
+                        <lu>
+                            <lit v="de"/>
+                            <lit-tag v="pr"/>
+                        </lu>
+                        <b pos="3"/>
+                        <lu>
+                            <clip pos="4" side="tl" part="whole"/>
+                        </lu>
+                    </chunk>
+                </out>
+            </action>
+        </rule>
+        
+    </section-rules>
+    
 </transfer>
-<!--
-Resources:
-    http://wiki.apertium.org/wiki/Chunking:_A_full_example
-    http://wiki.apertium.org/wiki/Chunking
-    http://wiki.apertium.org/wiki/Apertium_New_Language_Pair_HOWTO#Transfer_rules
-    http://wiki.apertium.org/wiki/A_long_introduction_to_transfer_rules
-    http://wiki.apertium.org/wiki/Transfer#Adding_structural_transfer_.28grammar.29_rules
--->
