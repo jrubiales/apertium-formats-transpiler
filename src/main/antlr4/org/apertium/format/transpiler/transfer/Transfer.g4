@@ -142,7 +142,7 @@ mParams
 
 // Macro body.
 mBody
-    : instr { System.out.print($instr.trans); }
+    : instr+ { System.out.print($instr.trans); }
     ;
 
 // Rule declaration.
@@ -181,29 +181,29 @@ rBody
     ;
 
 ruleAction returns [String trans = ""] 
-        : instr { $trans += $instr.trans; } (ruleAction { $trans += $ruleAction.trans; })? 
+        : instr+ { $trans += $instr.trans; } (ruleAction { $trans += $ruleAction.trans; })? 
         ;
 
 // Instruction.
 instr returns [String trans = ""]
     : CASE { $trans += "<choose>"; } (whenInstr {
         $trans += $whenInstr.trans;
-    })+ otherwise? END { $trans += "</choose>"; } (instr { $trans += $instr.trans; })?
+    })+ otherwise? END { $trans += "</choose>"; }
     | {
         $trans += "<let>";
     } container ASSIGN value SEMI {
         $trans += $container.trans + $value.trans + "</let>";
-    } (instr { $trans += $instr.trans; })?
+    }
     | ID {
         $trans += "<call-macro n=\"" + $ID.text + "\">";
     } LPAR callMacroParams {
         $trans += $callMacroParams.trans;
     } RPAR SEMI {        
         $trans += "</call-macro>";
-    } (instr { $trans += $instr.trans; })?
+    }
     | container MODIFY_CASE stringValue {        
         $trans += "<modify-case>" + $container.trans + $stringValue.trans + "</modify-case>";
-    } (instr { $trans += $instr.trans; })?
+    }
 
     /* 
 
@@ -213,7 +213,7 @@ instr returns [String trans = ""]
         $trans += "<append n=\"" + $ID.text + "\">";
     } (value { $trans += $value.trans; })+ END {
         $trans += "</append>";
-    } (instr { $trans += $instr.trans; })? 
+    }
 
     */
 
@@ -232,7 +232,7 @@ instr returns [String trans = ""]
         $trans += "<var n=\"" + $ID.text + "\"/>";
     } )+ END {
         $trans += "</out>";
-    } (instr { $trans += $instr.trans; })?
+    }
     ;
 
 callMacroParams returns [String trans = ""]
@@ -361,14 +361,9 @@ whenInstr returns [String trans = ""]
         $trans += "<when><test>";
     } expr { 
         $trans += $expr.trans + "</test>";
-    } THEN instr {
+    } THEN (instr {
         $trans += $instr.trans;
-    } 
-    /*(ELSE {
-        $trans += "<otherwise>";
-    } instr {
-        $trans += $instr.trans + "</otherwise>";
-    })? */
+    })+
     END {
         { $trans += "</when>"; }
     }
@@ -376,7 +371,7 @@ whenInstr returns [String trans = ""]
 
 // Otherwise instruction.
 otherwise returns [String trans = ""] 
-    : OTHERWISE { $trans += "<otherwise>"; } instr { $trans += $instr.trans + "</otherwise>"; }
+    : OTHERWISE { $trans += "<otherwise>"; } instr+ { $trans += $instr.trans + "</otherwise>"; }
     ;
 
 // Expression.

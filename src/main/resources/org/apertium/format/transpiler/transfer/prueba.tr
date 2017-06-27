@@ -1,143 +1,225 @@
 Transfer(default="chunk")
-Catlex to = "to,pr";
-Catlex interj = "ij";
-Catlex on = "on,pr", "on,adv";
-Catlex enough = "enough,adv";
-Catlex detquant = "det.qnt.*";
-Catlex all = "all,predet.sp";
-Catlex nomplural = "n.pl";
-Catlex nom = "n.*", "np.*";
-Catlex months = "january,n.*", "february,n.*", "march,n.*", "march,np.cog.*", "april,n.*", "may,n.*", "june,n.*", "july,n.*", "august,n.*", "september,n.*", "october,n.*", "november,n.*", "december,n.*";
-Catlex nomcomu = "n.*";
-Catlex nompropi = "np.*";
-Catlex nploc = "np.loc.*";
-Catlex adj = "adj", "adj.*", "adj.comp", "adj.sup", "adj.pos", "adj.sint", "adj.sint.*", "vblex.pp", "vbmod.pp";
-Catlex adj2 = "adj", "adj.*", "adj.sint", "adj.sint.*", "adj.comp", "adj.sup";
-Catlex adj2pos = "adj.pos", "adj", "adj.sint", "adj.sint.*", "adj.comp", "adj.sup";
-Catlex adjsup = "adj.sup", "adj.sint.sup";
-Catlex num = "num.*", "num";
-Catlex det = "det.dem.*", "det.ind.*", "det.def.*", "det.pos.*", "det.qnt.*", "det.itg.*", "det.ord.*", "predet.*";
-Catlex det2 = "det.qnt.*", "det.ord.*";
-Catlex prep = "pr";
-Attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
-Attribute a_np = "np";
-Attribute a_np_acr = "np", "acr";
-Attribute a_adj = "adj", "adj.pos", "vblex.pp", "vbmod.pp", "vblex.pron.pp", "adjant";
-Attribute grau_adj = "comp", "sup";
-Attribute a_det = "det.dem", "det.ind", "det.def", "det.pos", "det.qnt", "det.itg", "det.ord", "adj.pos", "num", "predet";
-Attribute a_prnpro = "prn.pro";
-Attribute a_prnenc = "prn.enc";
-Attribute a_num = "num", "num.percent", "num.ord", "num.mon";
-Attribute a_verb = "vblex", "vblex.pron", "vbhaver", "vbser", "vbmod";
-Attribute a_have_aux = "vbhaver";
-Attribute a_pp = "vblex.pp", "vblex.pron.pp", "vbser.pp", "vbmod.pp";
-Attribute a_aux = "vaux";
-Attribute a_prn = "prn";
-Attribute a_adv = "adv", "preadv", "adv.itg", "cnjadv";
-Attribute a_rel = "rel.nn", "rel.an", "rel.aa", "rel.adv";
-Attribute tipus_rel = "nn", "an", "aa", "adv";
-Attribute tipus_prn = "tn", "obj", "enc", "itg", "pos";
-Attribute pers = "p1", "p2", "p3", "PD";
-Attribute gen = "m", "f", "mf", "GD", "nt";
-Attribute gen_sense_mf = "m", "f", "GD", "nt";
-Attribute gen_mf = "mf";
-Attribute nbr = "sg", "pl", "sp", "ND";
-Attribute nbr_sense_sp = "sg", "pl", "ND";
-Attribute nbr_sp = "sp";
-Attribute temps = "cni", "fti", "ifi", "imp", "pii", "pis", "inf", "prs", "pres", "past", "pri", "pp", "ger", "pprs", "subs";
-Var genere = "&lt;m&gt;";
-Var nombre = "&lt;sg&gt;";
-Var interrogativa;
-Var exclamativa;
-Var neg;
-Var adjectiu1;
-Var adjectiu2;
-Var auxiliar;
-Var caseFirstWord;
-Var EOS = "true";
-Var lema;
-Var lema_SV;
-Var verbfinal;
-Var chunk;
-Var temps_chunk;
-Var pers_chunk;
-Var nbr_chunk;
-Var nbr_qual;
-Var gen_chunk;
-Var gen_qual;
-Var gen_paraula;
-Var nbr_paraula;
-Var nbr_adj;
-Var pronom;
-Var pronomenc;
-Var paraula1;
-Var paraula2;
-Var tipus_verb;
-Var tipus_verb_imp;
-Var negative;
-Var tipus_det;
-List reportingverb = "say", "admit", "agree", "decide", "deny", "explain", "insist", "promise", "recommend", "suggest", "point", "think", "believe", "hope", "fear", "suppose";
-List controlnouns = "desire", "order", "need", "right", "duty", "failure", "power", "wish", "capacity", "ability", "hope", "chance", "honour", "compulsion", "responsibility", "opportunity", "idea", "record", "way", "attempt", "obligation", "impulse", "surprise", "will", "mean";
-List tractaments = "Mr.", "Mrs.", "Ms.", "Dr.";
-List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
-List adv_neg = "not", "never";
-List verbs_modals = "can", "must", "should", "may", "might";
-List numeros25 = "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen";
-Macro elimina_GDND(npar=1)
-case
-when clip(pos=1, side="tl", part="gen") equal litTag("GD") then
-clip(pos=1, side="tl", part="gen") = litTag("m");
-end /* when */
-end /* choose */
-case
-when clip(pos=1, side="tl", part="nbr") equal litTag("ND") then
-clip(pos=1, side="tl", part="nbr") = litTag("sg");
-end /* when */
-end /* choose */
-end /* macro */
-Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 ? 23 de juliol de 2010)")
-Pattern = "months", "num", "coma", "num";
-firstWord(1);
-case
-when clip(pos=1, side="sl", part="lem") equal "March" then
-clip(pos=1, side="tl", part="lem") = "març";
-case
-when clip(pos=1, side="sl", part="a_nom") equal litTag("np.cog") then
-clip(pos=1, side="tl", part="a_nom") = litTag("n");
-clip(pos=1, side="tl", part="gen") = litTag("m");
-clip(pos=1, side="tl", part="nbr") = litTag("sg");
-end /* when */
-end /* choose */
-end /* when */
-end /* choose */
-out
-Chunk
-tags
-neg;
-clip(pos=2, side="tl", part="a_adv");
-end /* tags */
-lu
-clip(pos=2, side="tl", part="whole");
-end /* lu */
-b(1);
-lu
-litTag("pr");
-"de";
-end /* lu */
-b;
-lu
-clip(pos=1, side="tl", part="whole");
-end /* lu */
-b;
-lu
-litTag("pr");
-"de";
-end /* lu */
-b(3);
-lu
-clip(pos=4, side="tl", part="whole");
-end /* lu */
-end /* chunk */
-end /* out */
-end /* rule */
+    Catlex to = "to,pr";
+    Catlex interj = "ij";
+    Catlex on = "on,pr", "on,adv";
+    Catlex enough = "enough,adv";
+    Catlex detquant = "det.qnt.*";
+    Catlex all = "all,predet.sp";
+    Catlex nomplural = "n.pl";
+    Catlex nom = "n.*", "np.*";
+    Catlex months = "january,n.*", "february,n.*", "march,n.*", "march,np.cog.*", "april,n.*", "may,n.*", "june,n.*", "july,n.*", "august,n.*", "september,n.*", "october,n.*", "november,n.*", "december,n.*";
+    Catlex nomcomu = "n.*";
+    Catlex nompropi = "np.*";
+    Catlex nploc = "np.loc.*";
+    Catlex adj = "adj", "adj.*", "adj.comp", "adj.sup", "adj.pos", "adj.sint", "adj.sint.*", "vblex.pp", "vbmod.pp";
+    Catlex adj2 = "adj", "adj.*", "adj.sint", "adj.sint.*", "adj.comp", "adj.sup";
+    Catlex adj2pos = "adj.pos", "adj", "adj.sint", "adj.sint.*", "adj.comp", "adj.sup";
+    Catlex adjsup = "adj.sup", "adj.sint.sup";
+    Catlex num = "num.*", "num";
+    Catlex det = "det.dem.*", "det.ind.*", "det.def.*", "det.pos.*", "det.qnt.*", "det.itg.*", "det.ord.*", "predet.*";
+    Catlex det2 = "det.qnt.*", "det.ord.*";
+    Catlex prep = "pr";
+    Attribute a_nom = "n", "n.acr", "np.loc", "np.ant", "np.cog", "np.al", "adv";
+    Attribute a_np = "np";
+    Attribute a_np_acr = "np", "acr";
+    Attribute a_adj = "adj", "adj.pos", "vblex.pp", "vbmod.pp", "vblex.pron.pp", "adjant";
+    Attribute grau_adj = "comp", "sup";
+    Attribute a_det = "det.dem", "det.ind", "det.def", "det.pos", "det.qnt", "det.itg", "det.ord", "adj.pos", "num", "predet";
+    Attribute a_prnpro = "prn.pro";
+    Attribute a_prnenc = "prn.enc";
+    Attribute a_num = "num", "num.percent", "num.ord", "num.mon";
+    Attribute a_verb = "vblex", "vblex.pron", "vbhaver", "vbser", "vbmod";
+    Attribute a_have_aux = "vbhaver";
+    Attribute a_pp = "vblex.pp", "vblex.pron.pp", "vbser.pp", "vbmod.pp";
+    Attribute a_aux = "vaux";
+    Attribute a_prn = "prn";
+    Attribute a_adv = "adv", "preadv", "adv.itg", "cnjadv";
+    Attribute a_rel = "rel.nn", "rel.an", "rel.aa", "rel.adv";
+    Attribute tipus_rel = "nn", "an", "aa", "adv";
+    Attribute tipus_prn = "tn", "obj", "enc", "itg", "pos";
+    Attribute pers = "p1", "p2", "p3", "PD";
+    Attribute gen = "m", "f", "mf", "GD", "nt";
+    Attribute gen_sense_mf = "m", "f", "GD", "nt";
+    Attribute gen_mf = "mf";
+    Attribute nbr = "sg", "pl", "sp", "ND";
+    Attribute nbr_sense_sp = "sg", "pl", "ND";
+    Attribute nbr_sp = "sp";
+    Attribute temps = "cni", "fti", "ifi", "imp", "pii", "pis", "inf", "prs", "pres", "past", "pri", "pp", "ger", "pprs", "subs";
+    Var genere = "&lt;m&gt;";
+    Var nombre = "&lt;sg&gt;";
+    Var interrogativa;
+    Var exclamativa;
+    Var neg;
+    Var adjectiu1;
+    Var adjectiu2;
+    Var auxiliar;
+    Var caseFirstWord;
+    Var EOS = "true";
+    Var lema;
+    Var lema_SV;
+    Var verbfinal;
+    Var chunk;
+    Var temps_chunk;
+    Var pers_chunk;
+    Var nbr_chunk;
+    Var nbr_qual;
+    Var gen_chunk;
+    Var gen_qual;
+    Var gen_paraula;
+    Var nbr_paraula;
+    Var nbr_adj;
+    Var pronom;
+    Var pronomenc;
+    Var paraula1;
+    Var paraula2;
+    Var tipus_verb;
+    Var tipus_verb_imp;
+    Var negative;
+    Var tipus_det;
+    List reportingverb = "say", "admit", "agree", "decide", "deny", "explain", "insist", "promise", "recommend", "suggest", "point", "think", "believe", "hope", "fear", "suppose";
+    List controlnouns = "desire", "order", "need", "right", "duty", "failure", "power", "wish", "capacity", "ability", "hope", "chance", "honour", "compulsion", "responsibility", "opportunity", "idea", "record", "way", "attempt", "obligation", "impulse", "surprise", "will", "mean";
+    List tractaments = "Mr.", "Mrs.", "Ms.", "Dr.";
+    List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
+    List adv_neg = "/* not */", "never";
+    List verbs_modals = "can", "must", "should", "may", "might";
+    List numeros25 = "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen";
+    Macro f_concord3(npar=3)
+        gen_chunk = "";
+        nbr_chunk = "";
+        case
+            when clip(pos=2, side="tl", part="a_num") equal "" then
+                case
+                    when clip(pos=2, side="tl", part="gen") equal "" then
+                        paraula1 = clip(pos=2, side="tl", part="lemh");
+                        /* clip(pos=2, side="tl", part="tags") append litTag("GD") append litTag("ND") append clip(pos=2, side="tl", part="lemq"); */
+                        clip(pos=2, side="tl", part="whole") = paraula1;
+                    end /* when */
+                    when clip(pos=2, side="tl", part="nbr") equal "" then
+                        paraula1 = clip(pos=2, side="tl", part="lemh");
+                        /* clip(pos=2, side="tl", part="tags") append litTag("ND") append clip(pos=2, side="tl", part="lemq"); */
+                        clip(pos=2, side="tl", part="whole") = paraula1;
+                    end /* when */
+                end /* choose */
+            end /* when */
+        end /* choose */
+        case
+            when clip(pos=3, side="tl", part="a_num") equal "" then
+                case
+                    when clip(pos=3, side="tl", part="gen") equal "" then
+                        paraula1 = clip(pos=3, side="tl", part="lemh");
+                        /* clip(pos=3, side="tl", part="tags") append litTag("GD") append litTag("ND") append clip(pos=3, side="tl", part="lemq"); */
+                        clip(pos=3, side="tl", part="whole") = paraula1;
+                    end /* when */
+                    when clip(pos=3, side="tl", part="nbr") equal "" then
+                        paraula1 = clip(pos=3, side="tl", part="lemh");
+                        /* clip(pos=3, side="tl", part="tags") append litTag("ND") append clip(pos=3, side="tl", part="lemq"); */
+                        clip(pos=3, side="tl", part="whole") = paraula1;
+                    end /* when */
+                end /* choose */
+            end /* when */
+        end /* choose */
+        case
+            when clip(pos=2, side="tl", part="gen") equal litTag("GD") then
+                case
+                    when clip(pos=1, side="tl", part="gen") equal litTag("GD") then
+                        gen_chunk = litTag("GD");
+                    end /* when */
+                    when /* not */ clip(pos=1, side="tl", part="gen") equal "" or clip(pos=1, side="tl", part="gen") equal litTag("mf") then
+                        clip(pos=2, side="tl", part="gen") = clip(pos=1, side="tl", part="gen");
+                        gen_chunk = clip(pos=1, side="tl", part="gen");
+                    end /* when */
+                    otherwise 
+                        gen_chunk = litTag("GD");
+                    end /* otherwise */
+                end /* choose */
+            end /* when */
+        end /* choose */
+        case
+            when clip(pos=1, side="tl", part="gen") equal litTag("GD") then
+                gen_chunk = litTag("GD");
+            end /* when */
+            when /* not */ clip(pos=1, side="tl", part="gen") equal "" or clip(pos=1, side="tl", part="gen") equal litTag("mf") then
+                gen_chunk = clip(pos=1, side="tl", part="gen");
+            end /* when */
+            otherwise 
+                case
+                    when /* not */ clip(pos=3, side="tl", part="gen") equal litTag("GD") and /* not */ clip(pos=2, side="tl", part="gen") equal litTag("GD") then
+                        gen_chunk = clip(pos=1, side="tl", part="gen");
+                    end /* when */
+                end /* choose */
+            end /* otherwise */
+        end /* choose */
+        case
+            when clip(pos=3, side="tl", part="gen") equal litTag("GD") then
+                case
+                    when /* not */ gen_chunk equal "" then
+                        clip(pos=3, side="tl", part="gen") = gen_chunk;
+                    end /* when */
+                    otherwise 
+                        gen_chunk = litTag("GD");
+                    end /* otherwise */
+                end /* choose */
+            end /* when */
+        end /* choose */
+        case
+            when clip(pos=2, side="tl", part="nbr") equal litTag("ND") then
+                case
+                    when clip(pos=1, side="tl", part="nbr") equal litTag("ND") then
+                        nbr_chunk = litTag("ND");
+                    end /* when */
+                    when /* not */ clip(pos=1, side="tl", part="nbr") equal "" or clip(pos=1, side="tl", part="nbr") equal litTag("sp") then
+                        clip(pos=2, side="tl", part="nbr") = clip(pos=1, side="tl", part="nbr");
+                        nbr_chunk = clip(pos=1, side="tl", part="nbr");
+                    end /* when */
+                    otherwise 
+                        nbr_chunk = litTag("ND");
+                    end /* otherwise */
+                end /* choose */
+            end /* when */
+        end /* choose */
+        case
+            when clip(pos=1, side="tl", part="nbr") equal litTag("ND") then
+                nbr_chunk = litTag("ND");
+            end /* when */
+            when /* not */ clip(pos=1, side="tl", part="nbr") equal "" or clip(pos=1, side="tl", part="nbr") equal litTag("sp") then
+                nbr_chunk = clip(pos=1, side="tl", part="nbr");
+            end /* when */
+            otherwise
+                case
+                    when clip(pos=2, side="tl", part="nbr") equal litTag("pl") or clip(pos=2, side="tl", part="nbr") equal litTag("sg") then
+                        nbr_chunk = clip(pos=2, side="tl", part="nbr");
+                    end /* when */
+                    when clip(pos=2, side="tl", part="nbr") equal litTag("sp") then
+                        case
+                            when clip(pos=3, side="tl", part="nbr") equal litTag("pl") or clip(pos=3, side="tl", part="nbr") equal litTag("sg") then
+                                nbr_chunk = clip(pos=3, side="tl", part="nbr");
+                            end /* when */
+                        end /* choose */
+                    end /* when */
+                    when clip(pos=2, side="tl", part="nbr") equal "" then
+                        case
+                            when clip(pos=3, side="tl", part="nbr") equal litTag("pl") or clip(pos=3, side="tl", part="nbr") equal litTag("sg") then
+                                nbr_chunk = clip(pos=3, side="tl", part="nbr");
+                            end /* when */
+                            otherwise 
+                                nbr_chunk = clip(pos=1, side="tl", part="nbr");
+                            end /* otherwise */
+                        end /* choose */
+                    end /* when */
+                end /* choose */
+            end /* otherwise */
+        end /* choose */
+        case
+            when clip(pos=3, side="tl", part="nbr") equal litTag("ND") then
+                case
+                    when /* not */ nbr_chunk equal "" then
+                        clip(pos=3, side="tl", part="nbr") = nbr_chunk;
+                    end /* when */
+                    otherwise 
+                        nbr_chunk = litTag("ND");
+                    end /* otherwise */
+                end /* choose */
+            end /* when */
+        end /* choose */
+    end /* macro */
 end /* transfer */

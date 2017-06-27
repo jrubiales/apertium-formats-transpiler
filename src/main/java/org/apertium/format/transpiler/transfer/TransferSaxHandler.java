@@ -120,7 +120,7 @@ public class TransferSaxHandler extends DefaultHandler {
         } else if (localName.equals("when")) {
             System.out.print("when ");
         } else if (localName.equals("otherwise")) {
-            System.out.print("otherwise ");
+            System.out.println("otherwise ");
         } else if (localName.equals("and") || localName.equals("or")) {
             stack.push(localName);
         } else if (localName.equals("equal")
