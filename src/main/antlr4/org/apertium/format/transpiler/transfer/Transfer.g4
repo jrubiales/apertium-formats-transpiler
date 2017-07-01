@@ -11,9 +11,9 @@ grammar Transfer;
  */
 
 stat
-    : 
-    { 
-        System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
+    :
+    {
+        System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     } transfer EOF
     ;
 
@@ -26,8 +26,8 @@ transfer
         System.out.print(" default");
     } ASSIGN {
         System.out.print($ASSIGN.text);
-    } group = ('"lu"' | '"chunk"') { 
-        System.out.print($group.text); 
+    } group = ('"lu"' | '"chunk"') {
+        System.out.print($group.text);
     } RPAR {
         System.out.print(">");
     } transferBody END {
@@ -37,14 +37,14 @@ transfer
 
 // Transfer body.
 transferBody
-    : tDecl { 
+    : tDecl {
         /*
             switch($tDecl::type){
-                case "def-cat" : 
+                case "def-cat" :
                     System.out.print("<section-def-cats>" + $tDecl.trans + "</section-def-cats>"); break;
-                case "def-attr" : 
+                case "def-attr" :
                     System.out.print("<section-def-attrs>" + $tDecl.trans + "</section-def-attrs>"); break;
-                case "def-list" : 
+                case "def-list" :
                     System.out.print("<section-def-lists>" + $tDecl.trans + "</section-def-lists>"); break;
             }
 
@@ -58,7 +58,7 @@ transferBody
 
 // Type declaration. Catlex, Attribute, List
 tDecl returns [String trans = ""]
-    
+
     locals [
         static String type = "",
     ]
@@ -94,24 +94,24 @@ multString [String str] returns [String trans = ""]
             case "List" : $trans += "<list-item v=" + $literal.text + "/>"; break;
             case "Pattern" : $trans += "<pattern-item n=" + $literal.text + "/>"; break;
         }
-        
+
     } (COMMA multString[str] {
         $trans += $multString.trans;
     })?
     ;
 
 // Var declaration.
-varDecl    
+varDecl
     : VAR varExpr+ SEMI
     ;
 
 // Var expression.
 varExpr
-    : { 
+    : {
         System.out.print("<def-var ");
-    }(ID { 
+    }(ID {
         System.out.print("n=\"" + $ID.text + "\"/>");
-    } | ID ASSIGN { 
+    } | ID ASSIGN {
         System.out.print("n=\"" + $ID.text + "\" ");
     } literal {
         System.out.print("v=" + $literal.text + "/>");
@@ -123,7 +123,7 @@ mDecl
     : MACRO {
         System.out.print("<def-macro ");
     } ID {
-        System.out.print("n=\"" + $ID.text + "\" ");  
+        System.out.print("n=\"" + $ID.text + "\" ");
     } LPAR mParams RPAR mBody END {
         System.out.println("</def-macro>");
     }
@@ -135,8 +135,8 @@ mParams
         System.out.print($NPAR.text + "=\"" + $INT.text + "\"");
     }(C ASSIGN literal{
         System.out.print(" " + $C.text + "=" + $literal.text);
-    })? { 
-        System.out.print(">"); 
+    })? {
+        System.out.print(">");
     }
     ;
 
@@ -180,8 +180,8 @@ rBody
     }
     ;
 
-ruleAction returns [String trans = ""] 
-        : instr+ { $trans += $instr.trans; } (ruleAction { $trans += $ruleAction.trans; })? 
+ruleAction returns [String trans = ""]
+        : instr+ { $trans += $instr.trans; } (ruleAction { $trans += $ruleAction.trans; })?
         ;
 
 // Instruction.
@@ -198,18 +198,18 @@ instr returns [String trans = ""]
         $trans += "<call-macro n=\"" + $ID.text + "\">";
     } LPAR callMacroParams {
         $trans += $callMacroParams.trans;
-    } RPAR SEMI {        
+    } RPAR SEMI {
         $trans += "</call-macro>";
     }
-    | container MODIFY_CASE stringValue {        
+    | container MODIFY_CASE stringValue {
         $trans += "<modify-case>" + $container.trans + $stringValue.trans + "</modify-case>";
     }
 
-    /* 
+    /*
 
     TODO. Fix.
-   
-    | ID APPEND { 
+
+    | ID APPEND {
         $trans += "<append n=\"" + $ID.text + "\">";
     } (value { $trans += $value.trans; })+ END {
         $trans += "</append>";
@@ -239,14 +239,14 @@ callMacroParams returns [String trans = ""]
     : INT {
         $trans += "<with-param pos=\"" + $INT.text + "\"/>";
     } (COMMA callMacroParams {
-        $trans += $callMacroParams.trans; 
+        $trans += $callMacroParams.trans;
     })?
     ;
 
 container returns [String trans = ""]
     : (ID | clip {
         $trans += $clip.trans;
-    }) 
+    })
     ;
 
 value returns [String trans = ""]
@@ -254,7 +254,7 @@ value returns [String trans = ""]
         $trans += $b.trans;
     } | clip {
         $trans += $clip.trans;
-    } | literal { 
+    } | literal {
         $trans += "<lit v=" + $literal.text + "/>";
     } | litTag {
         $trans += $litTag.trans;
@@ -272,10 +272,10 @@ value returns [String trans = ""]
     ;
 
 stringValue returns [String trans = ""]
-    : (clip { 
-        $trans += $clip.trans; 
-    } | literal { 
-        $trans += "<lit v=" + $literal.text + "/>"; 
+    : (clip {
+        $trans += $clip.trans;
+    } | literal {
+        $trans += "<lit v=" + $literal.text + "/>";
     } | ID {
         $trans += "<var n=" + $ID.text + "/>";
     } )
@@ -294,7 +294,7 @@ b returns [String trans = ""]
 concat returns [String trans = ""]
     : CONCAT {
         $trans += "<concat>";
-    } (value { 
+    } (value {
         $trans += $value.trans;
     })+ END
     ;
@@ -330,10 +330,10 @@ chunk returns [String trans = ""]
         $trans += ">";
     } tags {
         $trans += $tags.trans;
-    } ( mlu { $trans += $mlu.trans; } 
-        | lu { $trans += $lu.trans; } 
-        | b { $trans += $b.trans; } 
-        | ID { $trans += "<var n=\"" + $ID.text + "\"/>"; } 
+    } ( mlu { $trans += $mlu.trans; }
+        | lu { $trans += $lu.trans; }
+        | b { $trans += $b.trans; }
+        | ID { $trans += "<var n=\"" + $ID.text + "\"/>"; }
     )+ END {
         $trans += "</chunk>";
     }
@@ -359,7 +359,7 @@ tags returns [String trans = ""]
 whenInstr returns [String trans = ""]
     : WHEN {
         $trans += "<when><test>";
-    } expr { 
+    } expr {
         $trans += $expr.trans + "</test>";
     } THEN (instr {
         $trans += $instr.trans;
@@ -370,8 +370,8 @@ whenInstr returns [String trans = ""]
     ;
 
 // Otherwise instruction.
-otherwise returns [String trans = ""] 
-    : OTHERWISE { $trans += "<otherwise>"; } instr+ { $trans += $instr.trans + "</otherwise>"; }
+otherwise returns [String trans = ""]
+    : OTHERWISE { $trans += "<otherwise>"; } instr+ { $trans += $instr.trans; } END { $trans += "</otherwise>"; }
     ;
 
 // Expression.
@@ -382,7 +382,7 @@ expr returns [String trans = ""]
         String startTag = "",
         String endTag = ""
     ]
-    
+
     : v1 = value NOT? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value {
         boolean hasNot = $NOT!=null && !$NOT.text.equals("");
         if(hasNot){
@@ -411,8 +411,8 @@ expr returns [String trans = ""]
         $trans += $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag;
         if(hasNot){
             $trans += "</not>";
-        }        
-    }                                                                                                                                               
+        }
+    }
     | value NOT? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID (c = (AND|OR) expr {
         boolean hasNot = $NOT!=null && !$NOT.text.equals("");
         if(hasNot){
@@ -447,7 +447,7 @@ expr returns [String trans = ""]
 
 // Clip function.
 clip returns [String trans = ""]
-    : CLIP { 
+    : CLIP {
         $trans += "<clip ";
     } LPAR clipParams RPAR {
         $trans += $clipParams.trans + "/>";
