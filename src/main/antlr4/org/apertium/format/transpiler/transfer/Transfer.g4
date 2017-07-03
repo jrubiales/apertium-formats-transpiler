@@ -142,7 +142,7 @@ mParams
 
 // Macro body.
 mBody
-    : instr+ { System.out.print($instr.trans); }
+    : (instr { System.out.print($instr.trans); })+
     ;
 
 // Rule declaration.
@@ -174,21 +174,21 @@ rBody
         System.out.println($multString.trans);
     } SEMI {
         System.out.println("</pattern>");
-    } rBody?
-    | ruleAction {
+    }
+    | ruleAction* {
         System.out.println("<action>" + $ruleAction.trans + "</action>");
     }
     ;
 
 ruleAction returns [String trans = ""]
-        : instr+ { $trans += $instr.trans; } (ruleAction { $trans += $ruleAction.trans; })?
+        : instr { $trans += $instr.trans; }
         ;
 
 // Instruction.
 instr returns [String trans = ""]
     : CASE { $trans += "<choose>"; } (whenInstr {
         $trans += $whenInstr.trans;
-    })+ otherwise? END { $trans += "</choose>"; }
+    })+ (otherwise { $trans +=$otherwise.trans; })? END { $trans += "</choose>"; }
     | {
         $trans += "<let>";
     } container ASSIGN value SEMI {
