@@ -244,7 +244,9 @@ callMacroParams returns [String trans = ""]
     ;
 
 container returns [String trans = ""]
-    : (ID | clip {
+    : (ID {
+        $trans += "<var n=\"" + $ID.text + "\"/>";
+    } | clip {
         $trans += $clip.trans;
     })
     ;
@@ -380,69 +382,30 @@ expr returns [String trans = ""]
 
     locals [
         String startTag = "",
-        String endTag = ""
+        String endTag = "",
+        String startNot = "",
+        String endNot = "",
     ]
 
-    : v1 = value NOT? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value {
-        boolean hasNot = $NOT!=null && !$NOT.text.equals("");
-        if(hasNot){
-            $trans += "<not>";
-        }
-        $trans += $startTag + $v1.trans + $v2.trans + $endTag;
-        if(hasNot){
-            $trans += "</not>";
-        }
-    } /* Recursion base case */
-    | v1 = value NOT? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value (c = (AND|OR) expr {
-        boolean hasNot = $NOT!=null && !$NOT.text.equals("");
-        if(hasNot){
-            $trans += "<not>";
-        }
-        $trans += "<" + $c.text + ">" + $startTag + $v1.trans + $v2.trans + $endTag + "</" + $c.text + ">";
-        if(hasNot){
-            $trans += "</not>";
-        }
-    })?
-    | value NOT? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID {
-        boolean hasNot = $NOT!=null && !$NOT.text.equals("");
-        if(hasNot){
-            $trans += "<not>";
-        }
-        $trans += $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag;
-        if(hasNot){
-            $trans += "</not>";
-        }
+    : v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value {
+        $trans += $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot;
     }
-    | value NOT? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID (c = (AND|OR) expr {
-        boolean hasNot = $NOT!=null && !$NOT.text.equals("");
-        if(hasNot){
-            $trans += "<not>";
-        }
-        $trans += "<" + $c.text + ">" + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + "</" + $c.text + ">";
-        if(hasNot){
-            $trans += "</not>";
-        }
-    })?
-    | v1 = value NOT? (BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }| CONTAINS_SUBSTR { $startTag = "<contains-substring>"; $endTag = "</contains-substring>"; } | CONTAINS_SUBSTR_CASELESS { $startTag = "<contains-substring caseless=\"yes\">"; $endTag = "</contains-substring>"; }) v2 = value {
-        boolean hasNot = $NOT!=null && !$NOT.text.equals("");
-        if(hasNot){
-            $trans += "<not>";
-        }
-        $trans += $startTag + $v1.trans + $v2.trans + $endTag;
-        if(hasNot){
-            $trans += "</not>";
-        }
+    | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value c = (AND|OR) expr {
+        $trans += "<" + $c.text + ">" + $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
     }
-    | v1 = value NOT? (BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }| CONTAINS_SUBSTR { $startTag = "<contains-substring>"; $endTag = "</contains-substring>"; } | CONTAINS_SUBSTR_CASELESS { $startTag = "<contains-substring caseless=\"yes\">"; $endTag = "</contains-substring>"; }) v2 = value ( c = (AND|OR) expr{
-        boolean hasNot = $NOT!=null && !$NOT.text.equals("");
-        if(hasNot){
-            $trans += "<not>";
-        }
-        $trans += "<" + $c.text + ">" + $startTag + $v1.trans + $v2.trans + $endTag + "</" + $c.text + ">";
-        if(hasNot){
-            $trans += "</not>";
-        }
-    })?
+    | value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID {
+        $trans += $startNot + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + $endNot;
+    }
+    | value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID c = (AND|OR) expr {
+        $trans += "<" + $c.text + ">" + $startNot + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
+    }
+    | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }| CONTAINS_SUBSTR { $startTag = "<contains-substring>"; $endTag = "</contains-substring>"; } | CONTAINS_SUBSTR_CASELESS { $startTag = "<contains-substring caseless=\"yes\">"; $endTag = "</contains-substring>"; }) v2 = value {
+        $trans += $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot;
+    }
+    | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }| CONTAINS_SUBSTR { $startTag = "<contains-substring>"; $endTag = "</contains-substring>"; } | CONTAINS_SUBSTR_CASELESS { $startTag = "<contains-substring caseless=\"yes\">"; $endTag = "</contains-substring>"; }) v2 = value c = (AND|OR) expr{
+        $trans += "<" + $c.text + ">" + $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
+    }
+
     ;
 
 // Clip function.

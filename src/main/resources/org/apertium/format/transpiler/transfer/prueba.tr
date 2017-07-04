@@ -80,7 +80,7 @@ Transfer(default="chunk")
     List controlnouns = "desire", "order", "need", "right", "duty", "failure", "power", "wish", "capacity", "ability", "hope", "chance", "honour", "compulsion", "responsibility", "opportunity", "idea", "record", "way", "attempt", "obligation", "impulse", "surprise", "will", "mean";
     List tractaments = "Mr.", "Mrs.", "Ms.", "Dr.";
     List days = "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday";
-    List adv_neg = "/* not */", "never";
+    List adv_neg = "not", "never";
     List verbs_modals = "can", "must", "should", "may", "might";
     List numeros25 = "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen";
     Macro f_concord3(npar=3)
@@ -124,7 +124,7 @@ Transfer(default="chunk")
                     when clip(pos=1, side="tl", part="gen") equal litTag("GD") then
                         gen_chunk = litTag("GD");
                     end /* when */
-                    when /* not */ clip(pos=1, side="tl", part="gen") equal "" or clip(pos=1, side="tl", part="gen") equal litTag("mf") then
+                    when clip(pos=1, side="tl", part="gen") equal "" or clip(pos=1, side="tl", part="gen") equal litTag("mf") then
                         clip(pos=2, side="tl", part="gen") = clip(pos=1, side="tl", part="gen");
                         gen_chunk = clip(pos=1, side="tl", part="gen");
                     end /* when */
@@ -138,12 +138,12 @@ Transfer(default="chunk")
             when clip(pos=1, side="tl", part="gen") equal litTag("GD") then
                 gen_chunk = litTag("GD");
             end /* when */
-            when /* not */ clip(pos=1, side="tl", part="gen") equal "" or clip(pos=1, side="tl", part="gen") equal litTag("mf") then
+            when clip(pos=1, side="tl", part="gen") equal "" or clip(pos=1, side="tl", part="gen") equal litTag("mf") then
                 gen_chunk = clip(pos=1, side="tl", part="gen");
             end /* when */
             otherwise 
                 case
-                    when /* not */ clip(pos=3, side="tl", part="gen") equal litTag("GD") and /* not */ clip(pos=2, side="tl", part="gen") equal litTag("GD") then
+                    when clip(pos=3, side="tl", part="gen") equal litTag("GD") and clip(pos=2, side="tl", part="gen") equal litTag("GD") then
                         gen_chunk = clip(pos=1, side="tl", part="gen");
                     end /* when */
                 end /* choose */
@@ -152,7 +152,7 @@ Transfer(default="chunk")
         case
             when clip(pos=3, side="tl", part="gen") equal litTag("GD") then
                 case
-                    when /* not */ gen_chunk equal "" then
+                    when gen_chunk equal "" then
                         clip(pos=3, side="tl", part="gen") = gen_chunk;
                     end /* when */
                     otherwise 
@@ -167,7 +167,7 @@ Transfer(default="chunk")
                     when clip(pos=1, side="tl", part="nbr") equal litTag("ND") then
                         nbr_chunk = litTag("ND");
                     end /* when */
-                    when /* not */ clip(pos=1, side="tl", part="nbr") equal "" or clip(pos=1, side="tl", part="nbr") equal litTag("sp") then
+                    when clip(pos=1, side="tl", part="nbr") equal "" or clip(pos=1, side="tl", part="nbr") equal litTag("sp") then
                         clip(pos=2, side="tl", part="nbr") = clip(pos=1, side="tl", part="nbr");
                         nbr_chunk = clip(pos=1, side="tl", part="nbr");
                     end /* when */
@@ -181,7 +181,7 @@ Transfer(default="chunk")
             when clip(pos=1, side="tl", part="nbr") equal litTag("ND") then
                 nbr_chunk = litTag("ND");
             end /* when */
-            when /* not */ clip(pos=1, side="tl", part="nbr") equal "" or clip(pos=1, side="tl", part="nbr") equal litTag("sp") then
+            when clip(pos=1, side="tl", part="nbr") equal "" or clip(pos=1, side="tl", part="nbr") equal litTag("sp") then
                 nbr_chunk = clip(pos=1, side="tl", part="nbr");
             end /* when */
             otherwise
@@ -212,7 +212,7 @@ Transfer(default="chunk")
         case
             when clip(pos=3, side="tl", part="nbr") equal litTag("ND") then
                 case
-                    when /* not */ nbr_chunk equal "" then
+                    when nbr_chunk equal "" then
                         clip(pos=3, side="tl", part="nbr") = nbr_chunk;
                     end /* when */
                     otherwise 

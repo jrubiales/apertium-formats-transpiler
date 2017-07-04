@@ -292,11 +292,11 @@ public class TransferSaxHandler extends DefaultHandler {
             pTrans = new StringBuilder();
 
         } else if (localName.equals("not")) {
-            String c = stack.pop();
-            pTrans.append("not ").append(c);
-            stack.push(pTrans.toString());
-            // pTrans.setLength(0);
-            pTrans = new StringBuilder();
+//            String c = stack.pop();
+//            pTrans.append("not ").append(c);
+//            stack.push(pTrans.toString());
+//            // pTrans.setLength(0);
+//            pTrans = new StringBuilder();
         } else if (localName.equals("equal")
                 || localName.equals("begins-with") || localName.equals("begins-with-list")
                 || localName.equals("ends-with") || localName.equals("ends-with-list")
@@ -308,7 +308,7 @@ public class TransferSaxHandler extends DefaultHandler {
 
             // Generar traducción añadiendo el operador condicional.
             pTrans.append(v2).append(" ").append(condition).append(" ").append(v1);
-
+           
             // Alamacenar la traducción parcial en la pila.
             stack.push(pTrans.toString());
             // pTrans.setLength(0);
