@@ -1,0 +1,3 @@
+Transfer(default="chunk")
+    Catlex to = "to,pr";
+end

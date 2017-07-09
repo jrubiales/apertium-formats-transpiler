@@ -1,4 +1,4 @@
-grammar Transfer;
+grammar Transfer_1;
 
 /**
  * Syntactic specification.
@@ -7,7 +7,7 @@ grammar Transfer;
 stat
     :
     {
-        System.out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     } transfer EOF
     ;
 
@@ -25,7 +25,7 @@ transfer
     } RPAR {
         System.out.print(">");
     } transferBody END {
-        System.out.print("</transfer>");
+        System.out.println("</transfer>");
     }
     ;
 
@@ -38,7 +38,7 @@ sectionDefCats
     : {
         System.out.print("<section-def-cats>");
     } defCat+ {
-        System.out.print("</section-def-cats>");
+        System.out.println("</section-def-cats>");
     }
     ;
 
@@ -46,9 +46,9 @@ defCat
     : CATLEX {
         System.out.print("<def-cat ");
     } ID {
-        System.out.print("n=\"" + $ID.text + "\">");
+        System.out.print("n=\"" + $ID.text + "\">\n");
     } ASSIGN catitem+ SEMI {
-        System.out.print("</def-cat>");
+        System.out.println("</def-cat>");
     }
     ;
 
@@ -61,7 +61,7 @@ catitem
         } else if(tokens.length > 1){
             System.out.print("lemma=" + tokens[0] + "\" tags=\"" + tokens[1]);
         }
-        System.out.print("/>");
+        System.out.println("/>");
     } COMMA?
     ;
 
@@ -69,7 +69,7 @@ sectionDefAttrs
     : {
         System.out.print("<section-def-attrs>");
     } defAttr+ {
-        System.out.print("</section-def-attrs>");
+        System.out.println("</section-def-attrs>");
     }
     ;
 
@@ -77,15 +77,15 @@ defAttr
     : ATTR {
         System.out.print("<def-attr ");
     } ID {
-        System.out.print("n=\"" + $ID.text + "\">");
+        System.out.print("n=\"" + $ID.text + "\">\n");
     } ASSIGN attrItem+ SEMI {
-        System.out.print("</def-attr>");
+        System.out.println("</def-attr>");
     }
     ;
 
 attrItem
     : literal {
-        System.out.print("<attr-item tags=" + $literal.text + "/>");
+        System.out.println("<attr-item tags=" + $literal.text + "/>");
     } COMMA?
     ;
 
@@ -93,7 +93,7 @@ sectionDefVars
     : {
         System.out.print("<section-def-vars>");
     } defVar+ {
-        System.out.print("</section-def-vars>");
+        System.out.println("</section-def-vars>");
     }
     ;
 
@@ -101,19 +101,19 @@ defVar
     : VAR ({
         System.out.print("<def-var ");
     }(ID {
-        System.out.print("n=\"" + $ID.text + "\"");
+        System.out.print("n=\"" + $ID.text + "\"/>\n");
     } | ID ASSIGN {
-        System.out.print("n=\"" + $ID.text + "\"");
+        System.out.print("n=\"" + $ID.text + "\" ");
     } literal {
-        System.out.print(" v=" + $literal.text + "");
-    }) COMMA?)+ SEMI { System.out.print("/>"); }
+        System.out.print("v=" + $literal.text + "/>\n");
+    }) COMMA?)+ SEMI { System.out.println("</def-var>"); }
     ;
 
 sectionDefLists
     : {
         System.out.print("<section-def-lists>");
     } defList+ {
-        System.out.print("</section-def-lists>");
+        System.out.println("</section-def-lists>");
     }
     ;
 
@@ -121,15 +121,15 @@ defList
     : LIST {
         System.out.print("<def-list ");
     } ID {
-        System.out.print("n=\"" + $ID.text + "\">");
+        System.out.print("n=\"" + $ID.text + "\">\n");
     } ASSIGN listItem+ SEMI {
-        System.out.print("</def-list>");
+        System.out.println("</def-list>");
     }
     ;
 
 listItem
     : literal {
-        System.out.print("<list-item v=" + $literal.text + "/>");
+        System.out.println("<list-item v=" + $literal.text + "/>");
     } COMMA?
     ;
 
@@ -143,9 +143,9 @@ defMacro
     } ID {
         System.out.print("n=\"" + $ID.text + "\" ");
     } LPAR macroParams RPAR {
-        System.out.print(">");
+        System.out.print(">\n");
     }  macroContent END {
-        System.out.print("</def-macro>");
+        System.out.println("</def-macro>");
     }
     ;
 
@@ -163,24 +163,24 @@ macroContent
 
 sentence
     : CASE {
-        System.out.print("<choose>");
+        System.out.println("<choose>");
     } whenInstr+ otherwise? END {
-        System.out.print("</choose>");
+        System.out.println("</choose>");
     }
     | {
-        System.out.print("<let>");
+        System.out.println("<let>");
     } container ASSIGN value SEMI {
-        System.out.print("</let>");
+        System.out.println("</let>");
     }
     | ID {
-        System.out.print("<call-macro n=\"" + $ID.text + "\">");
+        System.out.println("<call-macro n=\"" + $ID.text + "\">");
     } LPAR callMacroParams RPAR SEMI {
-        System.out.print("</call-macro>");
+        System.out.println("</call-macro>");
     }
     | container MODIFY_CASE {
-        System.out.print("<modify-case>");
+        System.out.println("<modify-case>");
     } stringValue {
-        System.out.print("</modify-case>");
+        System.out.println("</modify-case>");
     }
 
     /*
@@ -197,16 +197,16 @@ sentence
 
     | REJECT_CURRENT_RULE LPAR 'shifting' ASSIGN ('yes'|'no') RPAR SEMI
     | OUT {
-        System.out.print("<out>");
+        System.out.println("<out>");
     } (mlu | lu | b | chunk | ID {
-        System.out.print("<var n=\"" + $ID.text + "\"/>");
+        System.out.println("<var n=\"" + $ID.text + "\"/>");
     })+ END {
-        System.out.print("</out>");
+        System.out.println("</out>");
     }
     ;
 
 sectionRules
-    : { System.out.print("<section-rules>"); } r+ { System.out.print("</section-rules>"); }
+    : { System.out.print("<section-rules>"); } r+ { System.out.println("</section-rules>"); }
     ;
 
 // Rule.
@@ -216,7 +216,7 @@ r
     } LPAR ruleParams RPAR {
         System.out.print(">");
     } ruleBody END {
-        System.out.print("</rule>");
+        System.out.println("</rule>");
     }
     ;
 
@@ -238,16 +238,16 @@ ruleBody
 // Rule pattern.
 pattern
     : PATTERN {
-        System.out.print("<pattern>");
+        System.out.println("<pattern>");
     } ASSIGN patternItem+ SEMI {
-        System.out.print("</pattern>");
+        System.out.println("</pattern>");
     }
     ;
 
 // Pattern item.
 patternItem
     : literal {
-        System.out.print("<pattern-item n=" + $literal.text + " />");
+        System.out.println("<pattern-item n=" + $literal.text + " />");
     } COMMA?
     ;
 
@@ -256,38 +256,38 @@ action
     : {
         System.out.print("<action>");
     } sentence* {
-        System.out.print("</action>");
+        System.out.println("</action>");
     }
     ;
 
 container
     : ID {
-        System.out.print("<var n=\"" + $ID.text + "\" />");
+        System.out.println("<var n=\"" + $ID.text + "\" />");
     }
     | clip {
-        System.out.print($clip.trans);
+        System.out.println($clip.trans);
     }
     ;
 
 value returns [String trans = ""]
     : (b {
-        System.out.print($b.trans);
+        System.out.println($b.trans);
     } | clip {
-        System.out.print($clip.trans);
+        System.out.println($clip.trans);
     } | literal {
-        System.out.print("<lit v=" + $literal.text + " />");
+        System.out.println("<lit v=" + $literal.text + " />");
     } | litTag | ID {
-        System.out.print("<var n=\"" + $ID.text + "\" />");
+        System.out.println("<var n=\"" + $ID.text + "\" />");
     } | concat | lu | mlu | chunk)
     ;
 
 stringValue
     : (clip {
-        System.out.print($clip.trans);
+        System.out.println($clip.trans);
     } | literal {
-        System.out.print("<lit v=" + $literal.text + "/>");
+        System.out.println("<lit v=" + $literal.text + "/>");
     } | ID {
-        System.out.print("<var n=" + $ID.text + "/>");
+        System.out.println("<var n=" + $ID.text + "/>");
     } )
     ;
 
@@ -365,9 +365,9 @@ tags returns [String trans = ""]
     } ({
         System.out.print("<tag>");
     } value SEMI {
-        System.out.print("</tag>");
+        System.out.println("</tag>");
     })+ END {
-        System.out.print("</tags>");
+        System.out.println("</tags>");
     }
     ;
 
@@ -379,7 +379,7 @@ whenInstr
         System.out.print($expr.trans);
         System.out.print("</test>");
     } THEN sentence+ END {
-        System.out.print("</when>");
+        System.out.println("</when>");
     }
     ;
 
@@ -452,7 +452,7 @@ side
 
 callMacroParams
     : INT {
-        System.out.print("<with-param pos=\"" + $INT.text + "\" />");
+        System.out.println("<with-param pos=\"" + $INT.text + "\" />");
     } (COMMA callMacroParams)?
     ;
 
