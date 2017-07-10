@@ -169,7 +169,9 @@ sentence
     }
     | {
         System.out.print("<let>");
-    } container ASSIGN value SEMI {
+    } container ASSIGN value {
+        System.out.print($value.trans);
+    } SEMI {
         System.out.print("</let>");
     }
     | ID {
@@ -271,14 +273,22 @@ container
 
 value returns [String trans = ""]
     : (b {
-        System.out.print($b.trans);
+        $trans = $b.trans;
     } | clip {
-        System.out.print($clip.trans);
+        $trans = $clip.trans;
     } | literal {
-        System.out.print("<lit v=" + $literal.text + " />");
+        $trans = "<lit v=" + $literal.text + " />";
     } | litTag | ID {
-        System.out.print("<var n=\"" + $ID.text + "\" />");
-    } | concat | lu | mlu | chunk)
+        $trans = "<var n=\"" + $ID.text + "\" />";
+    } | concat {
+        $trans = $concat.trans;
+    } | lu {
+        $trans = $lu.trans;
+    } | mlu {
+        $trans = $mlu.trans;
+    } | chunk {
+        $trans = $chunk.trans;
+    })
     ;
 
 stringValue
@@ -361,13 +371,13 @@ chunkParams returns [String trans = ""]
 
 tags returns [String trans = ""]
     : TAGS {
-        System.out.print("<tags>");
+        $trans = "<tags>";
     } ({
-        System.out.print("<tag>");
+        $trans += "<tag>";
     } value SEMI {
-        System.out.print("</tag>");
+        $trans += "</tag>";
     })+ END {
-        System.out.print("</tags>");
+        $trans += "</tags>";
     }
     ;
 
@@ -392,8 +402,9 @@ otherwise
     }
     ;
 
-// Expression.
-
+// Expression. 
+// Es necesario devolver un string para generar la traducción correctamente.
+// Ej. value equal value => <equal><value><value></equal>
 expr returns [String trans = ""]
 
     locals [
@@ -404,24 +415,23 @@ expr returns [String trans = ""]
     ]
 
     : v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value {
-        System.out.print($startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot);
+        $trans = $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot ;
     }
     | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value c = (AND|OR) expr {
-        System.out.print("<" + $c.text + ">" + $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot + $expr.trans + "</" + $c.text + ">");
+        $trans = "<" + $c.text + ">" + $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
     }
     | value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID {
-        System.out.print($startNot + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + $endNot);
+        $trans = $startNot + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + $endNot;
     }
     | value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID c = (AND|OR) expr {
-        System.out.print("<" + $c.text + ">" + $startNot + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + $endNot + $expr.trans + "</" + $c.text + ">");
+        $trans = "<" + $c.text + ">" + $startNot + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
     }
     | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }| CONTAINS_SUBSTR { $startTag = "<contains-substring>"; $endTag = "</contains-substring>"; } | CONTAINS_SUBSTR_CASELESS { $startTag = "<contains-substring caseless=\"yes\">"; $endTag = "</contains-substring>"; }) v2 = value {
-        System.out.print($startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot);
+        $trans = $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot;
     }
     | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }| CONTAINS_SUBSTR { $startTag = "<contains-substring>"; $endTag = "</contains-substring>"; } | CONTAINS_SUBSTR_CASELESS { $startTag = "<contains-substring caseless=\"yes\">"; $endTag = "</contains-substring>"; }) v2 = value c = (AND|OR) expr{
-        System.out.print("<" + $c.text + ">" + $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot + $expr.trans + "</" + $c.text + ">");
+        $trans = "<" + $c.text + ">" + $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
     }
-
     ;
 
 // Clip function.

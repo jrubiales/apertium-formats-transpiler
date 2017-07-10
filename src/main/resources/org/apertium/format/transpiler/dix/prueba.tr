@@ -1,4 +1,12 @@
 alphabet = "·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 symbols = "comp", "acr", "predet", "qnt", "detnt", "loc", "ant", "al", "cog", "atn", "enc", "pro", "tn", "n", "np", "adj", "adjant", "f", "m", "mf", "sg", "pl", "adv", "preadv", "pr", "prn", "rel", "nn", "an", "aa", "ind", "itg", "det", "dem", "def", "cnjcoo", "cnjsub", "cnjadv", "nt", "vbser", "vbhaver", "vblex", "vbmod", "inf", "pres", "ger", "pp", "pprs", "subs", "pri", "p1", "p2", "p3", "pii", "ifi", "fti", "cni", "prs", "pis", "imp", "pos", "sp", "ref", "sup", "num", "ij", "sent", "cm", "lpar", "rpar", "lquest", "ND", "GD", "web", "past", "subj", "obj", "ord", "gen", "guio", "vbdo", "sint", "unc", "sep", "vaux", "pron", "apos", "percent", "mon";
 pardef "two__num"
+    entry
+        re = "re";
+    end
+end
+section
+    entry
+        " hola{a}{comp}{j}{acr}" > "{ adios}";
+    end
 end

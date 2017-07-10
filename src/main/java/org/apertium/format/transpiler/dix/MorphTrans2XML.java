@@ -5,8 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.apertium.format.transpiler.transfer.DixLexer;
-import org.apertium.format.transpiler.transfer.DixParser;
 
 /**
  *

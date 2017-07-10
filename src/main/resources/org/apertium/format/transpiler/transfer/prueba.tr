@@ -223,48 +223,48 @@ Transfer(default="chunk")
         end /* choose */
     end /* macro */
     Rule(comment="REGLA: MONTH NUM, NUM (July 23, 2010 ? 23 de juliol de 2010)")
-Pattern = "months", "num", "coma", "num";
-firstWord(1);
-case
-when clip(pos=1, side="sl", part="lem") equal "March" then
-clip(pos=1, side="tl", part="lem") = "març";
-case
-when clip(pos=1, side="sl", part="a_nom") equal litTag("np.cog") then
-clip(pos=1, side="tl", part="a_nom") = litTag("n");
-clip(pos=1, side="tl", part="gen") = litTag("m");
-clip(pos=1, side="tl", part="nbr") = litTag("sg");
-end /* when */
-end /* choose */
-end /* when */
-end /* choose */
-out
-Chunk
-tags
-neg;
-clip(pos=2, side="tl", part="a_adv");
-end /* tags */
-lu
-clip(pos=2, side="tl", part="whole");
-end /* lu */
-b(1);
-lu
-litTag("pr");
-"de";
-end /* lu */
-b;
-lu
-clip(pos=1, side="tl", part="whole");
-end /* lu */
-b;
-lu
-litTag("pr");
-"de";
-end /* lu */
-b(3);
-lu
-clip(pos=4, side="tl", part="whole");
-end /* lu */
-end /* chunk */
-end /* out */
-end /* rule */
+        Pattern = "months", "num", "coma", "num";
+        firstWord(1);
+        case
+            when clip(pos=1, side="sl", part="lem") equal "March" then
+                clip(pos=1, side="tl", part="lem") = "març";
+                case
+                    when clip(pos=1, side="sl", part="a_nom") equal litTag("np.cog") then
+                        clip(pos=1, side="tl", part="a_nom") = litTag("n");
+                        clip(pos=1, side="tl", part="gen") = litTag("m");
+                        clip(pos=1, side="tl", part="nbr") = litTag("sg");
+                    end /* when */
+                end /* choose */
+            end /* when */
+        end /* choose */
+        out
+            Chunk
+                tags
+                    neg;
+                    clip(pos=2, side="tl", part="a_adv");
+                end /* tags */
+                lu
+                    clip(pos=2, side="tl", part="whole");
+                end /* lu */
+                b(1);
+                lu
+                    litTag("pr");
+                    "de";
+                end /* lu */
+                b;
+                lu
+                    clip(pos=1, side="tl", part="whole");
+                end /* lu */
+                b;
+                lu
+                    litTag("pr");
+                    "de";
+                end /* lu */
+                b(3);
+                lu
+                    clip(pos=4, side="tl", part="whole");
+                end /* lu */
+            end /* chunk */
+        end /* out */
+    end /* rule */
 end /* transfer */
