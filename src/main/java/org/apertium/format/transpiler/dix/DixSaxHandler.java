@@ -44,25 +44,23 @@ public class DixSaxHandler extends DefaultHandler {
         } else if (localName.equals("pardef")) {
             System.out.print("pardef \"");
             String n = attributes.getValue("n");
-            System.out.println(n);
-            System.out.println("\"");
+            System.out.print(n);
+            System.out.print("\"\n");
         } else if (localName.equals("e")) {
-            System.out.print("entry(");
+            System.out.print("entry");
             String r = attributes.getValue("r");
             if(r != null && !r.equals("")){
-                System.out.print("r = \"");
+                System.out.print("(r = \"");
                 System.out.print(r);
-                System.out.print("\"");
+                System.out.print("\")");
             }    
-            System.out.println(")");
+            System.out.println("");
         } else if (localName.equals("i")) {
-            System.out.print("idendity = \"");
+            System.out.print("identity = \"");
             isITag = true;
         } else if (localName.equals("re")) {
             System.out.print("re = \"");
             isReTag = true;
-        } else if (localName.equals("p")) {
-            System.out.print("pair = ");
         } else if (localName.equals("l")) {
             System.out.print("\"");
             isLeftTag = true;
@@ -70,7 +68,7 @@ public class DixSaxHandler extends DefaultHandler {
             System.out.print("\"");
             isRightTag = true;
         } else if (localName.equals("par")) {
-            System.out.print("par-ref = ");
+            System.out.print("par-ref = \"");
             isParTag = true;
         } else if (localName.equals("a")) {
             System.out.print("{a}");
@@ -131,7 +129,7 @@ public class DixSaxHandler extends DefaultHandler {
             System.out.print("\"");
             isRightTag = false;
         } else if (localName.equals("par")) {
-            System.out.println(";");
+            System.out.println("\";");
             isParTag = false;
         } else if (localName.equals("g")) {
             System.out.print("}");

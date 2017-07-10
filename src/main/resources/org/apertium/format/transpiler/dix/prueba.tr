@@ -1,12 +1,740 @@
 alphabet = "·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 symbols = "comp", "acr", "predet", "qnt", "detnt", "loc", "ant", "al", "cog", "atn", "enc", "pro", "tn", "n", "np", "adj", "adjant", "f", "m", "mf", "sg", "pl", "adv", "preadv", "pr", "prn", "rel", "nn", "an", "aa", "ind", "itg", "det", "dem", "def", "cnjcoo", "cnjsub", "cnjadv", "nt", "vbser", "vbhaver", "vblex", "vbmod", "inf", "pres", "ger", "pp", "pprs", "subs", "pri", "p1", "p2", "p3", "pii", "ifi", "fti", "cni", "prs", "pis", "imp", "pos", "sp", "ref", "sup", "num", "ij", "sent", "cm", "lpar", "rpar", "lquest", "ND", "GD", "web", "past", "subj", "obj", "ord", "gen", "guio", "vbdo", "sint", "unc", "sep", "vaux", "pron", "apos", "percent", "mon";
+pardef "Abc"
+entry
+re = "[ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜABCDEFGHIJKLMNOPQRSTUVWXYZ][ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz]*";
+end /* end entry */
+end /* end paradigm */
 pardef "two__num"
-    entry
-        re = "re";
-    end
-end
-section
-    entry
-        " hola{a}{comp}{j}{acr}" > "{ adios}";
-    end
-end
+entry(r = "RL")
+"{num}" > "{num}{m}";
+end /* end entry */
+entry(r = "RL")
+"{num}" > "{num}{f}";
+end /* end entry */
+entry(r = "LR")
+"{num}" > "{num}{GD}";
+end /* end entry */
+entry(r = "RL")
+" hundred{num}" > "-cent{num}{m}";
+end /* end entry */
+entry(r = "RL")
+" hundred{num}" > "-cent{num}{f}";
+end /* end entry */
+entry(r = "LR")
+" hundred{num}" > "-cent{num}{GD}";
+end /* end entry */
+entry(r = "RL")
+" thousand{num}" > " mil{num}{m}";
+end /* end entry */
+entry(r = "RL")
+" thousand{num}" > " mil{num}{f}";
+end /* end entry */
+entry(r = "LR")
+" thousand{num}" > " mil{num}{GD}";
+end /* end entry */
+end /* end paradigm */
+pardef "two(1)__num"
+entry(r = "RL")
+"{num}" > "{num}{m}";
+end /* end entry */
+entry(r = "RL")
+"{num}" > "{num}{f}";
+end /* end entry */
+entry(r = "LR")
+"{num}" > "{num}{GD}";
+end /* end entry */
+entry(r = "RL")
+" thousand{num}" > " mil{num}{m}";
+end /* end entry */
+entry(r = "RL")
+" thousand{num}" > " mil{num}{f}";
+end /* end entry */
+entry(r = "LR")
+" thousand{num}" > " mil{num}{GD}";
+end /* end entry */
+end /* end paradigm */
+pardef "three__num"
+entry
+"{num}" > "{num}{mf}";
+end /* end entry */
+entry(r = "RL")
+" hundred{num}" > "-cent{num}{m}";
+end /* end entry */
+entry(r = "RL")
+" hundred{num}" > "-cent{num}{f}";
+end /* end entry */
+entry(r = "LR")
+" hundred{num}" > "-cent{num}{GD}";
+end /* end entry */
+entry
+" thousand{num}" > " mil{num}{mf}";
+end /* end entry */
+end /* end paradigm */
+pardef "three(1)__num"
+entry
+"{num}" > "{num}{mf}";
+end /* end entry */
+entry
+" thousand{num}" > " mil{num}{mf}";
+end /* end entry */
+end /* end paradigm */
+pardef "twenty__num"
+entry
+"" > "";
+par-ref = "";
+end /* end entry */
+entry
+"-one" > "-un";
+par-ref = "";
+end /* end entry */
+entry
+"-two" > "-dos";
+par-ref = "";
+end /* end entry */
+entry
+"-three" > "-tres";
+par-ref = "";
+end /* end entry */
+entry
+"-four" > "-quatre";
+par-ref = "";
+end /* end entry */
+entry
+"-five" > "-cinc";
+par-ref = "";
+end /* end entry */
+entry
+"-six" > "-sis";
+par-ref = "";
+end /* end entry */
+entry
+"-seven" > "-set";
+par-ref = "";
+end /* end entry */
+entry
+"-eight" > "-vuit";
+par-ref = "";
+end /* end entry */
+entry
+"-nine" > "-nou";
+par-ref = "";
+end /* end entry */
+end /* end paradigm */
+pardef "one__num"
+entry
+" hundred{num}" > "cent{num}{mf}";
+end /* end entry */
+entry
+" thousand{num}" > "mil{num}{mf}";
+end /* end entry */
+end /* end paradigm */
+pardef "twenty_hundred__num"
+entry
+" hundred{num}" > " mil{num}{GD}";
+end /* end entry */
+entry
+"-one hundred{num}" > " mil cent{num}{GD}";
+end /* end entry */
+entry
+"-two hundred{num}" > " mil dos-cents{num}{GD}";
+end /* end entry */
+entry
+"-three hundred{num}" > " mil tres-cents{num}{GD}";
+end /* end entry */
+entry
+"-four hundred{num}" > " mil quatre-cents{num}{GD}";
+end /* end entry */
+entry
+"-five hundred{num}" > " mil cinc-cents{num}{GD}";
+end /* end entry */
+entry
+"-six hundred{num}" > " mil sis-cents{num}{GD}";
+end /* end entry */
+entry
+"-seven hundred{num}" > " mil set-cents{num}{GD}";
+end /* end entry */
+entry
+"-eight hundred{num}" > " mil vuit-cents{num}{GD}";
+end /* end entry */
+entry
+"-nine hundred{num}" > " mil nou-cents{num}{GD}";
+end /* end entry */
+end /* end paradigm */
+pardef "thirty_hundred__num"
+entry
+" hundred{num}" > " mil{num}{mf}";
+end /* end entry */
+entry
+"-one hundred{num}" > " mil cent{num}{mf}";
+end /* end entry */
+entry
+"-two hundred{num}" > " mil dos-cents{num}{GD}";
+end /* end entry */
+entry
+"-three hundred{num}" > " mil tres-cents{num}{GD}";
+end /* end entry */
+entry
+"-four hundred{num}" > " mil quatre-cents{num}{GD}";
+end /* end entry */
+entry
+"-five hundred{num}" > " mil cinc-cents{num}{GD}";
+end /* end entry */
+entry
+"-six hundred{num}" > " mil sis-cents{num}{GD}";
+end /* end entry */
+entry
+"-seven hundred{num}" > " mil set-cents{num}{GD}";
+end /* end entry */
+entry
+"-eight hundred{num}" > " mil vuit-cents{num}{GD}";
+end /* end entry */
+entry
+"-nine hundred{num}" > " mil nou-cents{num}{GD}";
+end /* end entry */
+end /* end paradigm */
+pardef "arabic-roman-ones-ord(1)"
+entry
+"1st" > "I";
+end /* end entry */
+entry
+"2nd" > "II";
+end /* end entry */
+entry
+"3rd" > "III";
+end /* end entry */
+entry
+"4th" > "IV";
+end /* end entry */
+entry
+"5th" > "V";
+end /* end entry */
+entry
+"6th" > "VI";
+end /* end entry */
+entry
+"7th" > "VII";
+end /* end entry */
+entry
+"8th" > "VIII";
+end /* end entry */
+entry
+"9th" > "IX";
+end /* end entry */
+end /* end paradigm */
+pardef "arabic-roman-ones-ord"
+entry
+"0th" > "";
+end /* end entry */
+entry
+par-ref = "";
+end /* end entry */
+end /* end paradigm */
+pardef "arabic-roman-tens-ord"
+entry
+"" > "";
+par-ref = "";
+end /* end entry */
+entry
+"2" > "XX";
+par-ref = "";
+end /* end entry */
+entry
+"3" > "XXX";
+par-ref = "";
+end /* end entry */
+entry
+"4" > "XL";
+par-ref = "";
+end /* end entry */
+entry
+"5" > "L";
+par-ref = "";
+end /* end entry */
+entry
+"6" > "LX";
+par-ref = "";
+end /* end entry */
+entry
+"7" > "LXX";
+par-ref = "";
+end /* end entry */
+entry
+"8" > "LXXX";
+par-ref = "";
+end /* end entry */
+entry
+"9" > "XC";
+par-ref = "";
+end /* end entry */
+end /* end paradigm */
+pardef "arabic-roman-ord"
+entry
+"10th" > "X";
+end /* end entry */
+entry
+"11th" > "XI";
+end /* end entry */
+entry
+"12th" > "XII";
+end /* end entry */
+entry
+"13th" > "XIII";
+end /* end entry */
+entry
+"14th" > "XIV";
+end /* end entry */
+entry
+"15th" > "XV";
+end /* end entry */
+entry
+"16th" > "XVI";
+end /* end entry */
+entry
+"17th" > "XVII";
+end /* end entry */
+entry
+"18th" > "XVIII";
+end /* end entry */
+entry
+"19th" > "XIX";
+end /* end entry */
+entry
+par-ref = "";
+end /* end entry */
+end /* end paradigm */
+pardef "B.C.-aC"
+entry
+"" > "";
+end /* end entry */
+entry
+" BC" > " aC";
+end /* end entry */
+entry
+" B.C" > " a.C";
+end /* end entry */
+entry
+" B. C" > " a. C";
+end /* end entry */
+entry
+" AD" > " dC";
+end /* end entry */
+entry
+" A.D" > " d.C";
+end /* end entry */
+entry
+" A. D" > " d. C";
+end /* end entry */
+entry(r = "LR")
+" CE" > " dC";
+end /* end entry */
+entry(r = "LR")
+" C.E" > " d.C";
+end /* end entry */
+entry(r = "LR")
+" BCE" > " aC";
+end /* end entry */
+entry(r = "LR")
+" B.C.E" > " a.C";
+end /* end entry */
+entry(r = "LR")
+" C. E" > " d. C";
+end /* end entry */
+entry(r = "RL")
+" AD" > " AD";
+end /* end entry */
+entry(r = "RL")
+" A.D" > " A.D";
+end /* end entry */
+entry(r = "RL")
+" A. D" > " A. D";
+end /* end entry */
+end /* end paradigm */
+pardef "NPCOG"
+entry
+"{np}{cog}{sg}" > "{np}{cog}{mf}{sp}";
+end /* end entry */
+entry(r = "LR")
+"{np}{cog}{pl}" > "{np}{cog}{mf}{sp}";
+end /* end entry */
+end /* end paradigm */
+section main(type ="standard")
+entry
+"2-3-5 system{n}" > "sistema{ 2-3-5}{n}{m}";
+end /* end entry */
+entry
+"3GPP{n}{acr}" > "3GPP{n}{acr}{m}";
+end /* end entry */
+entry
+"4-2-4 system{n}" > "sistema{ 4-2-4}{n}{m}";
+end /* end entry */
+entry
+"4-3-3 system{n}" > "sistema{ 4-3-3}{n}{m}";
+end /* end entry */
+entry
+"4-4-2 system{n}" > "sistema{ 4-4-2}{n}{m}";
+end /* end entry */
+entry
+"A/H1N1{n}{acr}" > "A/H1N1{n}{acr}{f}";
+end /* end entry */
+entry
+"A/H5N1{n}{acr}" > "A/H5N1{n}{acr}{f}";
+end /* end entry */
+entry
+"ADP{n}{acr}" > "ADP{n}{acr}{m}";
+end /* end entry */
+entry
+"AFP{n}{acr}" > "AFP{n}{acr}{f}";
+end /* end entry */
+entry
+"ANSI{n}{acr}" > "ANSI{n}{acr}{m}";
+end /* end entry */
+entry
+"AT&T{n}{acr}" > "AT&T{n}{acr}{f}";
+end /* end entry */
+entry
+"ATP{n}{acr}" > "ATP{n}{acr}{m}";
+end /* end entry */
+entry
+"API{n}{acr}" > "API{n}{acr}{m}";
+end /* end entry */
+entry
+"ActiveX{n}{acr}" > "ActiveX{n}{acr}{m}";
+end /* end entry */
+entry
+"Allen key{n}" > "clau{ Allen}{n}{f}";
+end /* end entry */
+entry
+"Allen wrench{n}" > "clau{ Allen}{n}{f}";
+end /* end entry */
+entry
+"American{n}" > "americà{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"American{n}" > "americà{n}{f}";
+end /* end entry */
+entry
+"Antichrist{n}" > "anticrist{n}{m}";
+end /* end entry */
+entry
+"Apache{n}" > "apatxe{n}{m}";
+end /* end entry */
+entry
+"April{n}" > "abril{n}{m}";
+end /* end entry */
+entry
+"arab{n}" > "àrab{n}{mf}";
+end /* end entry */
+entry
+"Aryan{n}" > "ari{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"Ash Wednesday{n}{ND}" > "Dimecres de Cendra{n}{m}{sp}";
+end /* end entry */
+entry(r = "LR")
+"Ash Wednesday{n}" > "Dimecres de Cendra{n}{m}";
+end /* end entry */
+entry(r = "LR")
+"asian{n}" > "asiàtic{n}{GD}";
+end /* end entry */
+entry(r = "RL")
+"asian{n}" > "asiàtic{n}";
+end /* end entry */
+entry
+"Assyrian{n}" > "assiri{n}{m}";
+end /* end entry */
+entry
+"Asturian{n}" > "bable{n}{m}";
+end /* end entry */
+entry
+"August{n}" > "agost{n}{m}";
+end /* end entry */
+entry
+"Avogadro constant{n}" > "nombre{ d'Avogadro}{n}{m}";
+end /* end entry */
+entry(r = "LR")
+"Avogadro number{n}" > "nombre{ d'Avogadro}{n}{m}";
+end /* end entry */
+entry
+"BBC{n}{acr}" > "BBC{n}{acr}{f}";
+end /* end entry */
+entry
+"BIOS{n}{acr}" > "BIOS{n}{acr}{f}";
+end /* end entry */
+entry
+"Basque{n}" > "basc{n}{GD}";
+end /* end entry */
+entry(r = "RL")
+"Basque{n}" > "basc{n}";
+end /* end entry */
+entry
+"Big Bang{n}{sg}" > "big bang{n}{m}{sg}";
+end /* end entry */
+entry(r = "LR")
+"Big Bang{n}{pl}" > "big bang{n}{m}{sg}";
+end /* end entry */
+entry
+"Bolshevism{n}" > "bolxevisme{n}{m}";
+end /* end entry */
+entry
+"Bonapartism{n}" > "bonapartisme{n}{m}";
+end /* end entry */
+entry
+"Bose-Einstein condensate{n}" > "condensat{ de Bose-Einstein}{n}{m}";
+end /* end entry */
+entry
+"Bretton Woods Agreement{n}" > "Acord{ de Bretton Woods}{n}{m}";
+end /* end entry */
+entry
+"Bretton Woods system{n}" > "sistema{ de Bretton Woods}{n}{m}";
+end /* end entry */
+entry
+"British{n}" > "britànic{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"British{n}" > "britànic{n}{f}";
+end /* end entry */
+entry
+"Buddhism{n}" > "budisme{n}{m}";
+end /* end entry */
+entry
+"Buddhist{n}" > "budista{n}{mf}";
+end /* end entry */
+entry
+"CD{n}{acr}" > "CD{n}{acr}{m}";
+end /* end entry */
+entry
+"CDC{n}{acr}" > "CDC{n}{acr}{f}";
+end /* end entry */
+entry
+"CDMA{n}{acr}" > "CDMA{n}{acr}{m}";
+end /* end entry */
+entry
+"CDU{n}{acr}" > "CDU{n}{acr}{m}";
+end /* end entry */
+entry(r = "LR")
+"CO 2{n}{acr}{sg}" > "CO2{n}{acr}{m}{sg}";
+end /* end entry */
+entry
+"CO2{n}{acr}{sg}" > "CO2{n}{acr}{m}{sg}";
+end /* end entry */
+entry
+"CSMA{n}{acr}" > "CSMA{n}{acr}{m}";
+end /* end entry */
+entry
+"CSMA/CA{n}{acr}" > "CSMA/CA{n}{acr}{m}";
+end /* end entry */
+entry
+"CSMA/CD{n}{acr}" > "CSMA/CD{n}{acr}{m}";
+end /* end entry */
+entry(r = "LR")
+"canadian{n}" > "canadenc{n}{GD}";
+end /* end entry */
+entry(r = "RL")
+"canadian{n}" > "canadenc{n}";
+end /* end entry */
+entry(r = "LR")
+"catalan{n}" > "català{n}{GD}";
+end /* end entry */
+entry(r = "RL")
+"catalan{n}" > "català{n}";
+end /* end entry */
+entry(r = "LR")
+"catholic{n}" > "catòlic{n}{GD}";
+end /* end entry */
+entry(r = "RL")
+"catholic{n}" > "catòlic{n}";
+end /* end entry */
+entry(r = "LR")
+"christian{n}" > "cristià{n}{GD}";
+end /* end entry */
+entry(r = "RL")
+"christian{n}" > "cristià{n}";
+end /* end entry */
+entry
+"christianity{n}" > "cristianisme{n}{m}";
+end /* end entry */
+entry
+"CiU{n}{acr}" > "CiU{n}{acr}{f}";
+end /* end entry */
+entry
+"Cl-{n}{acr}" > "Cl-{n}{acr}{m}";
+end /* end entry */
+entry
+"DBMS{n}{acr}" > "SGBD{n}{acr}{m}";
+end /* end entry */
+entry
+"DNA{n}{acr}" > "ADN{n}{acr}{m}";
+end /* end entry */
+entry
+"DNA sample{n}" > "mostra{ d'ADN}{n}{f}";
+end /* end entry */
+entry
+"DOS{n}{acr}" > "DOS{n}{acr}{f}";
+end /* end entry */
+entry
+"DTP{n}{acr}" > "DTP{n}{acr}{m}";
+end /* end entry */
+entry
+"DVD{n}{acr}" > "DVD{n}{acr}{m}";
+end /* end entry */
+entry
+"December{n}" > "desembre{n}{m}";
+end /* end entry */
+entry
+"Dirac constant{n}" > "constant{ de Dirac}{n}{f}";
+end /* end entry */
+entry
+"Dr.{n}" > "Dr.{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"Dr.{n}" > "Dra.{n}{f}";
+end /* end entry */
+entry
+"Dutch{n}" > "holandès{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"Dutch{n}" > "holandès{n}{f}";
+end /* end entry */
+entry
+"ECB{n}{acr}" > "BCE{n}{acr}{m}";
+end /* end entry */
+entry
+"EPP-ED{n}{acr}" > "PPE-DE{n}{acr}{m}";
+end /* end entry */
+entry
+"EPROM{n}{acr}" > "EPROM{n}{acr}{f}";
+end /* end entry */
+entry
+"ERC{n}{acr}" > "ERC{n}{acr}{f}";
+end /* end entry */
+entry
+"ETA{n}{acr}" > "ETA{n}{acr}{f}";
+end /* end entry */
+entry
+"Easter{n}" > "Pasqua{n}{f}";
+end /* end entry */
+entry
+"Egyptologist{n}" > "egiptòleg{n}{m}";
+end /* end entry */
+entry
+"English{n}" > "anglès{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"English{n}" > "anglès{n}{f}";
+end /* end entry */
+entry
+"Ethernet{n}" > "Ethernet{n}{f}";
+end /* end entry */
+entry
+"European{n}" > "europeu{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"European{n}" > "europeu{n}{f}";
+end /* end entry */
+entry
+"FBI{n}{acr}" > "FBI{n}{acr}{f}";
+end /* end entry */
+entry
+"FDMA{n}{acr}" > "FDMA{n}{acr}{m}";
+end /* end entry */
+entry
+"FIDE{n}{acr}" > "FIDE{n}{acr}{f}";
+end /* end entry */
+entry
+"Faraday constant{n}" > "constant{ de Faraday}{n}{f}";
+end /* end entry */
+entry
+"February{n}" > "febrer{n}{m}";
+end /* end entry */
+entry(r = "LR")
+"Franco's regime{n}" > "franquisme{n}{m}";
+end /* end entry */
+entry
+"Franco regime{n}" > "franquisme{n}{m}";
+end /* end entry */
+entry
+"French{n}" > "francès{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"French{n}" > "francès{n}{f}";
+end /* end entry */
+entry(r = "LR")
+"Friday{n}" > "divendres{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"Friday{n}{ND}" > "divendres{n}{m}{sp}";
+end /* end entry */
+entry
+"GDP{n}{acr}" > "PIB{n}{acr}{m}";
+end /* end entry */
+entry
+"Galician{n}" > "gallec{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"Galician{n}" > "gallec{n}{f}";
+end /* end entry */
+entry
+"Game Boy{n}" > "Game Boy{n}{m}";
+end /* end entry */
+entry
+"German{n}" > "alemany{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"German{n}" > "alemany{n}{f}";
+end /* end entry */
+entry
+"Gordian knot{n}" > "nus gordià{n}{m}";
+end /* end entry */
+entry(r = "LR")
+"Goth{n}" > "got{n}{GD}";
+end /* end entry */
+entry(r = "RL")
+"Goth{n}" > "got{n}";
+end /* end entry */
+entry
+"Greek{n}" > "grec{n}{m}";
+end /* end entry */
+entry(r = "RL")
+"Greek{n}" > "grec{n}{f}";
+end /* end entry */
+entry
+"H1N1{n}{acr}" > "H1N1{n}{acr}{f}";
+end /* end entry */
+entry
+"H5N1{n}{acr}" > "H5N1{n}{acr}{f}";
+end /* end entry */
+entry
+"HIV{n}{acr}" > "VIH{n}{acr}{m}";
+end /* end entry */
+entry
+"Hebraism{n}" > "hebraisme{n}{m}";
+end /* end entry */
+entry(r = "LR")
+"Her Highness{n}" > "Sa Altesa{n}{f}";
+end /* end entry */
+entry(r = "LR")
+"Her Majesty{n}" > "Sa Majestat{n}{f}";
+end /* end entry */
+entry
+"Her Majesty the Queen{n}" > "Sa Majestat la Reina{n}{f}";
+end /* end entry */
+entry(r = "LR")
+"Her Royal Highness{n}" > "Sa Altesa Reial{n}{f}";
+end /* end entry */
+entry
+"High Contracting Party{n}" > "Alta Part Contractant{n}{f}";
+end /* end entry */
+entry
+"His Highness{n}" > "Sa Altesa{n}{f}";
+end /* end entry */
+entry
+"His Majesty{n}" > "Sa Majestat{n}{f}";
+end /* end entry */
+entry
+"His Majesty the King{n}" > "Sa Majestat el Rei{n}{m}";
+end /* end entry */
+entry
+"His Royal Highness{n}" > "Sa Altesa Reial{n}{f}";
+end /* end entry */
+end /* end section */

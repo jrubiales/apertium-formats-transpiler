@@ -47,23 +47,50 @@ pardef
     ;
 
 section
-    : SECTION { System.out.print("<section>");} e+ END {System.out.print("</section>"); }
+    : SECTION {
+        System.out.print("<section");
+    } ID {
+        System.out.print(" n=\"" + $ID.text + "\"");
+    } LPAR 'type' ASSIGN type = ('"standard"' | '"inconditional"' | '"postblank"' | '"preblank"') { 
+        System.out.print(" type=" + $type.text + ">"); 
+    } RPAR e+ END {
+        System.out.print("</section>"); 
+    }
     ;
 
 e
-    : ENTRY { System.out.print("<e"); } (LPAR R ASSIGN ('"LR"' | '"RL"') RPAR)? { System.out.print(">"); } (i | p | par | re)+ END { System.out.print("</e>"); }
+    : ENTRY { 
+        System.out.print("<e"); 
+    } (LPAR att = ('r'|'lm'|'a'|'c'|'i'|'slr'|'srl'|'alt'|'v'|'vl'|'vr') { 
+        System.out.print(" " + $att.text); 
+    } ASSIGN {
+        System.out.print("=");
+    } (value = ('"LR"' | '"RL"') {
+        System.out.print($value.text);
+    } | literal {
+        System.out.print($literal.text);
+    }) RPAR)? { 
+        System.out.print(">"); 
+    } (i | p | par | re)+ END { 
+        System.out.print("</e>"); 
+    }
     ;
 
 i
-    : I { System.out.print("<i>"); } ASSIGN literal {
-        String litTrans = $literal.text;
-        litTrans = litTrans.replaceAll("\\{a\\}", "<a/>");
-        litTrans = litTrans.replaceAll(" ", "<b/>");
-        litTrans = litTrans.replaceAll("\\{j\\}", "<j/>");
-        litTrans = litTrans.replaceAll("\\{", "<g>");
-        litTrans = litTrans.replaceAll("\\}", "</g>");
-        litTrans = litTrans.replaceAll("\"", "");
-        System.out.print(litTrans);
+    : IDENTITY { System.out.print("<i>"); } ASSIGN literal {
+        String result = $literal.text;
+        result = result.replaceAll("\"", "");
+        // TODO. Contemplar mas entidades html.
+        result = result.replaceAll("&", "&amp;");
+        // TODO. Solucionar problema \{ ([\w\{\} ]*)\}
+        result = result.replaceAll("\\{ ([\\w\\{\\} ]*)\\}", "<g>$0</g>");
+        result = result.replaceAll("\\{a\\}", "<a/>");
+        result = result.replaceAll(" ", "<b/>");
+        result = result.replaceAll("\\{j\\}", "<j/>");
+        result = result.replaceAll("\\{j\\}", "<j/>");
+        result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
+        result = result.replaceAll("[\\{\\}]", "");
+        System.out.print(result);
     } SEMI { System.out.print("</i>"); }
     ;
 
@@ -73,33 +100,41 @@ p
 
 l
     : literal {
-        String litTrans = $literal.text;
-        litTrans = litTrans.replaceAll("\\{a\\}", "<a/>");
-        litTrans = litTrans.replaceAll(" ", "<b/>");
-        litTrans = litTrans.replaceAll("\\{j\\}", "<j/>");
-        litTrans = litTrans.replaceAll("\\{j\\}", "<j/>");
-        litTrans = litTrans.replaceAll("\\{", "<g>");
-        litTrans = litTrans.replaceAll("\\}", "</g>");
-        litTrans = litTrans.replaceAll("\"", "");
-        System.out.print(litTrans);
+        String result = $literal.text;
+        result = result.replaceAll("\"", "");
+        // TODO. Contemplar mas entidades html.
+        result = result.replaceAll("&", "&amp;");
+        // TODO. Solucionar problema \{ ([\w\{\} ]*)\}
+        result = result.replaceAll("\\{ ([\\w\\{\\} ]*)\\}", "<g>$0</g>");
+        result = result.replaceAll("\\{a\\}", "<a/>");
+        result = result.replaceAll(" ", "<b/>");
+        result = result.replaceAll("\\{j\\}", "<j/>");
+        result = result.replaceAll("\\{j\\}", "<j/>");
+        result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
+        result = result.replaceAll("[\\{\\}]", "");
+        System.out.print(result);
     }
     ;
 
 r
     : literal {
-        String litTrans = $literal.text;
-        litTrans = litTrans.replaceAll("\\{a\\}", "<a/>");
-        litTrans = litTrans.replaceAll(" ", "<b/>");
-        litTrans = litTrans.replaceAll("\\{j\\}", "<j/>");
-        litTrans = litTrans.replaceAll("\\{", "<g>");
-        litTrans = litTrans.replaceAll("\\}", "</g>");
-        litTrans = litTrans.replaceAll("\"", "");
-        System.out.print(litTrans);
+        String result = $literal.text;
+        result = result.replaceAll("\"", "");
+        result = result.replaceAll("&", "&amp;");
+        // TODO. Solucionar problema \{ ([\w\{\} ]*)\}
+        result = result.replaceAll("\\{ ([\\w\\{\\} ]*)\\}", "<g>$0</g>");
+        result = result.replaceAll("\\{a\\}", "<a/>");
+        result = result.replaceAll(" ", "<b/>");
+        result = result.replaceAll("\\{j\\}", "<j/>");
+        result = result.replaceAll("\\{j\\}", "<j/>");
+        result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
+        result = result.replaceAll("[\\{\\}]", "");
+        System.out.print(result);
     }
     ;
 
 par
-    : PREF { System.out.print("<par"); } ASSIGN ID { System.out.print("n=\"" + $ID.text + "\""); } SEMI { System.out.print("</par>"); }
+    : PREF { System.out.print("<par"); } ASSIGN literal { System.out.print(" n=" + $literal.text); } SEMI { System.out.print("/>"); }
     ;
 
 re
@@ -124,7 +159,7 @@ SECTION                     : 'section' ;
 ASSIGN                      : '=' ;
 END                         : 'end' ;
 PREF                        : 'par-ref' ;
-I                           : 'i';
+IDENTITY                    : 'identity';
 ENTRY                       : 'entry';
 RE                          : 're' ;
 
@@ -132,7 +167,6 @@ RE                          : 're' ;
 
 N                           : 'n' ;
 C                           : 'c' ;
-R                           : 'r' ;
 
 // Separators.
 
