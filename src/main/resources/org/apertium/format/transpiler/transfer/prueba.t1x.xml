@@ -473,9 +473,7 @@
     </section-def-lists>
     
     <section-def-macros>
-    
-        <!--
-        
+           
         <def-macro n="elimina_GDND" npar="1">
             <choose>
                 <when>
@@ -506,9 +504,7 @@
                 </when>
             </choose>
         </def-macro>
-        
-        -->
-        
+                
         <def-macro n="f_concord3" npar="3"><!--1 = main parameter (typically noun); 2  = secondary parameter (typically adj or det). 3 = other secondary param. (typically det) -->
      <let>
        <var n="gen_chunk"/>
@@ -995,7 +991,7 @@
     
     <section-rules>
     
-       <!-- <rule comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)">
+       <rule comment="REGLA: MONTH NUM, NUM (July 23, 2010 → 23 de juliol de 2010)">
             <pattern>
                 <pattern-item n="months"/>
                 <pattern-item n="num"/>
@@ -1077,9 +1073,7 @@
                 </out>
             </action>
         </rule>
-        
-        -->
-        
+                
     </section-rules> 
     
 </transfer>

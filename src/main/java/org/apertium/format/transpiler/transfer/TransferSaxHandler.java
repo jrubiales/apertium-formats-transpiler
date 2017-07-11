@@ -136,6 +136,8 @@ public class TransferSaxHandler extends DefaultHandler {
             sentence = "=";
         } else if (localName.equals("append")) {
             sentence = "append";
+            String n = attributes.getValue("n");
+            stack.push(n);
         } else if (localName.equals("out")) {
             System.out.print("out\n");
         } else if (localName.equals("modify-case")) {

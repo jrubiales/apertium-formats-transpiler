@@ -184,19 +184,11 @@ sentence
     } stringValue {
         System.out.print("</modify-case>");
     }
-
-    /*
-
-    TODO. Fix.
-
     | ID APPEND {
-        $trans += "<append n=\"" + $ID.text + "\">";
-    } (value { $trans += $value.trans; })+ END {
-        $trans += "</append>";
+        System.out.print("<append n=\"" + $ID.text + "\">");
+    } (value { System.out.print($value.trans); } APPEND?)+ SEMI {
+        System.out.print("</append>");
     }
-
-    */
-
     | REJECT_CURRENT_RULE LPAR 'shifting' ASSIGN ('yes'|'no') RPAR SEMI
     | OUT {
         System.out.print("<out>");
