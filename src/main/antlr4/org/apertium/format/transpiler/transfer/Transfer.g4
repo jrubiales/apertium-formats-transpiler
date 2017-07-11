@@ -192,7 +192,15 @@ sentence
     | REJECT_CURRENT_RULE LPAR 'shifting' ASSIGN ('yes'|'no') RPAR SEMI
     | OUT {
         System.out.print("<out>");
-    } (mlu | lu | b | chunk | ID {
+    } (mlu {
+        System.out.print($mlu.trans);
+    } | lu {
+        System.out.print($lu.trans);
+    } | b {
+        System.out.print($b.trans);
+    } | chunk {
+        System.out.print($chunk.trans);
+    } | ID {
         System.out.print("<var n=\"" + $ID.text + "\"/>");
     })+ END {
         System.out.print("</out>");
@@ -265,21 +273,23 @@ container
 
 value returns [String trans = ""]
     : (b {
-        $trans = $b.trans;
+        $trans += $b.trans;
     } | clip {
-        $trans = $clip.trans;
+        $trans += $clip.trans;
     } | literal {
-        $trans = "<lit v=" + $literal.text + " />";
-    } | litTag | ID {
-        $trans = "<var n=\"" + $ID.text + "\" />";
+        $trans += "<lit v=" + $literal.text + " />";
+    } | litTag {
+        $trans += $litTag.trans;
+    } | ID {
+        $trans += "<var n=\"" + $ID.text + "\" />";
     } | concat {
-        $trans = $concat.trans;
+        $trans += $concat.trans;
     } | lu {
-        $trans = $lu.trans;
+        $trans += $lu.trans;
     } | mlu {
-        $trans = $mlu.trans;
+        $trans += $mlu.trans;
     } | chunk {
-        $trans = $chunk.trans;
+        $trans += $chunk.trans;
     })
     ;
 
@@ -295,7 +305,7 @@ stringValue
 
 b returns [String trans = ""]
     : 'b' {
-        $trans = "<b";
+        $trans += "<b";
     } (LPAR INT RPAR {
         $trans += " pos=\"" + $INT.text + "\"";
     })? SEMI {
@@ -305,7 +315,7 @@ b returns [String trans = ""]
 
 concat returns [String trans = ""]
     : CONCAT {
-        $trans = "<concat>";
+        $trans += "<concat>";
     } (value SEMI)+ {
         $trans += $value.trans;
     } END {
@@ -315,17 +325,17 @@ concat returns [String trans = ""]
 
 lu returns [String trans = ""]
     : LU {
-        $trans = "<lu>";
-    } (value SEMI)+ {
+        $trans += "<lu>";
+    } (value SEMI {
         $trans += $value.trans;
-    } END {
+    })+ END {
         $trans += "</lu>";
     }
     ;
 
 mlu returns [String trans = ""]
     : MLU {
-        $trans = "<mlu>";
+        $trans += "<mlu>";
     } lu+ {
         $trans += $lu.trans;
     } END {
@@ -335,14 +345,16 @@ mlu returns [String trans = ""]
 
 chunk returns [String trans = ""]
     : CHUNK {
-        $trans = "<chunk";
+        $trans += "<chunk";
     } (ID {
         $trans += " name=\"" + $ID.text + "\"";
     })? (LPAR chunkParams* {
         $trans += $chunkParams.trans;
     } RPAR)? {
         $trans += ">";
-    } tags (mlu {
+    } tags {
+        $trans += $tags.trans;
+    } (mlu {
         $trans += $mlu.trans;
     } | lu {
         $trans += $lu.trans;
@@ -357,16 +369,18 @@ chunk returns [String trans = ""]
 
 chunkParams returns [String trans = ""]
     : param = (NAME_FROM|CASE|C) ASSIGN literal {
-        $trans += $param.text + "=" + $literal.text + " ";
+        $trans += " " + $param.text + "=" + $literal.text;
     }
     ;
 
 tags returns [String trans = ""]
     : TAGS {
-        $trans = "<tags>";
+        $trans += "<tags>";
     } ({
         $trans += "<tag>";
-    } value SEMI {
+    } value {
+        $trans += $value.trans;
+    } SEMI {
         $trans += "</tag>";
     })+ END {
         $trans += "</tags>";
@@ -406,7 +420,13 @@ expr returns [String trans = ""]
         String endNot = "",
     ]
 
-    : v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value {
+    : v1 = value (NOT { 
+        $startNot="<not>"; $endNot = "</not>"; 
+    })? (EQUAL { 
+        $startTag = "<equal>"; $endTag = "</equal>"; 
+    } | EQUAL_CASELESS { 
+        $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; 
+    }) v2 = value {
         $trans = $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot ;
     }
     | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value c = (AND|OR) expr {
