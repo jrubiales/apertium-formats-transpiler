@@ -1,4 +1,4 @@
-package org.apertium.format.transpiler.transfer;
+package org.apertium.transpiler.transfer;
 
 import com.google.common.base.CaseFormat;
 import java.util.Stack;

@@ -1,4 +1,4 @@
-package org.apertium.format.transpiler.dix;
+package org.apertium.transpiler.dix;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -11,7 +11,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class DixSaxHandler extends DefaultHandler {
 
     /* Traducciones parciales. */
-    private StringBuilder pTrans;
+    private final StringBuilder pTrans;
     
     private boolean isAlphabetTag, isITag, isReTag, isParTag, isLeftTag, isRightTag;
             

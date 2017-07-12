@@ -1,4 +1,4 @@
-package org.apertium.format.transpiler.dix;
+package org.apertium.transpiler.dix;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -24,14 +24,14 @@ public class MorphDix2XML {
             String filePath = args[0];
             System.out.println("File: " + filePath);
             System.out.println("Parsing...");
-            try {
-                ANTLRFileStream in = new ANTLRFileStream(filePath);
+            try{
+                ANTLRFileStream in = new ANTLRFileStream(MorphDix2XML.class.getResource(filePath).getFile());
                 DixLexer lexer = new DixLexer(in);
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 DixParser parser = new DixParser(tokens);
                 parser.stat();
             } catch (IOException ex) {
-                Logger.getLogger(org.apertium.format.transpiler.transfer.MorphTrans2XML.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(org.apertium.transpiler.transfer.MorphTrans2XML.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("Finished.");
         }

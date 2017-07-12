@@ -1,4 +1,4 @@
-package org.apertium.format.transpiler.transfer;
+package org.apertium.transpiler.transfer;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -24,7 +24,7 @@ public class MorphTrans2XML {
             System.out.println("File: " + filePath);
             System.out.println("Parsing...");
             try {
-                ANTLRFileStream in = new ANTLRFileStream(filePath);
+                ANTLRFileStream in = new ANTLRFileStream(MorphTrans2XML.class.getResource(filePath).getFile());
                 TransferLexer lexer = new TransferLexer(in);
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 TransferParser parser = new TransferParser(tokens);
