@@ -109,7 +109,7 @@ public class DixSaxHandler extends DefaultHandler {
             isAlphabetTag = false;
         } else if (localName.equals("sdefs")) {
             System.out.print(pTrans.toString().replaceAll(", $", ";\n"));
-            pTrans = new StringBuilder();
+            pTrans.setLength(0);
         } else if (localName.equals("pardef")) {
             System.out.println("end /* end paradigm */");
         } else if (localName.equals("e")) {

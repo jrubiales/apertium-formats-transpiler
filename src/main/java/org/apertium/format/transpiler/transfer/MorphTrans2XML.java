@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.*;
 public class MorphTrans2XML {
     
     private static void help(){
-        System.out.println("no arguments were given.");
+        System.out.println("No arguments were given.");
     }
     
     public static void main(String[] args) {

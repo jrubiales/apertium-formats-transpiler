@@ -13,10 +13,10 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author juanfran
  */
-public class XML2MorphTrans {
+public class XML2MorphDix {
     
     private static void help(){
-        System.out.println("no arguments were given.");
+        System.out.println("No arguments were given.");
     }
         
     public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class XML2MorphTrans {
                 reader.setContentHandler(new DixSaxHandler());
                 reader.parse(new InputSource(new FileInputStream(filePath)));
             } catch (SAXException | IOException ex) {
-                Logger.getLogger(org.apertium.format.transpiler.dix.XML2MorphTrans.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(org.apertium.format.transpiler.dix.XML2MorphDix.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

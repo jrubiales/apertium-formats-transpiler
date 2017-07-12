@@ -17,7 +17,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class XML2MorphTrans {
         
     private static void help(){
-        System.out.println("no arguments were given.");
+        System.out.println("No arguments were given.");
     }
         
     public static void main(String[] args) {

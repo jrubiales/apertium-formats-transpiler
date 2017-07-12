@@ -10,10 +10,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
  *
  * @author juanfran
  */
-public class MorphTrans2XML {
+public class MorphDix2XML {
  
     private static void help(){
-        System.out.println("no arguments were given.");
+        System.out.println("No arguments were given.");
     }
     
     public static void main(String[] args) {
