@@ -13,7 +13,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author juanfran
  */
-public class XML2MorphTrans {
+public class XML2Trans {
         
     private static void help(){
         System.out.println("No arguments were given.");
@@ -29,9 +29,9 @@ public class XML2MorphTrans {
             try {
                 XMLReader reader = XMLReaderFactory.createXMLReader();
                 reader.setContentHandler(new TransferSaxHandler());
-                reader.parse(new InputSource(MorphTrans2XML.class.getResource(filePath).getFile()));
+                reader.parse(new InputSource(Trans2XML.class.getResource(filePath).getFile()));
             } catch (SAXException | IOException ex) {
-                Logger.getLogger(XML2MorphTrans.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(XML2Trans.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("Finished.");
         }

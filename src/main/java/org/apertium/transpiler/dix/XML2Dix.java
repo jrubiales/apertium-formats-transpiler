@@ -12,7 +12,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * @author juanfran
  */
-public class XML2MorphDix {
+public class XML2Dix {
     
     private static void help(){
         System.out.println("No arguments were given.");
@@ -28,9 +28,9 @@ public class XML2MorphDix {
             try {
                 XMLReader reader = XMLReaderFactory.createXMLReader();
                 reader.setContentHandler(new DixSaxHandler());
-                reader.parse(new InputSource(XML2MorphDix.class.getResource(filePath).getFile()));
+                reader.parse(new InputSource(XML2Dix.class.getResource(filePath).getFile()));
             } catch (SAXException | IOException ex) {
-                Logger.getLogger(org.apertium.transpiler.dix.XML2MorphDix.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(org.apertium.transpiler.dix.XML2Dix.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("Finished.");
         }

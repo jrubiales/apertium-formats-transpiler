@@ -1,17 +1,16 @@
-package org.apertium.transpiler.dix;
+package org.apertium.transpiler.transfer;
 
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
 
 /**
  *
  * @author juanfran
  */
-public class MorphDix2XML {
- 
+public class Trans2XML {
+    
     private static void help(){
         System.out.println("No arguments were given.");
     }
@@ -24,17 +23,17 @@ public class MorphDix2XML {
             String filePath = args[0];
             System.out.println("File: " + filePath);
             System.out.println("Parsing...");
-            try{
-                ANTLRFileStream in = new ANTLRFileStream(MorphDix2XML.class.getResource(filePath).getFile());
-                DixLexer lexer = new DixLexer(in);
+            try {
+                ANTLRFileStream in = new ANTLRFileStream(Trans2XML.class.getResource(filePath).getFile());
+                TransferLexer lexer = new TransferLexer(in);
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
-                DixParser parser = new DixParser(tokens);
+                TransferParser parser = new TransferParser(tokens);
                 parser.stat();
             } catch (IOException ex) {
-                Logger.getLogger(org.apertium.transpiler.transfer.MorphTrans2XML.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Trans2XML.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("Finished.");
         }
     }
-    
+
 }

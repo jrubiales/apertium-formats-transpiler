@@ -8,10 +8,10 @@ Without this configuration present, some functionality in the IDE may be limited
 -->
     <config-data xmlns="http://www.netbeans.org/ns/maven-config-data/1">
         <configurations>
-            <configuration id="MorphTrans2XML" profiles=""/>
-            <configuration id="XML2MorphTrans" profiles=""/>
-            <configuration id="MorphDix2XML" profiles=""/>
-            <configuration id="XML2MorphDix" profiles=""/>
+            <configuration id="Trans2XML" profiles=""/>
+            <configuration id="XML2Trans" profiles=""/>
+            <configuration id="Dix2XML" profiles=""/>
+            <configuration id="XML2Dix" profiles=""/>
         </configurations>
     </config-data>
 </project-shared-configuration>
