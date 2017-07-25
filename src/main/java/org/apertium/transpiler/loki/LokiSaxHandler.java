@@ -1,4 +1,4 @@
-package org.apertium.transpiler.dix;
+package org.apertium.transpiler.loki;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -8,14 +8,14 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author juanfran
  */
-public class DixSaxHandler extends DefaultHandler {
+public class LokiSaxHandler extends DefaultHandler {
 
     /* Traducciones parciales. */
     private final StringBuilder pTrans;
     
     private boolean isAlphabetTag, isITag, isReTag, isParTag, isLeftTag, isRightTag;
             
-    public DixSaxHandler() {
+    public LokiSaxHandler() {
         pTrans = new StringBuilder();
         isAlphabetTag = false;
         isITag = false;

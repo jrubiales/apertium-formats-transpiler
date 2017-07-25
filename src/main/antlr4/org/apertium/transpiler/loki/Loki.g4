@@ -1,4 +1,4 @@
-grammar Dix;
+grammar Loki;
 
 /**
  * Syntactic specification.
@@ -58,12 +58,15 @@ section
     }
     ;
 
+
+/*
+
 e
     : ENTRY { 
         System.out.print("<e"); 
     } (LPAR att = ('r'|'lm'|'a'|'c'|'i'|'slr'|'srl'|'alt'|'v'|'vl'|'vr') { 
         System.out.print(" " + $att.text); 
-    } ASSIGN {
+           } ASSIGN {
         System.out.print("=");
     } (value = ('"LR"' | '"RL"') {
         System.out.print($value.text);
@@ -76,8 +79,68 @@ e
     }
     ;
 
-i
-    : IDENTITY { System.out.print("<i>"); } ASSIGN literal {
+*/
+
+e 
+    locals [
+        String trans = "";
+    ]
+    : ENTRY { 
+        System.out.print("<e"); 
+    } (LPAR (att = ('r' | 'lm' | 'a' | 'c' | 'i' | 'slr' | 'srl' | 'alt' | 'v' | 'vl' | 'vr' ) ASSIGN literal)* {
+        
+        System.out.print(" ");
+        System.out.print($att.text);
+        System.out.print("=");
+
+        if($att.text.equals("l")){
+
+            if($literal.text.equals("LR") || $literal.text.equals("RL")){
+                System.out.print($literal.text);
+            } else {
+                // Error.
+            }
+
+        } else {
+            System.out.print($literal.text);
+        }
+
+    } RPAR)? (i {
+        $trans += $i.trans;
+    } | p {
+        if(!$p.rAttr.equals("")){
+            System.out.print(" r=\"" + $p.rAttr + "\"");
+        }
+        $trans += $p.trans;
+    } | par {
+        $trans += $par.trans;
+    } | re {
+        $trans += $re.trans;
+    })+ END {
+        System.out.print(">");
+        System.out.print($trans);
+        System.out.print("</e>"); 
+    }
+    ;
+
+/*
+
+e
+    : ENTRY { System.out.print("<e"); } (p { 
+        System.out.print(" r=\"" + $p.rAttr + "\"");        
+        System.out.print(">");
+        System.out.print($p.trans);
+    } | i | p | par | re {
+        
+    })+ END {
+        System.out.print("</e>");
+    }
+    ;
+
+*/
+
+i returns [String trans = ""]
+    : IDENTITY { $trans += "<i>"; } ASSIGN literal {
         String result = $literal.text;
         result = result.replaceAll("\"", "");
         // TODO. Contemplar mas entidades html.
@@ -90,15 +153,21 @@ i
         result = result.replaceAll("\\{j\\}", "<j/>");
         result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
         result = result.replaceAll("[\\{\\}]", "");
-        System.out.print(result);
-    } SEMI { System.out.print("</i>"); }
+        $trans += result;
+    } SEMI { $trans += "</i>"; }
     ;
 
-p
-    : { System.out.print("<p><l>"); } l { System.out.print("</l>"); } '>' { System.out.print("<r>"); } r { System.out.print("</r>"); } SEMI { System.out.print("</p>"); }
+p returns [String trans = "", String rAttr = ""]
+    : { $trans += "<p>"; } l { $trans += $l.trans; } (op = ('<' | '>') { 
+        if($op.text.equals(">")){
+            $rAttr = "LR"; 
+        } else {
+            $rAttr = "RL";
+        }
+    })? r { $trans += $r.trans; } SEMI { $trans += "</p>"; }
     ;
 
-l
+l returns [String trans = ""]
     : literal {
         String result = $literal.text;
         result = result.replaceAll("\"", "");
@@ -112,11 +181,11 @@ l
         result = result.replaceAll("\\{j\\}", "<j/>");
         result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
         result = result.replaceAll("[\\{\\}]", "");
-        System.out.print(result);
+        $trans += "<l>" + result + "</l>";
     }
     ;
 
-r
+r returns [String trans = ""]
     : literal {
         String result = $literal.text;
         result = result.replaceAll("\"", "");
@@ -129,16 +198,16 @@ r
         result = result.replaceAll("\\{j\\}", "<j/>");
         result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
         result = result.replaceAll("[\\{\\}]", "");
-        System.out.print(result);
+        $trans += "<r>" + result + "</r>";
     }
     ;
 
-par
-    : PREF { System.out.print("<par"); } ASSIGN literal { System.out.print(" n=" + $literal.text); } SEMI { System.out.print("/>"); }
+par returns [String trans = ""]
+    : PREF { $trans += "<par"; } ASSIGN literal { $trans += " n=" + $literal.text; } SEMI { $trans += "/>"; }
     ;
 
-re
-    : RE { System.out.print("<re>"); } ASSIGN literal { System.out.print($literal.text.replaceAll("\"", "")); } SEMI { System.out.print("</re>"); }
+re returns [String trans = ""]
+    : RE { $trans += "<re>"; } ASSIGN literal { $trans += $literal.text.replaceAll("\"", ""); } SEMI { $trans += "</re>"; }
     ;
 
 // Literal.

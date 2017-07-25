@@ -1,4 +1,4 @@
-package org.apertium.transpiler.transfer;
+package org.apertium.transpiler.freya;
 
 import com.google.common.base.CaseFormat;
 import java.util.Stack;
@@ -10,7 +10,7 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author juanfran
  */
-public class TransferSaxHandler extends DefaultHandler {
+public class FreyaSaxHandler extends DefaultHandler {
 
     /* Traducciones parciales. */
     private final StringBuilder pTrans;
@@ -19,7 +19,7 @@ public class TransferSaxHandler extends DefaultHandler {
 
     private final Stack<String> stack;
 
-    public TransferSaxHandler() {
+    public FreyaSaxHandler() {
         pTrans = new StringBuilder();
         refId = "";
         condition = "";

@@ -1,4 +1,4 @@
-grammar Transfer;
+grammar Freya;
 
 /**
  * Syntactic specification.
