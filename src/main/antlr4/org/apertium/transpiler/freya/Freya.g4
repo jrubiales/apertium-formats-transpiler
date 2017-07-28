@@ -162,7 +162,7 @@ macroContent
     ;
 
 sentence
-    : CASE {
+    : CHOOSE {
         System.out.print("<choose>");
     } whenInstr+ otherwise? END {
         System.out.print("</choose>");
@@ -505,7 +505,7 @@ END                         : 'end' ;
 PATTERN                     : 'Pattern' ;
 TAGS                        : 'tags' ;
 
-// Tags Attributres
+// Attributres
 
 N                           : 'n' ;
 NPAR                        : 'npar' ;
@@ -517,9 +517,9 @@ QUEUE                       : 'queue' ;
 LINK_TO                     : 'link-to' ;
 RCOMMENT                    : 'comment' ;
 
-
 NAME                        : 'name' ;
 NAME_FROM                   : 'namefrom' ;
+CASE                        : 'case' ;
 
 // Condition.
 
@@ -551,7 +551,7 @@ CHUNK                       : 'Chunk' ;
 
 ASSIGN                      : '=' ;
 OUT                         : 'out' ;
-CASE                        : 'case' ;
+CHOOSE                      : 'choose' ;
 MODIFY_CASE                 : 'modifyCase' ;
 APPEND                      : 'append' ;
 REJECT_CURRENT_RULE         : 'rejectCurrentRule' ;
