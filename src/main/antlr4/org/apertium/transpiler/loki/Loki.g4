@@ -5,6 +5,12 @@ grammar Loki;
  */
 
 stat
+        
+    /* List of symbols defined within this block */
+    locals [
+	List<String> symbols = new ArrayList<String>()
+    ]
+    
     :
     {
         System.out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -29,7 +35,10 @@ sdefs
     ;
 
 sdef
-    : { System.out.print("<sdef n="); } literal { System.out.print($literal.text + " />");  } COMMA?
+    : { System.out.print("<sdef n=\""); } ID { 
+        $stat::symbols.add($ID.text);
+        System.out.print($ID.text + "\" />");  
+    } COMMA?
     ;
 
 pardefs
@@ -86,7 +95,7 @@ e
     } RPAR)? (i {
         $trans += $i.trans;
     } | p {
-        if(!$p.rAttr.equals("")){
+        if($p.rAttr != null && !$p.rAttr.equals("")){
             System.out.print(" r=\"" + $p.rAttr + "\"");
         }
         $trans += $p.trans;
@@ -129,6 +138,7 @@ p returns [String trans = "", String rAttr = ""]
     }) r { $trans += $r.trans; } SEMI { $trans += "</p>"; }
     ;
 
+/*
 l returns [String trans = ""]
     : literal {
         String result = $literal.text;
@@ -147,6 +157,9 @@ l returns [String trans = ""]
     }
     ;
 
+*/
+
+/*
 r returns [String trans = ""]
     : literal {
         String result = $literal.text;
@@ -162,6 +175,65 @@ r returns [String trans = ""]
         result = result.replaceAll("[\\{\\}]", "");
         $trans += "<r>" + result + "</r>";
     }
+    ;
+*/
+
+l returns [String trans = ""]
+    : { 
+        $trans += "<l>";
+    } strTagsElements {
+        $trans += $strTagsElements.trans;
+    } | (LPAR { $trans += "<g"; } (((INT COMMA) {
+        $trans += " i=\"" + $INT.text + "\"";
+    })? {
+        $trans += ">";
+    } strTagsElements {
+        $trans += $strTagsElements.trans;
+    }) RPAR {
+        $trans += "</g>";
+    })? { 
+        $trans += "</l>";
+    }
+    ;
+
+r returns [String trans = ""]
+    : { 
+        $trans += "<r>";
+    } strTagsElements {
+        $trans += $strTagsElements.trans;
+    } (LPAR { $trans += "<g"; } (((INT COMMA) {
+        $trans += " i=\"" + $INT.text + "\"";
+    })? {
+        $trans += ">";
+    } strTagsElements {
+        $trans += $strTagsElements.trans;
+    }) RPAR {
+        $trans += "</g>";
+    })? { 
+        $trans += "</r>";
+    }
+    ;
+
+// String tags elements
+strTagsElements returns [String trans = ""]
+    : literal {
+        if($literal.text.equals(" ")){
+            $trans += "<b/>";
+        } else {
+            $trans += $literal.text;
+        }
+    } | (CONCAT strTagsElements)?
+    /*| ID {        
+        if (!$stat::symbols.contains($ID.text)) {
+            System.err.println("Undefined variable: " + $ID.text);
+        } else {
+            $trans += "<s n=\"" + $ID.text + "\"/>";
+        }
+    } | JOIN {
+        $trans += "<j/>";
+    } | A_MARK {
+        $trans += "<a/>";
+    } | CONCAT*/
     ;
 
 par returns [String trans = ""]
@@ -193,6 +265,13 @@ PREF                        : 'par-ref' ;
 IDENTITY                    : 'identity';
 ENTRY                       : 'entry';
 RE                          : 're' ;
+
+JOIN                        : '_j';
+A_MARK                      : '_a';
+
+// Operators
+
+CONCAT                      : '+' ;
 
 // Tags Attributres
 
