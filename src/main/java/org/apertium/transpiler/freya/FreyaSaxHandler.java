@@ -37,7 +37,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             Attributes attributes) throws SAXException {
 
         if (localName.equals("transfer")) {
-            System.out.print("Transfer");
+            System.out.print("transfer");
             String def = attributes.getValue("default");
             if (def != null) {
                 System.out.print("(default=\"");
@@ -47,7 +47,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             System.out.println();
         } else if (localName.equals("def-cat")) {
             String n = attributes.getValue("n");
-            System.out.print("Catlex ");
+            System.out.print("catlex ");
             System.out.print(n);
             System.out.print(" = ");
         } else if (localName.equals("cat-item")) {
@@ -60,7 +60,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             pTrans.append(tags).append("\", ");
         } else if (localName.equals("def-attr")) {
             String n = attributes.getValue("n");
-            System.out.print("Attribute ");
+            System.out.print("attribute ");
             System.out.print(n);
             System.out.print(" = ");
         } else if (localName.equals("attr-item")) {
@@ -70,7 +70,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             }
         } else if (localName.equals("def-var")) {
             String n = attributes.getValue("n");
-            System.out.print("Var ");
+            System.out.print("var ");
             System.out.print(n);
             String v = attributes.getValue("v");
             if (v != null) {
@@ -81,7 +81,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             }
         } else if (localName.equals("def-list")) {
             String n = attributes.getValue("n");
-            System.out.print("List ");
+            System.out.print("list ");
             System.out.print(n);
             System.out.print(" = ");
         } else if (localName.equals("list-item")) {
@@ -90,13 +90,13 @@ public class FreyaSaxHandler extends DefaultHandler {
         } else if (localName.equals("def-macro")) {
             String n = attributes.getValue("n");
             String nPar = attributes.getValue("npar");
-            System.out.print("Macro ");
+            System.out.print("macro ");
             System.out.print(n);
             System.out.print("(npar=");
             System.out.print(nPar);
             System.out.print(")\n");
         } else if (localName.equals("rule")) {
-            System.out.print("Rule(");
+            System.out.print("rule(");
             String c = attributes.getValue("c");
             if (c != null) {
                 System.out.print("c=\"");
@@ -111,26 +111,32 @@ public class FreyaSaxHandler extends DefaultHandler {
             }
             System.out.print(")\n");
         } else if (localName.equals("pattern")) {
-            System.out.print("Pattern = ");
+            System.out.print("pattern = ");
         } else if (localName.equals("pattern-item")) {
             String n = attributes.getValue("n");
             pTrans.append("\"").append(n).append("\", ");
         } /* sentence (dtd) */ else if (localName.equals("choose")) {
-            System.out.print("case\n");
+            System.out.print("choose\n");
         } else if (localName.equals("when")) {
             System.out.print("when ");
         } else if (localName.equals("otherwise")) {
             System.out.println("otherwise ");
         } else if (localName.equals("and") || localName.equals("or")) {
             stack.push(localName);
-        } else if (localName.equals("equal")
-                || localName.equals("begins-with") || localName.equals("begins-with-list")
+        } else if (localName.equals("equal")){
+            String caseless = attributes.getValue("caseless");
+            if (caseless != null && caseless.equals("yes")) {
+                condition = "===";
+            } else {
+                condition = "==";
+            }
+        } else if (localName.equals("begins-with") || localName.equals("begins-with-list")
                 || localName.equals("ends-with") || localName.equals("ends-with-list")
                 || localName.equals("contains-substring") || localName.equals("in")) {
             String caseless = attributes.getValue("caseless");
             condition = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, localName.replaceAll("-", "_"));
             if (caseless != null && caseless.equals("yes")) {
-                condition += "Caseless";
+                condition += "caseless";
             }
         } else if (localName.equals("let")) {
             sentence = "=";
@@ -202,7 +208,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             System.out.print("lu\n");
         } else if (localName.equals("chunk")) {
 
-            System.out.print("Chunk");
+            System.out.print("chunk");
             String attName = attributes.getValue("name");
             String attNamefrom = attributes.getValue("namefrom");
             String attCase = attributes.getValue("case");
@@ -303,6 +309,7 @@ public class FreyaSaxHandler extends DefaultHandler {
 
             // Desapilar n elementos y generar traducción.
             boolean found = false;
+            pTrans.append("(");
             while (!stack.empty() && !found) {
                 String e = stack.pop();
                 if (!e.equals(localName)) {
@@ -311,15 +318,16 @@ public class FreyaSaxHandler extends DefaultHandler {
                     found = true;
                 }
             }
-
+            
             // Alamacenar la traducción parcial en la pila.
-            stack.push(pTrans.toString().replaceAll(" " + localName + " $", ""));
+            stack.push(pTrans.toString().replaceAll(" " + localName + " $", ")"));
+            
             pTrans.setLength(0);
 
         } else if (localName.equals("not")) {
-//            String c = stack.pop();
-//            pTrans.append("not ").append(c);
-//            stack.push(pTrans.toString());
+            String c = stack.pop();
+            pTrans.append("not (").append(c).append(")");
+            stack.push(pTrans.toString());
             pTrans.setLength(0);
         } else if (localName.equals("equal")
                 || localName.equals("begins-with") || localName.equals("begins-with-list")
@@ -331,7 +339,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             String v1 = stack.pop();
 
             // Generar traducción añadiendo el operador condicional.
-            pTrans.append(v1).append(" ").append(condition).append(" ").append(v2);
+            pTrans.append("(").append(v1).append(" ").append(condition).append(" ").append(v2).append(")");
 
             // Alamacenar la traducción parcial en la pila.
             stack.push(pTrans.toString());

@@ -2,10 +2,10 @@ alphabet = "·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìí
 symbols = "n", "np", "sp", "adj", "f", "m", "mf", "sg", "pl", "ND", "GD", "det", "vbser";
 section main(type ="standard")
 	entry
-            "be{vbser}" "ser{vbser}";
+            "be{vbser}" <> "ser{vbser}";
 	end /* end entry */
 	entry
-            "beautiful{adj}" "bonic{adj}";
+            "beautiful{adj}" <> "bonic{adj}";
 	end /* end entry */
 	entry
             "dog{n}" > "gos{n}{GD}";

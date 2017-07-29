@@ -59,28 +59,6 @@ section
     ;
 
 
-/*
-
-e
-    : ENTRY { 
-        System.out.print("<e"); 
-    } (LPAR att = ('r'|'lm'|'a'|'c'|'i'|'slr'|'srl'|'alt'|'v'|'vl'|'vr') { 
-        System.out.print(" " + $att.text); 
-           } ASSIGN {
-        System.out.print("=");
-    } (value = ('"LR"' | '"RL"') {
-        System.out.print($value.text);
-    } | literal {
-        System.out.print($literal.text);
-    }) RPAR)? { 
-        System.out.print(">"); 
-    } (i | p | par | re)+ END { 
-        System.out.print("</e>"); 
-    }
-    ;
-
-*/
-
 e 
     locals [
         String trans = "";
@@ -123,22 +101,6 @@ e
     }
     ;
 
-/*
-
-e
-    : ENTRY { System.out.print("<e"); } (p { 
-        System.out.print(" r=\"" + $p.rAttr + "\"");        
-        System.out.print(">");
-        System.out.print($p.trans);
-    } | i | p | par | re {
-        
-    })+ END {
-        System.out.print("</e>");
-    }
-    ;
-
-*/
-
 i returns [String trans = ""]
     : IDENTITY { $trans += "<i>"; } ASSIGN literal {
         String result = $literal.text;
@@ -158,13 +120,13 @@ i returns [String trans = ""]
     ;
 
 p returns [String trans = "", String rAttr = ""]
-    : { $trans += "<p>"; } l { $trans += $l.trans; } (op = ('<' | '>') { 
+    : { $trans += "<p>"; } l { $trans += $l.trans; } (op = ('<' | '>' | '<>') { 
         if($op.text.equals(">")){
             $rAttr = "LR"; 
-        } else {
+        } else if($op.text.equals("<")) {
             $rAttr = "RL";
         }
-    })? r { $trans += $r.trans; } SEMI { $trans += "</p>"; }
+    }) r { $trans += $r.trans; } SEMI { $trans += "</p>"; }
     ;
 
 l returns [String trans = ""]

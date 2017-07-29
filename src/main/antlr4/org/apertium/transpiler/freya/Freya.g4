@@ -158,10 +158,10 @@ macroParams
     ;
 
 macroContent
-    : sentence+
+    : instr+
     ;
 
-sentence
+instr
     : CHOOSE {
         System.out.print("<choose>");
     } whenInstr+ otherwise? END {
@@ -257,7 +257,7 @@ patternItem
 action
     : {
         System.out.print("<action>");
-    } sentence* {
+    } instr* {
         System.out.print("</action>");
     }
     ;
@@ -394,7 +394,7 @@ whenInstr
     } expr {
         System.out.print($expr.trans);
         System.out.print("</test>");
-    } THEN sentence+ END {
+    } THEN instr+ END {
         System.out.print("</when>");
     }
     ;
@@ -403,7 +403,7 @@ whenInstr
 otherwise
     : OTHERWISE {
         System.out.print("<otherwise>");
-    } sentence+ END {
+    } instr+ END {
         System.out.print("</otherwise>");
     }
     ;
@@ -412,37 +412,74 @@ otherwise
 // Es necesario devolver un string para generar la traducción correctamente.
 // Ej. value equal value => <equal><value><value></equal>
 expr returns [String trans = ""]
+    : e1 = simpleExpr compop e2 = simpleExpr {
+        $trans += "<" + $compop.tagName + ">" + $e1.trans + $e2.trans + "</" + $compop.tagName + ">";
+    } | simpleExpr {
+        $trans += $simpleExpr.trans;
+    }
+    ;
 
-    locals [
-        String startTag = "",
-        String endTag = "",
-        String startNot = "",
-        String endNot = "",
-    ]
+// Simple expression.
+simpleExpr returns [String trans = ""]
+    : se1 = simpleExpr OR term {
+        $trans += "<or>" + $se1.trans + $term.trans + "</or>";
+    } | term {
+        $trans += $term.trans;
+    }
+    ;
 
-    : v1 = value (NOT { 
-        $startNot="<not>"; $endNot = "</not>"; 
-    })? (EQUAL { 
-        $startTag = "<equal>"; $endTag = "</equal>"; 
-    } | EQUAL_CASELESS { 
-        $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; 
-    }) v2 = value {
-        $trans = $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot ;
+// Term.
+term returns [String trans = ""]
+    : t1 = term AND factor {
+        $trans += "<and>" + $t1.trans + $factor.trans + "</and>";
+    } | factor {
+        $trans += $factor.trans;
     }
-    | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (EQUAL { $startTag = "<equal>"; $endTag = "</equal>"; } | EQUAL_CASELESS { $startTag = "<equal caseless=\"yes\">"; $endTag = "</equal>"; }) v2 = value c = (AND|OR) expr {
-        $trans = "<" + $c.text + ">" + $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
+    ;
+
+// Factor.
+factor returns [String trans = ""]
+    : value {
+        $trans += $value.trans;
+    } | LPAR expr RPAR {
+        $trans += $expr.trans;
+    } | ID {
+        // Var or list.
+        $trans += "<var n=\"" + $ID.text + "\"/>";
+    } | NOT f1 = factor {
+        $trans += "<not>" + $f1.trans + "</not>";
     }
-    | value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID {
-        $trans = $startNot + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + $endNot;
+    ;
+
+// Relational operators
+relop returns [String tagName = ""]
+    : EQUAL {
+        $tagName += "equal";
+    } | EQUAL_CASELESS {
+        $tagName += "equalCaseless";
     }
-    | value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (IN { $startTag = "<in>"; $endTag = "</in>"; } | IN_CASELESS { $startTag = "<in caseless=\"yes\">"; $endTag = "</in>"; } | BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }) ID c = (AND|OR) expr {
-        $trans = "<" + $c.text + ">" + $startNot + $startTag + $value.trans + "<var n=\"" + $ID.text + "\"/>" + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
-    }
-    | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }| CONTAINS_SUBSTR { $startTag = "<contains-substring>"; $endTag = "</contains-substring>"; } | CONTAINS_SUBSTR_CASELESS { $startTag = "<contains-substring caseless=\"yes\">"; $endTag = "</contains-substring>"; }) v2 = value {
-        $trans = $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot;
-    }
-    | v1 = value (NOT { $startNot="<not>"; $endNot = "</not>"; })? (BEGINS_WITH { $startTag = "<begins-with>"; $endTag = "</begins-with>"; } | BEGINS_WITH_CASELESS { $startTag = "<begins-with caseless=\"yes\">"; $endTag = "</begins-with>"; } | ENDS_WITH { $startTag = "<ends-with>"; $endTag = "</ends-with>"; } | ENDS_WITH_CASELESS { $startTag = "<ends-with caseless=\"yes\">"; $endTag = "</ends-with>"; }| CONTAINS_SUBSTR { $startTag = "<contains-substring>"; $endTag = "</contains-substring>"; } | CONTAINS_SUBSTR_CASELESS { $startTag = "<contains-substring caseless=\"yes\">"; $endTag = "</contains-substring>"; }) v2 = value c = (AND|OR) expr{
-        $trans = "<" + $c.text + ">" + $startNot + $startTag + $v1.trans + $v2.trans + $endTag + $endNot + $expr.trans + "</" + $c.text + ">";
+    ;
+
+// Comparison operators
+compop returns [String tagName = ""]
+    : relop {
+        $tagName = $relop.tagName;
+    } | BEGINS_WITH {
+        $tagName = $BEGINS_WITH.text;
+    } | BEGINS_WITH_CASELESS {
+        $tagName = $BEGINS_WITH_CASELESS.text;
+    } | ENDS_WITH {
+        $tagName = $ENDS_WITH.text;
+    } | ENDS_WITH_CASELESS {
+        $tagName = $ENDS_WITH_CASELESS.text;
+    } | CONTAINS_SUBSTR {
+        $tagName = $CONTAINS_SUBSTR.text;
+    } | CONTAINS_SUBSTR_CASELESS {
+        $tagName = $CONTAINS_SUBSTR_CASELESS.text;
+    } | IN {
+        $tagName = $IN.text;
+    } | IN_CASELESS {
+        $tagName = $IN_CASELESS.text;
     }
     ;
 
@@ -462,7 +499,7 @@ clipParams returns [String trans = ""]
     : POS ASSIGN INT COMMA SIDE ASSIGN side COMMA PART ASSIGN literal {
         $trans += "pos=\"" + $INT.text + "\" side=" + $side.text + " part=" + $literal.text;
     } (COMMA clipParam = (QUEUE|LINK_TO|C) ASSIGN literal{
-        $trans += $clipParam.text + "=" + $literal.text;
+        $trans += " " + $clipParam.text + "=" + $literal.text;
     })?
     ;
 
@@ -488,6 +525,7 @@ litTag returns [String trans = ""]
         $trans = "<lit-tag v=" + $literal.text + "/>";
     }
     ;
+    
 
 /**
  * Lexical specification.
@@ -495,14 +533,14 @@ litTag returns [String trans = ""]
 
 // Keywords.
 
-TRANSFER                    : 'Transfer' ;
-CATLEX                      : 'Catlex' ;
-ATTR                        : 'Attribute' ;
-LIST                        : 'List' ;
-MACRO                       : 'Macro' ;
-RULE                        : 'Rule' ;
+TRANSFER                    : 'transfer' ;
+CATLEX                      : 'catlex' ;
+ATTR                        : 'attribute' ;
+LIST                        : 'list' ;
+MACRO                       : 'macro' ;
+RULE                        : 'rule' ;
 END                         : 'end' ;
-PATTERN                     : 'Pattern' ;
+PATTERN                     : 'pattern' ;
 TAGS                        : 'tags' ;
 
 // Attributres
@@ -521,13 +559,13 @@ NAME                        : 'name' ;
 NAME_FROM                   : 'namefrom' ;
 CASE                        : 'case' ;
 
-// Condition.
-
 AND                         : 'and' ;
 OR                          : 'or' ;
 NOT                         : 'not' ;
-EQUAL                       : 'equal' ;
-EQUAL_CASELESS              : 'equalCaseless' ;
+
+EQUAL                       : '==' ;
+EQUAL_CASELESS              : '===' ;
+
 BEGINS_WITH                 : 'beginsWith' ;
 BEGINS_WITH_CASELESS        : 'beginsWithCaseless' ;
 ENDS_WITH                   : 'endsWith' ;
@@ -539,13 +577,13 @@ IN_CASELESS                 : 'inCaseless' ;
 
 // Container, value, stringvalue
 
-VAR                         : 'Var' ;
+VAR                         : 'var' ;
 CLIP                        : 'clip' ;
 LTAG                        : 'litTag' ;
 CONCAT                      : 'concat' ;
 LU                          : 'lu' ;
 MLU                         : 'mlu' ;
-CHUNK                       : 'Chunk' ;
+CHUNK                       : 'chunk' ;
 
 // sentence
 
