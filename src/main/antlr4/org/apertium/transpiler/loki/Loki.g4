@@ -111,21 +111,26 @@ e
     ;
 
 i returns [String trans = ""]
-    : IDENTITY { $trans += "<i>"; } ASSIGN literal {
-        String result = $literal.text;
-        result = result.replaceAll("\"", "");
-        // TODO. Contemplar mas entidades html.
-        result = result.replaceAll("&", "&amp;");
-        // TODO. Solucionar problema \{ ([\w\{\} ]*)\}
-        result = result.replaceAll("\\{ ([\\w\\{\\} ]*)\\}", "<g>$0</g>");
-        result = result.replaceAll("\\{a\\}", "<a/>");
-        result = result.replaceAll(" ", "<b/>");
-        result = result.replaceAll("\\{j\\}", "<j/>");
-        result = result.replaceAll("\\{j\\}", "<j/>");
-        result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
-        result = result.replaceAll("[\\{\\}]", "");
-        $trans += result;
-    } SEMI { $trans += "</i>"; }
+    : IDENTITY { $trans += "<i>"; } ASSIGN (literal {
+               
+        if($literal.text.equals(" ")){
+            $trans += "<b/>";
+        } else {
+            String result = $literal.text;
+            result = result.replaceAll("\"", "");
+            result = result.replaceAll(" ", "<b/>");
+            $trans += result;
+        }
+
+    } | ID {
+        $trans += "<s n=\"" + $ID.text + "\"/>";
+    } | g {
+        $trans += $g.trans;
+    } | j {
+        $trans += $j.trans;
+    } | a {
+        $trans += $a.trans;
+    })* SEMI { $trans += "</i>"; }
     ;
 
 p returns [String trans = "", String rAttr = ""]
@@ -138,60 +143,32 @@ p returns [String trans = "", String rAttr = ""]
     }) r { $trans += $r.trans; } SEMI { $trans += "</p>"; }
     ;
 
-/*
-l returns [String trans = ""]
-    : literal {
-        String result = $literal.text;
-        result = result.replaceAll("\"", "");
-        // TODO. Contemplar mas entidades html.
-        result = result.replaceAll("&", "&amp;");
-        // TODO. Solucionar problema \{ ([\w\{\} ]*)\}
-        result = result.replaceAll("\\{ ([\\w\\{\\} ]*)\\}", "<g>$0</g>");
-        result = result.replaceAll("\\{a\\}", "<a/>");
-        result = result.replaceAll(" ", "<b/>");
-        result = result.replaceAll("\\{j\\}", "<j/>");
-        result = result.replaceAll("\\{j\\}", "<j/>");
-        result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
-        result = result.replaceAll("[\\{\\}]", "");
-        $trans += "<l>" + result + "</l>";
-    }
-    ;
-
-*/
-
-/*
-r returns [String trans = ""]
-    : literal {
-        String result = $literal.text;
-        result = result.replaceAll("\"", "");
-        result = result.replaceAll("&", "&amp;");
-        // TODO. Solucionar problema \{ ([\w\{\} ]*)\}
-        result = result.replaceAll("\\{ ([\\w\\{\\} ]*)\\}", "<g>$0</g>");
-        result = result.replaceAll("\\{a\\}", "<a/>");
-        result = result.replaceAll(" ", "<b/>");
-        result = result.replaceAll("\\{j\\}", "<j/>");
-        result = result.replaceAll("\\{j\\}", "<j/>");
-        result = result.replaceAll("\\{(\\w*)\\}", "<s n=\"$0\" />");
-        result = result.replaceAll("[\\{\\}]", "");
-        $trans += "<r>" + result + "</r>";
-    }
-    ;
-*/
-
 l returns [String trans = ""]
     : { 
         $trans += "<l>";
-    } strTagsElements {
-        $trans += $strTagsElements.trans;
-    } | (LPAR { $trans += "<g"; } (((INT COMMA) {
-        $trans += " i=\"" + $INT.text + "\"";
-    })? {
-        $trans += ">";
-    } strTagsElements {
-        $trans += $strTagsElements.trans;
-    }) RPAR {
-        $trans += "</g>";
-    })? { 
+    } (literal {
+        
+        if($literal.text.equals(" ")){
+            $trans += "<b/>";
+        } else {
+            String result = $literal.text;
+            result = result.replaceAll("\"", "");
+            result = result.replaceAll(" ", "<b/>");
+            $trans += result;
+        }
+
+    } | a {
+        $trans += $a.trans;
+    } | g {
+        $trans += $g.trans;
+    } | j {
+        $trans += $j.trans;
+    } | ID {
+        if(!$stat::symbols.contains($ID.text)){
+            System.err.println("Undefined symbol: " + $ID.text);
+        }
+        $trans += "<s n=\"" + $ID.text + "\"/>";
+    })* {
         $trans += "</l>";
     }
     ;
@@ -199,41 +176,71 @@ l returns [String trans = ""]
 r returns [String trans = ""]
     : { 
         $trans += "<r>";
-    } strTagsElements {
-        $trans += $strTagsElements.trans;
-    } (LPAR { $trans += "<g"; } (((INT COMMA) {
-        $trans += " i=\"" + $INT.text + "\"";
-    })? {
-        $trans += ">";
-    } strTagsElements {
-        $trans += $strTagsElements.trans;
-    }) RPAR {
-        $trans += "</g>";
-    })? { 
+    } (literal {
+        
+        if($literal.text.equals(" ")){
+            $trans += "<b/>";
+        } else {
+            String result = $literal.text;
+            result = result.replaceAll("\"", "");
+            result = result.replaceAll(" ", "<b/>");
+            $trans += result;
+        }
+
+    } | a {
+        $trans += $a.trans;
+    } | g {
+        $trans += $g.trans;
+    } | j {
+        $trans += $j.trans;
+    } | ID {
+        if(!$stat::symbols.contains($ID.text)){
+            System.err.println("Undefined symbol: " + $ID.text);
+        }
+        $trans += "<s n=\"" + $ID.text + "\"/>";
+    })* {
         $trans += "</r>";
     }
     ;
 
-// String tags elements
-strTagsElements returns [String trans = ""]
-    : literal {
+a returns [String trans = ""]
+    : A_MARK {
+        $trans += "<a/>";
+    }
+    ;
+
+j returns [String trans = ""]
+    : JOIN {
+        $trans += "<j/>";
+    }
+    ;
+
+g returns [String trans = ""]
+    : LPAR {
+        $trans += "<g>";
+    } (literal {
+        
         if($literal.text.equals(" ")){
             $trans += "<b/>";
         } else {
-            $trans += $literal.text;
+            String result = $literal.text;
+            result = result.replaceAll("\"", "");
+            result = result.replaceAll(" ", "<b/>");
+            $trans += result;
         }
-    } | (CONCAT strTagsElements)?
-    /*| ID {        
-        if (!$stat::symbols.contains($ID.text)) {
-            System.err.println("Undefined variable: " + $ID.text);
-        } else {
-            $trans += "<s n=\"" + $ID.text + "\"/>";
+
+    } | a {
+        $trans += $a.trans;
+    } | j {
+        $trans += $j.trans;
+    } | ID {
+        if(!$stat::symbols.contains($ID.text)){
+            System.err.println("Undefined symbol: " + $ID.text);
         }
-    } | JOIN {
-        $trans += "<j/>";
-    } | A_MARK {
-        $trans += "<a/>";
-    } | CONCAT*/
+        $trans += "<s n=\"" + $ID.text + "\"/>";
+    })* RPAR {
+        $trans += "</g>";
+    }
     ;
 
 par returns [String trans = ""]

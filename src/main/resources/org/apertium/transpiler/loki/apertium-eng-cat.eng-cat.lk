@@ -2,6 +2,6 @@ alphabet = "·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìí
 symbols = nn, np, sp, adj, f, m, mf, sg, pl, ND, GD, det, vbser;
 section main(type ="standard")
 	entry
-            "be" + "jj" > "bb";
+            "be" > "ser"; 
 	end /* end entry */
 end /* end section */
