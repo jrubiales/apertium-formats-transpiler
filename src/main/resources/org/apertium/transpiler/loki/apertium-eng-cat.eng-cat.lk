@@ -1,5 +1,5 @@
 alphabet = "·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" ;
-symbols = n, np, sp, adj, f, m, mf, sg, pl, ND, GD, det, def;
+symbols = n, np, sp, adj, f, m, mf, sg, pl, ND, GD, det, def, vbser;
 section main(type ="standard")
     entry
             "be" vbser <> "ser" vbser ;
