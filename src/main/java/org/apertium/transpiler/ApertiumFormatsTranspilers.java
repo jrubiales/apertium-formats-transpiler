@@ -2,6 +2,8 @@ package org.apertium.transpiler;
 
 import java.io.IOException;
 import org.apertium.transpiler.freya.Freya2XML;
+import org.apertium.transpiler.freya.Symbol;
+import org.apertium.transpiler.freya.Type;
 import org.apertium.transpiler.freya.XML2Freya;
 import org.apertium.transpiler.loki.Loki2XML;
 import org.apertium.transpiler.loki.XML2Loki;
@@ -35,7 +37,7 @@ public class ApertiumFormatsTranspilers {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-                
+        
         ApertiumFormatsTranspilers app = new ApertiumFormatsTranspilers();
         
         if (args.length == 0) {

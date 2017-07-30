@@ -5,10 +5,28 @@ grammar Freya;
  */
 
 stat
+
+    /* List of symbols defined */
+    locals [
+	List<Symbol> symbols = new ArrayList<Symbol>(),
+        List<String> errs = new ArrayList<String>()
+    ]
+
     :
     {
         System.out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    } transfer EOF
+    } transfer EOF {
+        if($errs.size() > 0){
+            System.out.println("\n");
+            System.out.println("#########################");
+            System.out.println("Detected errors:");
+            System.out.println("----------------");
+            $errs.forEach((e) -> {
+                System.err.println(e);
+            });
+            System.out.println("#########################");
+        }
+    }
     ;
 
 // Root element containing the whole structural transfer rule file.
@@ -46,7 +64,14 @@ defCat
     : CATLEX {
         System.out.print("<def-cat ");
     } ID {
+        
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::symbols.add(new Symbol($ID.text, Type.CATLEX));
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print("n=\"" + $ID.text + "\">");
+
     } ASSIGN catitem+ SEMI {
         System.out.print("</def-cat>");
     }
@@ -77,7 +102,14 @@ defAttr
     : ATTR {
         System.out.print("<def-attr ");
     } ID {
+        
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::symbols.add(new Symbol($ID.text, Type.ATTR));
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print("n=\"" + $ID.text + "\">");
+
     } ASSIGN attrItem+ SEMI {
         System.out.print("</def-attr>");
     }
@@ -101,9 +133,23 @@ defVar
     : VAR ({
         System.out.print("<def-var ");
     }(ID {
+        
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::symbols.add(new Symbol($ID.text, Type.VAR));
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print("n=\"" + $ID.text + "\"");
+
     } | ID ASSIGN {
+        
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::symbols.add(new Symbol($ID.text, Type.VAR));
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print("n=\"" + $ID.text + "\"");
+        
     } literal {
         System.out.print(" v=" + $literal.text + "");
     }) COMMA?)+ SEMI { System.out.print("/>"); }
@@ -121,7 +167,14 @@ defList
     : LIST {
         System.out.print("<def-list ");
     } ID {
+
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::symbols.add(new Symbol($ID.text, Type.LIST));
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print("n=\"" + $ID.text + "\">");
+        
     } ASSIGN listItem+ SEMI {
         System.out.print("</def-list>");
     }
@@ -141,7 +194,14 @@ defMacro
     : MACRO {
         System.out.print("<def-macro ");
     } ID {
+
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::symbols.add(new Symbol($ID.text, Type.MACRO));
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print("n=\"" + $ID.text + "\" ");
+
     } LPAR macroParams RPAR {
         System.out.print(">");
     }  macroContent END {
@@ -175,7 +235,12 @@ instr
         System.out.print("</let>");
     }
     | ID {
+        
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        }    
         System.out.print("<call-macro n=\"" + $ID.text + "\">");
+        
     } LPAR callMacroParams RPAR SEMI {
         System.out.print("</call-macro>");
     }
@@ -185,7 +250,12 @@ instr
         System.out.print("</modify-case>");
     }
     | ID APPEND {
+
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print("<append n=\"" + $ID.text + "\">");
+        
     } (value { System.out.print($value.trans); } APPEND?)+ SEMI {
         System.out.print("</append>");
     }
@@ -201,7 +271,12 @@ instr
     } | chunk {
         System.out.print($chunk.trans);
     } | ID {
+
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        } 
         System.out.print("<var n=\"" + $ID.text + "\"/>");
+
     })+ END {
         System.out.print("</out>");
     }
@@ -248,8 +323,11 @@ pattern
 
 // Pattern item.
 patternItem
-    : literal {
-        System.out.print("<pattern-item n=" + $literal.text + " />");
+    : ID {
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        }
+        System.out.print("<pattern-item n=\"" + $ID.text + "\" />");
     } COMMA?
     ;
 
@@ -264,6 +342,9 @@ action
 
 container
     : ID {
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        } 
         System.out.print("<var n=\"" + $ID.text + "\" />");
     }
     | clip {
@@ -281,6 +362,9 @@ value returns [String trans = ""]
     } | litTag {
         $trans += $litTag.trans;
     } | ID {
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        }
         $trans += "<var n=\"" + $ID.text + "\" />";
     } | concat {
         $trans += $concat.trans;
@@ -299,6 +383,9 @@ stringValue
     } | literal {
         System.out.print("<lit v=" + $literal.text + "/>");
     } | ID {
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print("<var n=" + $ID.text + "/>");
     } )
     ;
@@ -347,6 +434,11 @@ chunk returns [String trans = ""]
     : CHUNK {
         $trans += "<chunk";
     } (ID {
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::symbols.add(new Symbol($ID.text, Type.CHUNK));
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         $trans += " name=\"" + $ID.text + "\"";
     })? (LPAR chunkParams* {
         $trans += $chunkParams.trans;
@@ -361,6 +453,9 @@ chunk returns [String trans = ""]
     } | b {
         $trans += $b.trans;
     } | ID {
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        }
         $trans += "<var n=\"" + $ID.text + "\"/>";
     })+ END {
         $trans += "</chunk>";
@@ -413,7 +508,13 @@ otherwise
 // Ej. value equal value => <equal><value><value></equal>
 expr returns [String trans = ""]
     : e1 = simpleExpr compop e2 = simpleExpr {
-        $trans += "<" + $compop.tagName + ">" + $e1.trans + $e2.trans + "</" + $compop.tagName + ">";
+
+        $trans += "<" + $compop.tagName;    
+        if($compop.caseless){
+            $trans += " caseless=\"yes\"";
+        }
+        $trans += ">" + $e1.trans + $e2.trans + "</" + $compop.tagName + ">";
+    
     } | simpleExpr {
         $trans += $simpleExpr.trans;
     }
@@ -439,47 +540,66 @@ term returns [String trans = ""]
 
 // Factor.
 factor returns [String trans = ""]
-    : value {
-        $trans += $value.trans;
+    : ID {
+        
+        Symbol searchSymbol = new Symbol($ID.text);
+        if(!$stat::symbols.contains(searchSymbol)){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        } else {
+            Symbol s = searchSymbol.search($stat::symbols);
+            // Var or list.
+            if(s.getType() == Type.VAR){
+                $trans += "<var";
+            } else if(s.getType() == Type.LIST){
+                $trans += "<list";
+            }
+            $trans += " n=\"" + $ID.text + "\"/>";
+        }
+        
     } | LPAR expr RPAR {
         $trans += $expr.trans;
-    } | ID {
-        // Var or list.
-        $trans += "<var n=\"" + $ID.text + "\"/>";
     } | NOT f1 = factor {
         $trans += "<not>" + $f1.trans + "</not>";
+    } | value {
+        $trans += $value.trans;
     }
     ;
 
 // Relational operators
-relop returns [String tagName = ""]
+relop returns [String tagName = "", boolean caseless = false]
     : EQUAL {
         $tagName += "equal";
     } | EQUAL_CASELESS {
-        $tagName += "equalCaseless";
+        $tagName += "equal";
+        $caseless = true;
     }
     ;
 
 // Comparison operators
-compop returns [String tagName = ""]
+compop returns [String tagName = "", boolean caseless = false]
     : relop {
         $tagName = $relop.tagName;
+        $caseless = $relop.caseless;
     } | BEGINS_WITH {
-        $tagName = $BEGINS_WITH.text;
+        $tagName = "begins-with";
     } | BEGINS_WITH_CASELESS {
-        $tagName = $BEGINS_WITH_CASELESS.text;
+        $tagName = "begins-with";
+        $caseless = true;
     } | ENDS_WITH {
-        $tagName = $ENDS_WITH.text;
+        $tagName = "ends-with";
     } | ENDS_WITH_CASELESS {
-        $tagName = $ENDS_WITH_CASELESS.text;
+        $tagName = "ends-with";
+        $caseless = true;
     } | CONTAINS_SUBSTR {
-        $tagName = $CONTAINS_SUBSTR.text;
+        $tagName = "contains-substring";
     } | CONTAINS_SUBSTR_CASELESS {
-        $tagName = $CONTAINS_SUBSTR_CASELESS.text;
+        $tagName = "contains-substring";
+        $caseless = true;
     } | IN {
-        $tagName = $IN.text;
+        $tagName = "in";
     } | IN_CASELESS {
-        $tagName = $IN_CASELESS.text;
+        $tagName = "in";
+        $caseless = true;
     }
     ;
 
@@ -496,9 +616,20 @@ clip returns [String trans = ""]
 
 // Clip function params.
 clipParams returns [String trans = ""]
-    : POS ASSIGN INT COMMA SIDE ASSIGN side COMMA PART ASSIGN literal {
-        $trans += "pos=\"" + $INT.text + "\" side=" + $side.text + " part=" + $literal.text;
-    } (COMMA clipParam = (QUEUE|LINK_TO|C) ASSIGN literal{
+    : POS ASSIGN INT {
+        $trans += "pos=\"" + $INT.text + "\"";
+    } COMMA SIDE ASSIGN side {
+        $trans += " side=" + $side.text + "";
+    } COMMA PART ASSIGN {
+        $trans += " part=";
+    } (ID {    
+        if(!$stat::symbols.contains(new Symbol($ID.text))){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        }
+        $trans += "\"" + $ID.text + "\"";
+    } | part = ('"lem"' | '"lemh"' | '"lemq"' | '"whole"' ){                
+        $trans += $part.text;
+    }) (COMMA clipParam = (QUEUE|LINK_TO|C) ASSIGN literal{
         $trans += " " + $clipParam.text + "=" + $literal.text;
     })?
     ;

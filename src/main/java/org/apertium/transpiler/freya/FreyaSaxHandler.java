@@ -114,7 +114,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             System.out.print("pattern = ");
         } else if (localName.equals("pattern-item")) {
             String n = attributes.getValue("n");
-            pTrans.append("\"").append(n).append("\", ");
+            pTrans.append("").append(n).append(", ");
         } /* sentence (dtd) */ else if (localName.equals("choose")) {
             System.out.print("choose\n");
         } else if (localName.equals("when")) {
@@ -162,8 +162,14 @@ public class FreyaSaxHandler extends DefaultHandler {
             String part = attributes.getValue("part");
 
             pTrans.append("clip(pos=").append(pos)
-                    .append(", side=\"").append(side).append("\"")
-                    .append(", part=\"").append(part).append("\"");
+                    .append(", side=\"").append(side).append("\"");
+                    
+            if(part.equals("lem") || part.equals("lemh") || part.equals("lemq") || part.equals("whole")){
+                pTrans.append(", part=\"").append(part).append("\"");
+            } else {
+                pTrans.append(", part=").append(part).append("");
+            }
+            
             String queue = attributes.getValue("queue");
             if (queue != null) {
                 pTrans.append(", queue=\"").append(queue).append("\"");
