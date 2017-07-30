@@ -8,7 +8,8 @@ stat
         
     /* List of symbols defined within this block */
     locals [
-	List<String> symbols = new ArrayList<String>()
+	List<String> symbols = new ArrayList<String>(),
+        List<String> errs = new ArrayList<String>()
     ]
     
     :
@@ -17,7 +18,18 @@ stat
         System.out.print("<dictionary>");
     } alphabet? sdefs? pardefs? section+ {
         System.out.print("</dictionary>");
-    } EOF
+    } EOF {
+        if($errs.size() > 0){
+            System.out.println("\n");
+            System.out.println("#########################");
+            System.out.println("Detected errors:");
+            System.out.println("----------------");
+            $errs.forEach((e) -> {
+                System.err.println(e);
+            });
+            System.out.println("#########################");
+        }
+    }
     ;
 
 alphabet
@@ -36,7 +48,12 @@ sdefs
 
 sdef
     : { System.out.print("<sdef n=\""); } ID { 
-        $stat::symbols.add($ID.text);
+        if(!$stat::symbols.contains($ID.text)){
+            $stat::symbols.add($ID.text);
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+            // System.err.println("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print($ID.text + "\" />");  
     } COMMA?
     ;
@@ -165,7 +182,8 @@ l returns [String trans = ""]
         $trans += $j.trans;
     } | ID {
         if(!$stat::symbols.contains($ID.text)){
-            System.err.println("Undefined symbol: " + $ID.text);
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+            // System.err.println("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
         }
         $trans += "<s n=\"" + $ID.text + "\"/>";
     })* {
@@ -195,7 +213,8 @@ r returns [String trans = ""]
         $trans += $j.trans;
     } | ID {
         if(!$stat::symbols.contains($ID.text)){
-            System.err.println("Undefined symbol: " + $ID.text);
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+            // System.err.println("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
         }
         $trans += "<s n=\"" + $ID.text + "\"/>";
     })* {
@@ -235,7 +254,8 @@ g returns [String trans = ""]
         $trans += $j.trans;
     } | ID {
         if(!$stat::symbols.contains($ID.text)){
-            System.err.println("Undefined symbol: " + $ID.text);
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+            // System.err.println("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
         }
         $trans += "<s n=\"" + $ID.text + "\"/>";
     })* RPAR {
@@ -279,11 +299,6 @@ A_MARK                      : '_a';
 // Operators
 
 CONCAT                      : '+' ;
-
-// Tags Attributres
-
-N                           : 'n' ;
-C                           : 'c' ;
 
 // Separators.
 

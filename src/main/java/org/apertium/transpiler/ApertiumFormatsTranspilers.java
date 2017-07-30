@@ -35,7 +35,7 @@ public class ApertiumFormatsTranspilers {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+                
         ApertiumFormatsTranspilers app = new ApertiumFormatsTranspilers();
         
         if (args.length == 0) {
