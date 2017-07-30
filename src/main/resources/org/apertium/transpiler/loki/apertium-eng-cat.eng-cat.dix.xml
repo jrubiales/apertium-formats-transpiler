@@ -1,24 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dictionary>
-    <alphabet>·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</alphabet>
+<?xml version="1.0" encoding="UTF-8"?><dictionary>
+    <alphabet>"·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"</alphabet>
     <sdefs>
-        <sdef n="n" /> 
-        <sdef n="np" /> 
-        <sdef n="sp" /> 
-        <sdef n="adj" /> 
-        <sdef n="f" /> 
-        <sdef n="m" /> 
-        <sdef n="mf" /> 
-        <sdef n="sg" /> 
+        <sdef n="n" />
+        <sdef n="np" />
+        <sdef n="sp" />
+        <sdef n="adj" />
+        <sdef n="f" />
+        <sdef n="m" />
+        <sdef n="mf" />
+        <sdef n="sg" />
         <sdef n="pl" />
-        <sdef n="ND" /> 
-        <sdef n="GD" /> 
+        <sdef n="ND" />
+        <sdef n="GD" />
         <sdef n="det" />
-        <sdef n="vbser" /> 
+        <sdef n="def" />
+        <sdef n="vbser" />
     </sdefs>
-    <pardefs>
-    </pardefs>
-    <section id="main" type="standard">
+    <section n="main" type="standard">
         <e>
             <p>
                 <l>be<s n="vbser"/></l>
@@ -34,7 +32,9 @@
         <e r="LR">
             <p>
                 <l>dog<s n="n"/></l>
-                <r>gos<s n="n"/><s n="GD"/></r>
+                <r>gos<s n="n"/>
+                    <s n="GD"/>
+                </r>
             </p>
         </e>
         <e r="RL">
@@ -51,8 +51,15 @@
         </e>
         <e r="LR">
             <p>
-                <l>the<s n="det"/><s n="def"/><s n="sp"/></l>
-                <r>el<s n="det"/><s n="def"/><s n="GD"/><s n="ND"/></r>
+                <l>the<s n="det"/>
+                    <s n="def"/>
+                    <s n="sp"/>
+                </l>
+                <r>el<s n="det"/>
+                    <s n="def"/>
+                    <s n="GD"/>
+                    <s n="ND"/>
+                </r>
             </p>
         </e>
     </section>
