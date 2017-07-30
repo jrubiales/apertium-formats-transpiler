@@ -6,7 +6,7 @@ grammar Loki;
 
 stat
         
-    /* List of symbols defined within this block */
+    /* List of symbols defined */
     locals [
 	List<String> symbols = new ArrayList<String>(),
         List<String> errs = new ArrayList<String>()
@@ -52,7 +52,6 @@ sdef
             $stat::symbols.add($ID.text);
         } else {
             $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
-            // System.err.println("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
         }
         System.out.print($ID.text + "\" />");  
     } COMMA?
@@ -183,7 +182,6 @@ l returns [String trans = ""]
     } | ID {
         if(!$stat::symbols.contains($ID.text)){
             $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
-            // System.err.println("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
         }
         $trans += "<s n=\"" + $ID.text + "\"/>";
     })* {
@@ -214,7 +212,6 @@ r returns [String trans = ""]
     } | ID {
         if(!$stat::symbols.contains($ID.text)){
             $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
-            // System.err.println("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
         }
         $trans += "<s n=\"" + $ID.text + "\"/>";
     })* {
@@ -255,7 +252,6 @@ g returns [String trans = ""]
     } | ID {
         if(!$stat::symbols.contains($ID.text)){
             $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
-            // System.err.println("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
         }
         $trans += "<s n=\"" + $ID.text + "\"/>";
     })* RPAR {
