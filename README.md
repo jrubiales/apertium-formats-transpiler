@@ -2,6 +2,14 @@
 
 This repository provides some tools that arise aiming to design a simple text based format to write structural transfer rules and dictionaries. The provided tools consist of two transpilers which one of them is used to generate the translations between the transfer file formats and the other one to generate the translations between the dictionaries files, that is, exist one transpiler to convert from the actual format (XML) to the new format and vice versa both for  the Dictionaries files and Transfer files.
 
+## Language Features ##
+
+* High-Level language
+* Easy to extend
+* Fast and Efficient
+* Portable compiler
+* Semantic errors
+
 ## Transpilers ##
 
 The name of the transpilers are Freya and Loki for the transfer files and dictionaries respectively.
@@ -37,9 +45,11 @@ The transpiler will detect the input file and will output the appropriate format
 
 ```
 
-<alphabet>·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</alphabet>
+<alphabet>·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz</alphabet>
 
-alphabet = "·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+alphabet = "·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìíîïñòóôöùúûüABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz";
 
 ```
 
@@ -51,7 +61,7 @@ alphabet = "·ÀÁÂÄÇÈÉÊËÌÍÎÏÑÒÓÔÖÙÚÛÜàáâäçèéêëìí
   <sdef n="det" />
 </sdefs>
 
-symbols = "n", "GD", "det";
+symbols = n, GD, det;
 
 ```
 
@@ -75,7 +85,7 @@ symbols = "n", "GD", "det";
 
 </section>
 
-section main(type ="standard")
+section main(type="standard")
 
   entry
     "dog{n}" > "gos{n}{GD}";
@@ -86,4 +96,32 @@ section main(type ="standard")
   end /* end entry */
 
 end /* end section */
+
+```
+
+## Semantic errors ##
+
+```
+
+symbols = n, adj, ... , adj;
+
+"Symbol adj is already defined (1:69)"
+
+```
+
+```
+
+symbols = np;
+
+section main(type ="standard")
+
+  entry
+          "dog" n < "gos" n ;
+  end /* end entry */
+
+end /* end section */
+
+"Undefined symbol: n (6:18)"
+"Undefined symbol: n (6:28)"
+
 ```
