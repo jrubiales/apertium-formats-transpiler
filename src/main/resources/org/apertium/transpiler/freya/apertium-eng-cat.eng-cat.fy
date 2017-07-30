@@ -29,7 +29,7 @@ transfer(default="chunk")
 		end /* choose */
 	end /* macro */
 	
-	rule(comment="REGLA: DET NOM")
+	rule /* REGLA: DET NOM */
 		pattern = det, nom;
 		det_no(1, 2);
 		f_concord2(2, 1);

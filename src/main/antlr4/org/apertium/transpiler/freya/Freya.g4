@@ -212,9 +212,7 @@ defMacro
 macroParams
     : NPAR ASSIGN INT {
         System.out.print($NPAR.text + "=\"" + $INT.text + "\"");
-    }(C ASSIGN literal{
-        System.out.print(" " + $C.text + "=" + $literal.text);
-    })?
+    }
     ;
 
 macroContent
@@ -289,15 +287,20 @@ sectionRules
 // Rule.
 r
     : RULE {
-        System.out.print("<rule ");
-    } LPAR ruleParams RPAR {
+        System.out.print("<rule>");
+    } 
+
+    /* LPAR ruleParams RPAR {
         System.out.print(">");
-    } ruleBody END {
+    } */
+    
+    ruleBody END {
         System.out.print("</rule>");
     }
     ;
 
 // Rule params.
+/*
 ruleParams
     : RCOMMENT ASSIGN literal {
         System.out.print("comment=" + $literal.text);
@@ -306,6 +309,7 @@ ruleParams
         System.out.print(" " + "c=" + $literal.text);
     } (COMMA ruleParams)?
     ;
+*/
 
 // Rule body.
 ruleBody
@@ -463,7 +467,7 @@ chunk returns [String trans = ""]
     ;
 
 chunkParams returns [String trans = ""]
-    : param = (NAME_FROM|CASE|C) ASSIGN literal {
+    : param = (NAME_FROM|CASE) ASSIGN literal {
         $trans += " " + $param.text + "=" + $literal.text;
     }
     ;
@@ -629,7 +633,7 @@ clipParams returns [String trans = ""]
         $trans += "\"" + $ID.text + "\"";
     } | part = ('"lem"' | '"lemh"' | '"lemq"' | '"whole"' ){                
         $trans += $part.text;
-    }) (COMMA clipParam = (QUEUE|LINK_TO|C) ASSIGN literal{
+    }) (COMMA clipParam = (QUEUE|LINK_TO) ASSIGN literal{
         $trans += " " + $clipParam.text + "=" + $literal.text;
     })?
     ;
@@ -676,15 +680,12 @@ TAGS                        : 'tags' ;
 
 // Attributres
 
-N                           : 'n' ;
 NPAR                        : 'npar' ;
-C                           : 'c' ;
 POS                         : 'pos' ;
 SIDE                        : 'side' ;
 PART                        : 'part' ;
 QUEUE                       : 'queue' ;
 LINK_TO                     : 'link-to' ;
-RCOMMENT                    : 'comment' ;
 
 NAME                        : 'name' ;
 NAME_FROM                   : 'namefrom' ;
