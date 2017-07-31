@@ -9,6 +9,7 @@ This repository provides some tools that arise aiming to design a simple text ba
 * Fast and Efficient
 * Portable compiler
 * Semantic errors
+* UTF-8 support
 
 ## Transpilers ##
 
@@ -54,7 +55,6 @@ abcdefghijklmnopqrstuvwxyz";
 ```
 
 ```
-
 <sdefs>
   <sdef n="n" />
   <sdef n="GD" />
@@ -62,11 +62,9 @@ abcdefghijklmnopqrstuvwxyz";
 </sdefs>
 
 symbols = n, GD, det;
-
 ```
 
 ```
-
 <section id="main" type="standard">
 
   <e r="LR">
@@ -88,29 +86,25 @@ symbols = n, GD, det;
 section main(type="standard")
 
   entry
-    "dog{n}" > "gos{n}{GD}";
+    "dog" n > "gos" n GD";
   end /* end entry */
 
   entry
-    "the{det}" < "el{det}";
+    "the" det < "e" det;
   end /* end entry */
 
 end /* end section */
-
 ```
 
 ## Semantic errors ##
-
 ```
 
 symbols = n, adj, ... , adj;
 
 "Symbol adj is already defined (1:69)"
-
 ```
 
 ```
-
 symbols = np;
 
 section main(type ="standard")
@@ -123,5 +117,4 @@ end /* end section */
 
 "Undefined symbol: n (6:18)"
 "Undefined symbol: n (6:28)"
-
 ```
