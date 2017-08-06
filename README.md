@@ -9,7 +9,6 @@ This repository provides some tools that arise aiming to design a simple text ba
 * Fast and Efficient
 * Portable compiler
 * Semantic errors
-* UTF-8 support
 
 ## Transpilers ##
 

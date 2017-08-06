@@ -37,13 +37,13 @@ public class LokiSaxHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String name,
             Attributes attributes) throws SAXException {
         if (localName.equals("alphabet")) {
-            System.out.print("alphabet = ");
+            System.out.print("alphabet =");
             isAlphabetTag = true;
         } else if (localName.equals("sdefs")) {
-            System.out.print("symbols = ");
+            System.out.print("symbols =");
         } else if (localName.equals("sdef")) {
             String n = attributes.getValue("n");
-            pTrans.append(n).append(", ");
+            pTrans.append(" ").append(n).append(",");
         } else if (localName.equals("pardef")) {
             System.out.print("pardef ");
             String n = attributes.getValue("n");
@@ -56,20 +56,22 @@ public class LokiSaxHandler extends DefaultHandler {
             if(r != null){
                 
                 if(r.equals("LR")){
-                    rAttr = ">";
+                    rAttr = " >";
                 } else if(r.equals("RL")){
-                    rAttr = "<";
+                    rAttr = " <";
                 } else {
-                    rAttr = "<>";
+                    rAttr = " <>";
                 }
                 
             } else {
-                rAttr = "<>";
+                rAttr = " <>";
             }
+            
+            // TODO. Resto de atributos.
             
             System.out.println("");
         } else if (localName.equals("i")) {
-            System.out.print("identity = ");
+            System.out.print("identity =");
             isITag = true;
         } else if (localName.equals("re")) {
             System.out.print("re = ");
@@ -80,39 +82,43 @@ public class LokiSaxHandler extends DefaultHandler {
             isRightTag = true;      
         } else if (localName.equals("par")) {
             System.out.print("par-ref = ");
-            isParTag = true;
-        } else if (localName.equals("a")) {
-            System.out.print("_a ");
-        } else if (localName.equals("b")) {
-            System.out.print(" ");
-        } else if (localName.equals("g")) {
-            System.out.print("(");
-        } else if (localName.equals("j")) {
-            System.out.print("_j ");
-        } else if (localName.equals("s")) {
             String n = attributes.getValue("n");
             System.out.print(n);
+        } else if (localName.equals("a")) {
+            System.out.print(" _a");
+        } else if (localName.equals("b")) {
+            System.out.print(" \" \"");
+        } else if (localName.equals("g")) {
+            System.out.print(" (");
+        } else if (localName.equals("j")) {
+            System.out.print(" _j");
+        } else if (localName.equals("s")) {
+            String n = attributes.getValue("n");
             System.out.print(" ");
+            System.out.print(n);
         } else if (localName.equals("section")) {
             System.out.print("section ");
             String id = attributes.getValue("id");
             System.out.print(id);
             String type = attributes.getValue("type");
-            System.out.print("(type =\"");
+            System.out.print("(type=\"");
             System.out.print(type);
             System.out.println("\")");            
         }
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) {
-        if(isAlphabetTag || isITag || isReTag || isParTag || isLeftTag || isRightTag){
-            System.out.print("\"");
-            System.out.print(new String(ch, start, length));
-            System.out.print("\" ");
+    public void characters(char[] ch, int start, int length) throws SAXException {
+        if(isAlphabetTag || isITag || isReTag || isLeftTag || isRightTag){
+            String s = new String(ch, start, length);
+            if(!s.matches("[ \\t\\r\\n\\u000C]+")){
+                System.out.print(" \"");
+                System.out.print(s);
+                System.out.print("\"");   
+            }
         }
     }
-
+        
     @Override
     public void endElement(String uri, String localName, String name)
             throws SAXException {
@@ -120,7 +126,7 @@ public class LokiSaxHandler extends DefaultHandler {
             System.out.println(";");
             isAlphabetTag = false;
         } else if (localName.equals("sdefs")) {
-            System.out.print(pTrans.toString().replaceAll(", $", ";\n"));
+            System.out.print(pTrans.toString().replaceAll(",$", ";\n"));
             pTrans.setLength(0);
         } else if (localName.equals("pardef")) {
             System.out.println("end /* end paradigm */");
@@ -142,7 +148,6 @@ public class LokiSaxHandler extends DefaultHandler {
             isRightTag = false;      
         } else if (localName.equals("par")) {
             System.out.println(";");
-            isParTag = false;
         } else if (localName.equals("g")) {
             System.out.print(") ");
         } else if (localName.equals("section")) {

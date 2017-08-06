@@ -36,7 +36,7 @@ alphabet
     : ALPHABET {
         System.out.print("<alphabet>");
     } ASSIGN literal {
-        System.out.print($literal.text);
+        System.out.print($literal.text.replaceAll("\"", ""));
     } SEMI {
         System.out.print("</alphabet>");
     }
@@ -64,8 +64,13 @@ pardefs
 pardef
     : PARDEF {
         System.out.print("<pardef");
-    } literal {
-        System.out.print(" n=" + $literal.text + ">");
+    } ID {
+        if(!$stat::symbols.contains($ID.text)){
+            $stat::symbols.add($ID.text);
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
+        System.out.print(" n=\"" + $ID.text + "\">");
     } e+ END {
         System.out.print("</pardef>");
     }
@@ -75,6 +80,11 @@ section
     : SECTION {
         System.out.print("<section");
     } ID {
+        if(!$stat::symbols.contains($ID.text)){
+            $stat::symbols.add($ID.text);
+        } else {
+            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
+        }
         System.out.print(" n=\"" + $ID.text + "\"");
     } LPAR 'type' ASSIGN type = ('"standard"' | '"inconditional"' | '"postblank"' | '"preblank"') { 
         System.out.print(" type=" + $type.text + ">"); 
@@ -260,7 +270,16 @@ g returns [String trans = ""]
     ;
 
 par returns [String trans = ""]
-    : PREF { $trans += "<par"; } ASSIGN literal { $trans += " n=" + $literal.text; } SEMI { $trans += "/>"; }
+    : PREF { 
+        $trans += "<par"; 
+    } ASSIGN ID { 
+        if(!$stat::symbols.contains($ID.text)){
+            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
+        }
+        $trans += " n=\"" + $ID.text + "\""; 
+    } SEMI { 
+        $trans += "/>"; 
+    }
     ;
 
 re returns [String trans = ""]
