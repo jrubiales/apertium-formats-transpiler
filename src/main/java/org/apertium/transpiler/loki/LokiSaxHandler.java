@@ -111,6 +111,7 @@ public class LokiSaxHandler extends DefaultHandler {
     public void characters(char[] ch, int start, int length) throws SAXException {
         if(isAlphabetTag || isITag || isReTag || isLeftTag || isRightTag){
             String s = new String(ch, start, length);
+            // WS
             if(!s.matches("[ \\t\\r\\n\\u000C]+")){
                 System.out.print(" \"");
                 System.out.print(s);

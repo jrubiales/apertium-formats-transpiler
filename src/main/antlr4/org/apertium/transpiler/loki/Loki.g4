@@ -100,7 +100,7 @@ e
     ]
     : ENTRY { 
         System.out.print("<e"); 
-    } (LPAR (att = ('r' | 'lm' | 'a' | 'c' | 'i' | 'slr' | 'srl' | 'alt' | 'v' | 'vl' | 'vr' ) ASSIGN literal)* {
+    } (LPAR (att = ('r' | 'lm' | 'a' | 'i' | 'slr' | 'srl' | 'alt' | 'v' | 'vl' | 'vr' ) ASSIGN literal)* {
         
         System.out.print(" ");
         System.out.print($att.text);

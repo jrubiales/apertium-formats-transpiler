@@ -34,13 +34,13 @@ transfer
     :
     TRANSFER {
         System.out.print("<transfer ");
-    } LPAR 'default' {
+    } (LPAR 'default' {
         System.out.print("default");
     } ASSIGN {
         System.out.print($ASSIGN.text);
     } defaultAttr = ('"lu"' | '"chunk"') {
         System.out.print($defaultAttr.text);
-    } RPAR {
+    } RPAR)? {
         System.out.print(">");
     } transferBody END {
         System.out.print("</transfer>");
@@ -186,8 +186,13 @@ listItem
     } COMMA?
     ;
 
+
 sectionDefMacros
-    : defMacro+
+    : {
+        System.out.print("<section-def-macros>");
+    } defMacro+ {
+        System.out.print("</section-def-macros>");
+    }
     ;
 
 defMacro
@@ -242,9 +247,9 @@ instr
     } LPAR callMacroParams RPAR SEMI {
         System.out.print("</call-macro>");
     }
-    | container MODIFY_CASE {
+    | {
         System.out.print("<modify-case>");
-    } stringValue {
+    } container MODIFY_CASE stringValue SEMI{
         System.out.print("</modify-case>");
     }
     | ID APPEND {
@@ -257,7 +262,11 @@ instr
     } (value { System.out.print($value.trans); } APPEND?)+ SEMI {
         System.out.print("</append>");
     }
-    | REJECT_CURRENT_RULE LPAR 'shifting' ASSIGN ('yes'|'no') RPAR SEMI
+    | REJECT_CURRENT_RULE {
+        System.out.println("<reject-current-rule"); 
+    } (LPAR 'shifting' ASSIGN shiftVal = ('yes'|'no') RPAR {
+        System.out.println(" shifting=\"" + $shiftVal.text + "\"");
+    })? SEMI
     | OUT {
         System.out.print("<out>");
     } (mlu {
@@ -631,7 +640,7 @@ clipParams returns [String trans = ""]
             $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
         }
         $trans += "\"" + $ID.text + "\"";
-    } | part = ('"lem"' | '"lemh"' | '"lemq"' | '"whole"' ){                
+    } | part = ('"lem"' | '"lemh"' | '"lemq"' | '"whole"' | '"tags"' ){ /* I'm not sure about "tags" value. This value is used in .t1x files but is not specified in the DTD document.  */
         $trans += $part.text;
     }) (COMMA clipParam = (QUEUE|LINK_TO) ASSIGN literal{
         $trans += " " + $clipParam.text + "=" + $literal.text;

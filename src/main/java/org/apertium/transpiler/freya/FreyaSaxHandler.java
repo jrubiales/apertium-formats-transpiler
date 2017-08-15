@@ -96,20 +96,8 @@ public class FreyaSaxHandler extends DefaultHandler {
             System.out.print(nPar);
             System.out.print(")\n");
         } else if (localName.equals("rule")) {
-            System.out.print("rule(");
-            String c = attributes.getValue("c");
-            if (c != null) {
-                System.out.print("c=\"");
-                System.out.print(c);
-                System.out.print("\", ");
-            }
-            String comment = attributes.getValue("comment");
-            if (comment != null) {
-                System.out.print("comment=\"");
-                System.out.print(comment);
-                System.out.print("\"");
-            }
-            System.out.print(")\n");
+            System.out.print("rule");
+            System.out.print("\n");
         } else if (localName.equals("pattern")) {
             System.out.print("pattern = ");
         } else if (localName.equals("pattern-item")) {
@@ -164,7 +152,7 @@ public class FreyaSaxHandler extends DefaultHandler {
             pTrans.append("clip(pos=").append(pos)
                     .append(", side=\"").append(side).append("\"");
                     
-            if(part.equals("lem") || part.equals("lemh") || part.equals("lemq") || part.equals("whole")){
+            if(part.equals("lem") || part.equals("lemh") || part.equals("lemq") || part.equals("whole") || part.equals("tags")){
                 pTrans.append(", part=\"").append(part).append("\"");
             } else {
                 pTrans.append(", part=").append(part).append("");
@@ -177,10 +165,6 @@ public class FreyaSaxHandler extends DefaultHandler {
             String linkTo = attributes.getValue("link-to");
             if (linkTo != null) {
                 pTrans.append(", link-to=\"").append(linkTo).append("\"");
-            }
-            String c = attributes.getValue("c");
-            if (c != null) {
-                pTrans.append(", c=\"").append(c).append("\"");
             }
             pTrans.append(")");
             stack.push(pTrans.toString());
@@ -218,7 +202,6 @@ public class FreyaSaxHandler extends DefaultHandler {
             String attName = attributes.getValue("name");
             String attNamefrom = attributes.getValue("namefrom");
             String attCase = attributes.getValue("case");
-            String attC = attributes.getValue("c");
 
             if (attName != null) {
                 System.out.print(" " + attName + " ");
@@ -232,10 +215,6 @@ public class FreyaSaxHandler extends DefaultHandler {
 
             if (attCase != null) {
                 attTrans.append("case=\"").append(attCase).append("\", ");
-            }
-
-            if (attC != null) {
-                attTrans.append("c=\"").append(attC).append("\", ");
             }
 
             if (!attTrans.toString().equals("")) {
