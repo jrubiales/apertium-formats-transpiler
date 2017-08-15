@@ -53,7 +53,7 @@ sdef
         } else {
             $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
         }
-        System.out.print($ID.text + "\" />");  
+        System.out.print($ID.text + "\"/>");  
     } COMMA?
     ;
 
@@ -327,7 +327,7 @@ RBRACE                      : '}' ;
 
 // Identifiers.
 
-ID                          : [a-zA-Z_][a-zA-Z_0-9]* ;
+ID                          : [a-zA-Z_/][a-zA-Z0-9_/]* ;
 INT                         : [0-9]+ ;
 
 // String Literals.
