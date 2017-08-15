@@ -85,7 +85,7 @@ section
         } else {
             $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
         }
-        System.out.print(" n=\"" + $ID.text + "\"");
+        System.out.print(" id=\"" + $ID.text + "\"");
     } LPAR 'type' ASSIGN type = ('"standard"' | '"inconditional"' | '"postblank"' | '"preblank"') { 
         System.out.print(" type=" + $type.text + ">"); 
     } RPAR e+ END {
