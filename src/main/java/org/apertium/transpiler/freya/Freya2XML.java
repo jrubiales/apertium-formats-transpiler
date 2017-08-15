@@ -27,7 +27,7 @@ public class Freya2XML {
     }
        
     public void parse() throws IOException {
-        ANTLRFileStream in = new ANTLRFileStream(Freya2XML.class.getResource(filePath).getFile());
+        ANTLRFileStream in = new ANTLRFileStream(filePath);
         FreyaLexer lexer = new FreyaLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         FreyaParser parser = new FreyaParser(tokens);

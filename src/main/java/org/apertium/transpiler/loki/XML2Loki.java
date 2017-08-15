@@ -1,5 +1,6 @@
 package org.apertium.transpiler.loki;
 
+import java.io.File;
 import java.io.IOException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -32,6 +33,7 @@ public class XML2Loki {
     public void parse() throws IOException, SAXException{           
         XMLReader reader = XMLReaderFactory.createXMLReader();
         reader.setContentHandler(new LokiSaxHandler());
-        reader.parse(new InputSource(XML2Loki.class.getResource(filePath).getFile()));            
+        File f = new File(filePath);
+        reader.parse(new InputSource(f.getAbsolutePath()));            
     }    
 }

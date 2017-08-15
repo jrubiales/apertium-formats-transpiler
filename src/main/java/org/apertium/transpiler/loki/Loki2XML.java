@@ -28,7 +28,7 @@ public class Loki2XML {
     }
     
     public void parse() throws IOException{
-        ANTLRFileStream in = new ANTLRFileStream(Loki2XML.class.getResource(filePath).getFile());
+        ANTLRFileStream in = new ANTLRFileStream(filePath);
         LokiLexer lexer = new LokiLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         LokiParser parser = new LokiParser(tokens);

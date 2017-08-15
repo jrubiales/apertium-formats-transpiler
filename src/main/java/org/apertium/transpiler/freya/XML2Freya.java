@@ -1,6 +1,7 @@
 
 package org.apertium.transpiler.freya;
 
+import java.io.File;
 import java.io.IOException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -33,6 +34,7 @@ public class XML2Freya {
     public void parse() throws IOException, SAXException {
         XMLReader reader = XMLReaderFactory.createXMLReader();
         reader.setContentHandler(new FreyaSaxHandler());
-        reader.parse(new InputSource(Freya2XML.class.getResource(filePath).getFile()));
+        File f = new File(filePath);
+        reader.parse(new InputSource(f.getAbsolutePath()));
     }    
 }
