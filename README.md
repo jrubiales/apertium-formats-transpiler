@@ -1,6 +1,6 @@
 # Apertium Formats Transpilers #
 
-This repository provides some tools that arise aiming to design a simple text based format to write structural transfer rules and dictionaries. The provided tools consist of two transpilers which one of them is used to generate the translations between the transfer file formats and the other one to generate the translations between the dictionaries files, that is, exist one transpiler to convert from the actual format (XML) to the new format and vice versa both for  the Dictionaries files and Transfer files.
+This repository provides some tools that arise aiming to design a simple text based format to write structural transfer rules and dictionaries. The provided tools consist of four transpilers which two of them is used to generate the translations between the transfer file formats and the other two to generate the translations between the dictionaries files, that is, exist two transpilers to convert from the actual format (XML) to the new format and vice versa both for the Dictionaries files, and another two for the Transfer files.
 
 ## Language Features ##
 
