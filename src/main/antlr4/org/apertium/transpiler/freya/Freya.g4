@@ -17,14 +17,14 @@ stat
         System.out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     } transfer EOF {
         if($errs.size() > 0){
-            System.out.println("\n");
-            System.out.println("#########################");
-            System.out.println("Detected errors:");
-            System.out.println("----------------");
+            System.err.println("\n");
+            System.err.println("#########################");
+            System.err.println("Detected errors:");
+            System.err.println("----------------");
             $errs.forEach((e) -> {
                 System.err.println(e);
             });
-            System.out.println("#########################");
+            System.err.println("#########################");
         }
     }
     ;

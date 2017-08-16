@@ -20,14 +20,14 @@ stat
         System.out.print("</dictionary>");
     } EOF {
         if($errs.size() > 0){
-            System.out.println("\n");
-            System.out.println("#########################");
-            System.out.println("Detected errors:");
-            System.out.println("----------------");
+            System.err.println("\n");
+            System.err.println("#########################");
+            System.err.println("Detected errors:");
+            System.err.println("----------------");
             $errs.forEach((e) -> {
                 System.err.println(e);
             });
-            System.out.println("#########################");
+            System.err.println("#########################");
         }
     }
     ;
