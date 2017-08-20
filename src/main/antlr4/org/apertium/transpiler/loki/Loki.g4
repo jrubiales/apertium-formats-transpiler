@@ -1,5 +1,10 @@
 grammar Loki;
 
+@header {
+  import org.stringtemplate.v4.StringRenderer;
+}
+
+
 /**
  * Syntactic specification.
  */
@@ -64,13 +69,8 @@ pardefs
 pardef
     : PARDEF {
         System.out.print("<pardef");
-    } ID {
-        if(!$stat::symbols.contains($ID.text)){
-            $stat::symbols.add($ID.text);
-        } else {
-            $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
-        }
-        System.out.print(" n=\"" + $ID.text + "\">");
+    } literal {
+        System.out.print(" n=" + $literal.text + ">");
     } e+ END {
         System.out.print("</pardef>");
     }
@@ -86,8 +86,9 @@ section
             $stat::errs.add("Symbol " + $ID.text + " is already defined (" + $ID.line + ":" + $ID.pos + ")");
         }
         System.out.print(" id=\"" + $ID.text + "\"");
-    } LPAR 'type' ASSIGN type = ('"standard"' | '"inconditional"' | '"postblank"' | '"preblank"') { 
-        System.out.print(" type=" + $type.text + ">"); 
+    } LPAR 'type' ASSIGN literal {
+        // TODO. ('"standard"' | '"inconditional"' | '"postblank"' | '"preblank"')
+        System.out.print(" type=" + $literal.text + ">"); 
     } RPAR e+ END {
         System.out.print("</section>"); 
     }
@@ -96,6 +97,8 @@ section
 
 e 
     locals [
+        // if statement only executes once when there are more than one <p> tags.
+        boolean once = false,
         String trans = "";
     ]
     : ENTRY { 
@@ -106,7 +109,7 @@ e
         System.out.print($att.text);
         System.out.print("=");
 
-        if($att.text.equals("l")){
+        if($att.text.equals("r")){
 
             if($literal.text.equals("LR") || $literal.text.equals("RL")){
                 System.out.print($literal.text);
@@ -115,14 +118,15 @@ e
             }
 
         } else {
-            System.out.print($literal.text);
+            System.out.print(StringRenderer.escapeHTML($literal.text));
         }
 
     } RPAR)? (i {
         $trans += $i.trans;
     } | p {
-        if($p.rAttr != null && !$p.rAttr.equals("")){
+        if($p.rAttr != null && !$p.rAttr.equals("") && !$once){
             System.out.print(" r=\"" + $p.rAttr + "\"");
+            $once = true;
         }
         $trans += $p.trans;
     } | par {
@@ -142,7 +146,7 @@ i returns [String trans = ""]
         if($literal.text.equals(" ")){
             $trans += "<b/>";
         } else {
-            String result = $literal.text;
+            String result = StringRenderer.escapeHTML($literal.text);
             result = result.replaceAll("\"", "");
             result = result.replaceAll(" ", "<b/>");
             $trans += result;
@@ -177,7 +181,7 @@ l returns [String trans = ""]
         if($literal.text.equals(" ")){
             $trans += "<b/>";
         } else {
-            String result = $literal.text;
+            String result = StringRenderer.escapeHTML($literal.text);
             result = result.replaceAll("\"", "");
             result = result.replaceAll(" ", "<b/>");
             $trans += result;
@@ -207,7 +211,7 @@ r returns [String trans = ""]
         if($literal.text.equals(" ")){
             $trans += "<b/>";
         } else {
-            String result = $literal.text;
+            String result = StringRenderer.escapeHTML($literal.text);
             result = result.replaceAll("\"", "");
             result = result.replaceAll(" ", "<b/>");
             $trans += result;
@@ -249,7 +253,7 @@ g returns [String trans = ""]
         if($literal.text.equals(" ")){
             $trans += "<b/>";
         } else {
-            String result = $literal.text;
+            String result = StringRenderer.escapeHTML($literal.text);
             result = result.replaceAll("\"", "");
             result = result.replaceAll(" ", "<b/>");
             $trans += result;
@@ -272,18 +276,15 @@ g returns [String trans = ""]
 par returns [String trans = ""]
     : PREF { 
         $trans += "<par"; 
-    } ASSIGN ID { 
-        if(!$stat::symbols.contains($ID.text)){
-            $stat::errs.add("Undefined symbol: " + $ID.text + " (" + $ID.line + ":" + $ID.pos + ")");
-        }
-        $trans += " n=\"" + $ID.text + "\""; 
+    } ASSIGN literal { 
+        $trans += " n=" + $literal.text; 
     } SEMI { 
         $trans += "/>"; 
     }
     ;
 
 re returns [String trans = ""]
-    : RE { $trans += "<re>"; } ASSIGN literal { $trans += $literal.text.replaceAll("\"", ""); } SEMI { $trans += "</re>"; }
+    : RE { $trans += "<re>"; } ASSIGN literal { $trans += StringRenderer.escapeHTML($literal.text.replaceAll("\"", "")); } SEMI { $trans += "</re>"; }
     ;
 
 // Literal.
@@ -327,7 +328,7 @@ RBRACE                      : '}' ;
 
 // Identifiers.
 
-ID                          : [a-zA-Z_/][a-zA-Z0-9_/]* ;
+ID                          : [a-zA-Z][a-zA-Z0-9]* ;
 INT                         : [0-9]+ ;
 
 // String Literals.
